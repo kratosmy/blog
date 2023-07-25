@@ -1,0 +1,1705 @@
+---
+title: 'LeetCode 刷题记录 101 - 200'
+date: '2023-04-22'
+tags: ['cpp', 'algorithms', 'LeetCode']
+summary: ' '
+draft: false
+author: lov3 camille
+---
+
+## 101. 对称二叉树
+
+检查二叉树是否轴对称.
+
+```cpp
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        if (!root || !root->left && !root->right) return true;
+        if (!root->left || !root->right) return false;
+        if (root->left->val != root->right->val) return false;
+        return dfs(root->left, root->right);
+    }
+
+    bool dfs(TreeNode* l, TreeNode* r) {
+        if (!l && !r) return true;
+        if (!l || !r) return false;
+        if (l->val != r->val) return false;
+        return dfs(l->left, r->right) && dfs(l->right, r->left);
+    }
+};
+```
+
+## 102. 二叉树的层序遍历
+
+给你二叉树的根节点 root ，返回其节点值的 层序遍历 。 （即逐层地，从左到右访问所有节点）。
+
+```cpp
+class Solution {
+public:
+    queue<TreeNode*> path;
+    vector<vector<int>> ans;
+
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        if (!root) return ans;
+
+        path.push(root);
+        auto temp = path;
+        while(path.size()) {
+            vector<int> sub_path;
+            for (int i = 0; i < temp.size(); i ++) {
+                auto node = path.front();
+                path.pop();
+                sub_path.push_back(node->val);
+                if (node->left) path.push(node->left);
+                if (node->right) path.push(node->right);
+            }
+            temp = path;
+            ans.push_back(sub_path);
+        }
+        return ans;
+    }
+};
+```
+
+## 103. 二叉树的锯齿形层序遍历
+
+给你二叉树的根节点 root ，返回其节点值的 锯齿形层序遍历 。（即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行）。
+
+```cpp
+#include <vector>
+#include <queue>
+#include <algorithm>
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
+using namespace std;
+
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>> res;
+        queue<TreeNode*> q;
+        if (root) q.push(root);
+
+        int cnt = 0;
+        while (q.size()) {
+            vector<int> level;
+            int len = q.size();
+            while (len --) {
+                auto t = q.front();
+                q.pop();
+                level.push_back(t->val);
+                if (t->left) q.push(t->left);
+                if (t->right) q.push(t->right);
+            }
+            if (++ cnt % 2 == 0) reverse(level.begin(), level.end());
+            res.push_back(level);
+        }
+        return res;
+    }
+};
+```
+
+## 104. 二叉树的最大深度
+
+给定一个二叉树，找出其最大深度。
+
+二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。
+
+说明: 叶子节点是指没有子节点的节点。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        if (!root) return 0;
+        return max(maxDepth(root->left), maxDepth(root->right)) + 1;
+    }
+};
+```
+
+## 105. 从前序与中序遍历序列构造二叉树
+
+```cpp
+#include <vector>
+#include <unordered_map>
+#include <bits/stdc++.h>
+
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
+class Solution {
+public:
+    unordered_map<int, int> pos;
+
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        for (int i = 0; i < inorder.size(); i ++) pos[inorder[i]] = i;
+        return build(preorder, inorder, 0, preorder.size() - 1, 0, inorder.size() - 1);
+    }
+
+    TreeNode* build(vector<int>& preorder, vector<int>& inorder, int pl, int pr, int il, int ir) {
+        if (pl > pr) return NULL;
+        auto root = new TreeNode(preorder[pl]);
+        int k = pos[root->val];
+        root->left = build(preorder, inorder, pl + 1, pl + 1 + k - 1 - il, il, k - 1);
+        root->right = build(preorder, inorder, pl + 1 + k - 1 - il + 1, pr, k + 1, ir);
+        return root;
+    }
+};
+```
+
+## 106. 从后序与中序遍历序列构造二叉树
+
+```cpp
+#include <vector>
+#include <unordered_map>
+#include <bits/stdc++.h>
+
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
+class Solution {
+public:
+    unordered_map<int, int> pos;
+
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        for (int i = 0; i < inorder.size(); i ++) pos[inorder[i]] = i;
+        return build(inorder, postorder, 0, inorder.size() - 1, 0, postorder.size() - 1);
+    }
+
+    TreeNode* build(vector<int>& inorder, vector<int>& postorder, int il, int ir, int pl, int pr) {
+        if (pl > pr) return NULL;
+        auto root = new TreeNode(postorder[pr]);
+        int k = pos[root->val];
+        root->left = build(inorder, postorder, il, k - 1, pl, pl + k - 1 - il);
+        root->right = build(inorder, postorder, k + 1, ir, pl + k - 1 - il + 1, pr - 1);
+        return root;
+    }
+};
+```
+
+## 107.二叉树的层序遍历 II
+
+给你二叉树的根节点 root ，返回其节点值 自底向上的层序遍历 。 （即按从叶子节点所在层到根节点所在的层，逐层从左向右遍历）
+
+```cpp
+#include<bits/stdc++.h>
+
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
+class Solution {
+public:
+    vector<vector<int>> levelOrderBottom(TreeNode* root) {
+        vector<vector<int>> res;
+        queue<TreeNode*> q;
+        if (root) q.push(root);
+        while (q.size()) {
+            vector<int> level;
+            int len = q.size();
+            while (len --) {
+                auto node = q.front();
+                level.push_back(node->val);
+                q.pop();
+                if (node->left) q.push(node->left);
+                if (node->right) q.push(node->right);
+            }
+            res.push_back(level);
+        }
+        reverse(res.begin(), res.end());
+        return res;
+    }
+};
+```
+
+## 108. 将有序数组转换为二叉搜索树
+
+给你一个整数数组 nums ，其中元素已经按 升序 排列，请你将其转换为一棵 高度平衡 二叉搜索树。
+
+高度平衡 二叉树是一棵满足「每个节点的左右两个子树的高度差的绝对值不超过 1 」的二叉树。
+
+```cpp
+#include<bits/stdc++.h>
+
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
+class Solution {
+public:
+    TreeNode* sortedArrayToBST(vector<int>& nums) {
+        return build(nums, 0, nums.size() - 1);
+    }
+
+    TreeNode* build(vector<int>& nums, int l, int r) {
+        if (l > r) return NULL;
+        int mid = l + r >> 1;
+        auto root = new TreeNode(nums[mid]);
+        root->left = build(nums, l, mid - 1);
+        root->right = build(nums, mid + 1, r);
+        return root;
+    }
+};
+```
+
+## 109. 有序链表转换二叉搜索树
+
+给定一个单链表的头节点 head，其中的元素 按升序排序 ，将其转换为高度平衡的二叉搜索树。
+
+本题中，一个高度平衡二叉树是指一个二叉树每个节点  的左右两个子树的高度差不超过 1。
+
+```cpp
+#include<bits/stdc++.h>
+
+using namespace std;
+
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
+
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
+class Solution {
+public:
+    TreeNode* sortedListToBST(ListNode* head) {
+        if (!head) return NULL;
+        int n = 0;
+        for (auto p = head; p; p = p->next) n ++;
+        if (n == 1) return new TreeNode(head->val);
+        auto cur = head;
+        for (int i = 0; i < n / 2 - 1; i ++) cur = cur->next;
+        auto root = new TreeNode(cur->next->val);
+        root->right = sortedListToBST(cur->next->next);
+        cur->next = NULL;
+        root->left = sortedListToBST(head);
+        return root;
+    }
+};
+```
+
+## 110.平衡二叉树
+
+给定一个二叉树，判断它是否是高度平衡的二叉树。
+
+本题中，一棵高度平衡二叉树定义为：
+
+> 一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1 。
+
+```cpp
+#include<bits/stdc++.h>
+
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
+class Solution {
+public:
+    bool ans;
+
+    bool isBalanced(TreeNode* root) {
+        ans = true;
+        dfs(root);
+        return ans;
+    }
+
+    int dfs(TreeNode* root) {
+        if (!root) return 0;
+        auto lh = dfs(root->left), rh = dfs(root->right);
+        if (abs(lh - rh) > 1) ans = false;
+        return max(lh, rh) + 1;
+    }
+};
+```
+
+## 111. 二叉树的最小深度
+
+给定一个二叉树，找出其最小深度。
+
+最小深度是从根节点到最近叶子节点的最短路径上的节点数量。
+
+说明：叶子节点是指没有子节点的节点。
+
+```cpp
+#include<bits/stdc++.h>
+
+using namespace std;
+
+struct TreeNode {
+	int val;
+	TreeNode *left;
+	TreeNode *right;
+	TreeNode() : val(0), left(nullptr), right(nullptr) {}
+	TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+	TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
+class Solution {
+public:
+    int minDepth(TreeNode* root) {
+        if (!root) return 0;
+        if (!root->left && !root->right) return 1;
+        if (root->left && root->right) return min(minDepth(root->left), minDepth(root->right)) + 1;
+        if (root->left) return minDepth(root->left) + 1;
+        return minDepth(root->right) + 1;
+    }
+};
+```
+
+## 112. 路径总和
+
+给你二叉树的根节点 root 和一个表示目标和的整数 targetSum 。判断该树中是否存在 根节点到叶子节点 的路径，这条路径上所有节点值相加等于目标和 targetSum 。如果存在，返回 true ；否则，返回 false 。
+
+叶子节点 是指没有子节点的节点。
+
+```cpp
+#include<bits/stdc++.h>
+
+using namespace std;
+
+struct TreeNode {
+	int val;
+	TreeNode *left;
+	TreeNode *right;
+	TreeNode() : val(0), left(nullptr), right(nullptr) {}
+	TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+	TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
+class Solution {
+public:
+    bool hasPathSum(TreeNode* root, int targetSum) {
+        if (!root) return false;
+        return dfs(root, targetSum, root->val);
+    }
+
+    bool dfs(TreeNode* root, int targetSum, int sum) {
+        if (!root) return sum == targetSum;
+        if (!root->left && !root->right) {
+            return sum == targetSum;
+        }
+        if (root->left && root->right) return dfs(root->left, targetSum, sum + root->left->val) || dfs(root->right, targetSum, sum + root->right->val);
+        if (root->left) return dfs(root->left, targetSum, sum + root->left->val);
+        return dfs(root->right, targetSum, sum + root->right->val);
+    }
+};
+```
+
+## 113. 路径总和 II
+
+给你二叉树的根节点 root 和一个整数目标和 targetSum ，找出所有 从根节点到叶子节点 路径总和等于给定目标和的路径。
+
+叶子节点 是指没有子节点的节点。
+
+```cpp
+#include<bits/stdc++.h>
+
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
+class Solution {
+public:
+    vector<vector<int>> ans;
+    vector<int> path;
+
+    vector<vector<int>> pathSum(TreeNode* root, int targetSum) {
+        dfs(root, targetSum, path);
+        return ans;
+    }
+
+    void dfs(TreeNode* root, int targetSum, vector<int> path) {
+        if (!root) return;
+        if (!root->left && !root->right) {
+            path.push_back(root->val);
+            if (accumulate(path.begin(), path.end(), 0) == targetSum) ans.push_back(path);
+            return;
+        }
+
+        path.push_back(root->val);
+        dfs(root->left, targetSum, path);
+        dfs(root->right, targetSum, path);
+        path.pop_back();
+    }
+};
+```
+
+## 114. 二叉树展开为链表
+
+给你二叉树的根结点 root ，请你将它展开为一个单链表：
+
+展开后的单链表应该同样使用 TreeNode ，其中 right 子指针指向链表中下一个结点，而左子指针始终为 null 。
+展开后的单链表应该与二叉树 先序遍历 顺序相同。
+
+```cpp
+#include<bits/stdc++.h>
+
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
+class Solution {
+public:
+    void flatten(TreeNode* root) {
+        while (root) {
+            auto p = root->left;
+            if (p) {
+                while (p->right) p = p->right;
+                p->right = root->right;
+                root->right = root->left;
+                root->left = NULL;
+            }
+            root = root->right;
+        }
+    }
+};
+```
+
+## 115. 不同的子序列
+
+给你两个字符串 s 和 t ，统计并返回在 s 的 子序列 中 t 出现的个数。
+
+题目数据保证答案符合 32 位带符号整数范围。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int numDistinct(string s, string t) {
+        int n = s.size(), m = t.size();
+        s = ' ' + s, t = ' ' + t;
+        vector<vector<long long>> f(n + 1, vector<long long>(m + 1));
+        for (int i = 0; i <= n; i ++) f[i][0] = 1;
+
+        for (int i = 1; i <= n; i ++) {
+            for (int j = 1; j <= m; j ++) {
+                f[i][j] = f[i - 1][j];
+                if (s[i] == t[j]) f[i][j] += f[i - 1][j - 1];
+            }
+        }
+        return f[n][m];
+    }
+};
+```
+
+## 116. 填充每个节点的下一个右侧节点指针
+
+给定一个 完美二叉树 ，其所有叶子节点都在同一层，每个父节点都有两个子节点。二叉树定义如下：
+
+```cpp
+struct Node {
+  int val;
+  Node *left;
+  Node *right;
+  Node *next;
+}
+```
+
+填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 NULL。
+
+初始状态下，所有 next 指针都被设置为 NULL。
+
+```cpp
+#include <cstring>
+
+using namespace std;
+
+class Node {
+public:
+    int val;
+    Node* left;
+    Node* right;
+    Node* next;
+
+    Node() : val(0), left(NULL), right(NULL), next(NULL) {}
+
+    Node(int _val) : val(_val), left(NULL), right(NULL), next(NULL) {}
+
+    Node(int _val, Node* _left, Node* _right, Node* _next)
+        : val(_val), left(_left), right(_right), next(_next) {}
+};
+
+class Solution {
+public:
+    Node* connect(Node* root) {
+        if (!root) return root;
+        auto source = root;
+        while (root->left) {
+            for (auto p = root; p; p = p->next) {
+                p->left->next = p->right;
+                if (p->next) p->right->next = p->next->left;
+            }
+            root = root->left;
+        }
+        return source;
+    }
+};
+```
+
+## 117. 填充每个节点的下一个右侧节点指针 II
+
+给定一个二叉树：
+
+```cpp
+struct Node {
+  int val;
+  Node *left;
+  Node *right;
+  Node *next;
+}
+```
+
+填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 NULL 。
+
+初始状态下，所有 next 指针都被设置为 NULL 。
+
+```cpp
+#include <cstring>
+
+using namespace std;
+
+class Node {
+public:
+    int val;
+    Node* left;
+    Node* right;
+    Node* next;
+
+    Node() : val(0), left(NULL), right(NULL), next(NULL) {}
+
+    Node(int _val) : val(_val), left(NULL), right(NULL), next(NULL) {}
+
+    Node(int _val, Node* _left, Node* _right, Node* _next)
+        : val(_val), left(_left), right(_right), next(_next) {}
+};
+
+class Solution {
+public:
+    Node* connect(Node* root) {
+        if (!root) return root;
+        auto source = root;
+        while (source) {
+            auto head = new Node(-1);
+            auto tail = head;
+            for (auto p = source; p; p = p->next) {
+                if (p->left) tail = tail->next = p->left;
+                if (p->right) tail = tail->next = p->right;
+            }
+            source = head->next;
+        }
+        return root;
+    }
+};
+```
+
+## 119. 杨辉三角
+
+给定一个非负整数 numRows，生成「杨辉三角」的前 numRows 行。
+
+在「杨辉三角」中，每个数是它左上方和右上方的数的和。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    vector<vector<int>> generate(int numRows) {
+        vector<vector<int>> res;
+        vector<int> layer_1 = {1};
+        vector<int> layer_2 = {1, 1};
+        if (numRows == 1) return {{1}};
+        if (numRows == 2) return {{1}, {1, 1}};
+
+        else {
+            res.push_back(layer_1);
+            res.push_back(layer_2);
+
+            for (int i = 2; i < numRows; i ++) {
+                vector<int> layer_cur;
+                layer_cur.push_back(1);
+                for (int j = 0; j < res[i - 1].size() - 1; j ++) {
+                    layer_cur.push_back(res[i - 1][j] + res[i - 1][j + 1]);
+                }
+                layer_cur.push_back(1);
+                res.push_back(layer_cur);
+            }
+        }
+        return res;
+    }
+};
+```
+
+## 119. 杨辉三角 II
+
+给定一个非负索引 rowIndex，返回「杨辉三角」的第 rowIndex 行。
+
+在「杨辉三角」中，每个数是它左上方和右上方的数的和。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    vector<int> getRow(int n) {
+        vector<vector<int>> f(2, vector<int>(n + 1));
+        for (int i = 0; i <= n; i ++) {
+            f[i & 1][0] = f[i & 1][i] = 1;
+            for (int j = 1; j < i; j ++) {
+                f[i & 1][j] = f[i - 1 & 1][j - 1] + f[i - 1 & 1][j];
+            }
+        }
+        return f[n & 1];
+    }
+};
+```
+
+## 120. 三角形最小路径和
+
+给定一个三角形 triangle ，找出自顶向下的最小路径和。
+
+每一步只能移动到下一行中相邻的结点上。相邻的结点 在这里指的是 下标 与 上一层结点下标 相同或者等于 上一层结点下标 + 1 的两个结点。也就是说，如果正位于当前行的下标 i ，那么下一步可以移动到下一行的下标 i 或 i + 1 。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int minimumTotal(vector<vector<int>>& f) {
+        for (int i = f.size() - 2; i >= 0; i --) {
+            for (int j = 0; j <= i; j ++) {
+                f[i][j] += min(f[i + 1][j], f[i + 1][j + 1]);
+            }
+        }
+        return f[0][0];
+    }
+};
+```
+
+## 121. 买卖股票的最佳时机
+
+给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。
+
+你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。
+
+返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int res = 0;
+        for (int i = 0, min_p = INT_MAX; i < prices.size(); i ++) {
+            res = max(res, prices[i] - min_p);
+            min_p = min(min_p, prices[i]);
+        }
+        return res;
+    }
+};
+```
+
+## 122. 买卖股票的最佳时机 II
+
+给你一个整数数组 prices ，其中 prices[i] 表示某支股票第 i 天的价格。
+
+在每一天，你可以决定是否购买和/或出售股票。你在任何时候  最多  只能持有 一股 股票。你也可以先购买，然后在 同一天 出售。
+
+返回 你能获得的 最大 利润 。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int res = 0;
+        for (int i = 0; i < prices.size() - 1; i ++) {
+            res += max(0, prices[i + 1] - prices[i]);
+        }
+        return res;
+    }
+};
+```
+
+## 123. 买卖股票的最佳时机 III
+
+给定一个数组，它的第 i 个元素是一支给定的股票在第 i 天的价格。
+
+设计一个算法来计算你所能获取的最大利润。你最多可以完成  两笔  交易。
+
+注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int n = prices.size();
+        vector<int> f(n + 1);
+        for (int i = 1, min_p = INT_MAX; i <= n; i ++) {
+            f[i] = max(f[i - 1], prices[i - 1] - min_p);
+            min_p = min(min_p, prices[i - 1]);
+        }
+
+        int res = 0;
+        for (int i = n, max_p = 0; i; i --) {
+            res = max(res, f[i - 1] + max_p - prices[i - 1]);
+            max_p = max(max_p, prices[i - 1]);
+        }
+
+        return res;
+    }
+};
+```
+
+## 124. 二叉树中的最大路径和
+
+二叉树中的 路径 被定义为一条节点序列，序列中每对相邻节点之间都存在一条边。同一个节点在一条路径序列中 至多出现一次 。该路径 至少包含一个 节点，且不一定经过根节点。
+
+路径和 是路径中各节点值的总和。
+
+给你一个二叉树的根节点 root ，返回其 最大路径和 。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
+class Solution {
+public:
+    int ans = INT_MIN;
+
+    int maxPathSum(TreeNode* root) {
+        dfs(root);
+        return ans;
+    }
+
+    int dfs(TreeNode* root) {
+        if (!root) return 0;
+        int left = max(0, dfs(root->left)), right = max(0, dfs(root->right));
+        ans = max(ans, left + right + root->val);
+        return root->val + max(left, right);
+    }
+};
+```
+
+## 125. 验证回文串
+
+如果在将所有大写字符转换为小写字符、并移除所有非字母数字字符之后，短语正着读和反着读都一样。则可以认为该短语是一个 回文串 。
+
+字母和数字都属于字母数字字符。
+
+给你一个字符串 s，如果它是 回文串 ，返回 true ；否则，返回 false 。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+class Solution {
+public:
+    bool check(char c) {
+        return c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9';
+    }
+
+    bool isPalindrome(string s) {
+        int n = s.size();
+        for (int i = 0, j = n - 1; i < n && j >= 0; i ++, j --) {
+            while (i < j && !check(s[i])) i ++;
+            while (i < j && !check(s[j])) j --;
+            if (i < j && tolower(s[i]) != tolower(s[j])) return false;
+        }
+        return true;
+    }
+};
+```
+
+## 126. 单词接龙 II
+
+按字典 wordList 完成从单词 beginWord 到单词 endWord 转化，一个表示此过程的 转换序列 是形式上像 beginWord -> s1 -> s2 -> ... -> sk 这样的单词序列，并满足：
+
+每对相邻的单词之间仅有单个字母不同。
+转换过程中的每个单词 si（1 {'<='} i {'<='} k）必须是字典 wordList 中的单词。注意，beginWord 不必是字典 wordList 中的单词。
+sk == endWord
+给你两个单词 beginWord 和 endWord ，以及一个字典 wordList 。请你找出并返回所有从 beginWord 到 endWord 的 最短转换序列 ，如果不存在这样的转换序列，返回一个空列表。每个序列都应该以单词列表 [beginWord, s1, s2, ..., sk] 的形式返回。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    vector<vector<string>> ans;
+    vector<string> path;
+    unordered_set<string> S;
+    unordered_map<string, int> dist;
+
+    vector<vector<string>> findLadders(string beginWord, string endWord, vector<string>& wordList) {
+        for (auto& word : wordList) S.insert(word);
+        queue<string> q;
+        q.push(beginWord);
+        dist[beginWord] = 0;
+
+        while (q.size()) {
+            auto t = q.front();
+            q.pop();
+            string r = t;
+            for (int i = 0; i < t.size(); i ++) {
+                t = r;
+                for (char j = 'a'; j <= 'z'; j ++) {
+                    if (j != t[i]) {
+                        t[i] = j;
+                        if (S.count(t) && dist.count(t) == 0) {
+                            dist[t] = dist[r] + 1;
+                            if (t == endWord) break;
+                            q.push(t);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (dist.count(endWord)) {
+            path.push_back(beginWord);
+            dfs(beginWord, endWord);
+        }
+
+        return ans;
+    }
+
+    void dfs(string st, string ed) {
+        if (st == ed) {
+            ans.push_back(path);
+            return;
+        }
+
+        string r = st;
+        for (int i = 0; i < st.size(); i ++) {
+            st = r;
+            for (char j = 'a'; j < 'z'; j ++) {
+                if (j != r[i]) {
+                    st[i] = j;
+                    if (S.count(st) && dist[r] + 1 == dist[st]) {
+                        path.push_back(st);
+                        dfs(st, ed);
+                        path.pop_back();
+                    }
+                }
+            }
+        }
+    }
+};
+```
+
+## 127. 单词接龙
+
+字典 wordList 中从单词 beginWord 和 endWord 的 转换序列 是一个按下述规格形成的序列 beginWord -> s1-> s2-> ... -> sk：
+
+每一对相邻的单词只差一个字母。
+ 对于 1 {'<='} i {'<='} k 时，每个 si 都在 wordList 中。注意， beginWord 不需要在 wordList 中。
+sk== endWord
+给你两个单词 beginWord 和 endWord 和一个字典 wordList ，返回 从 beginWord 到 endWord 的 最短转换序列 中的 单词数目 。如果不存在这样的转换序列，返回 0 。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        unordered_set<string> S;
+        unordered_map<string, int> dist;
+        queue<string> q;
+
+        for (string& word : wordList) S.insert(word);
+        q.push(beginWord);
+        dist[beginWord] = 0;
+
+        while (q.size()) {
+            string t = q.front();
+            q.pop();
+            string r = t;
+            for (int i = 0; i < t.size(); i ++) {
+                t = r;
+                for (char j = 'a'; j <= 'z'; j ++) {
+                    if (t[i] != j) {
+                        t[i] = j;
+                        if (S.count(t) && !dist.count(t)) {
+                            dist[t] = dist[r] + 1;
+                            if (t == endWord) return dist[t] + 1;
+                            q.push(t);
+                        }
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+};
+```
+
+## 128. 最长连续序列
+
+给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。
+
+请你设计并实现时间复杂度为 O(n) 的算法解决此问题。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        unordered_set<int> S;
+        for (auto& num : nums) S.insert(num);
+
+        int res = 0;
+        for (auto& num : nums) {
+            if (!S.count(num - 1)) {
+                int y = num;
+                S.erase(num);
+                while (S.count(y + 1)) {
+                    y ++;
+                    S.erase(y);
+                }
+                res = max(res, y - num + 1);
+            }
+        }
+        return res;
+    }
+};
+```
+
+## 129. 求根节点到叶节点数字之和
+
+给你一个二叉树的根节点 root ，树中每个节点都存放有一个 0 到 9 之间的数字。
+每条从根节点到叶节点的路径都代表一个数字：
+
+例如，从根节点到叶节点的路径 1 -> 2 -> 3 表示数字 123 。
+计算从根节点到叶节点生成的 所有数字之和 。
+
+叶节点 是指没有子节点的节点。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
+class Solution {
+public:
+    int res = 0;
+
+    void dfs(TreeNode* node, int path) {
+        if (!node) return;
+
+        if (node && !node->left && !node->right) {
+            res += (path * 10 + node->val);
+            return;
+        }
+
+        dfs(node->left, path * 10 + node->val);
+        dfs(node->right, path * 10 + node->val);
+    }
+
+    int sumNumbers(TreeNode* root) {
+        dfs(root, 0);
+        return res;
+    }
+};
+```
+
+## 130. 被围绕的区域
+
+给你一个 m x n 的矩阵 board ，由若干字符 'X' 和 'O' ，找到所有被 'X' 围绕的区域，并将这些区域里所有的 'O' 用 'X' 填充。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int n, m;
+    vector<vector<char>> board;
+    int dx[4] = {-1, 0, 1, 0}, dy[4] = {0, 1, 0, -1};
+
+    void solve(vector<vector<char>>& _board) {
+        board = _board;
+        n = board.size();
+        if(!n) return;
+        m = board[0].size();
+
+        for (int i = 0; i < n; i ++) {
+            if (board[i][0] == 'O') dfs(i, 0);
+            if (board[i][m - 1] == 'O') dfs(i, m - 1);
+        }
+
+        for (int i = 0; i < m; i ++) {
+            if (board[0][i] == 'O') dfs(0, i);
+            if (board[n - 1][i] == 'O') dfs(n - 1, i);
+        }
+
+        for (int i = 0; i < n; i ++) {
+            for (int j = 0; j < m; j ++) {
+                if (board[i][j] == '#') board[i][j] = 'O';
+                else board[i][j] = 'X';
+            }
+        }
+        _board = board;
+    }
+
+    void dfs(int x, int y) {
+        board[x][y] = '#';
+        for (int i = 0; i < 4; i ++) {
+            int a = x + dx[i];
+            int b = y + dy[i];
+
+            if (a >= 0 && a < n && b >= 0 && b < m && board[a][b] == 'O') dfs(a, b);
+        }
+    }
+};
+```
+
+## 131. 分割回文串
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    vector<vector<bool>> f;
+    vector<vector<string>> ans;
+    vector<string> path;
+
+    vector<vector<string>> partition(string s) {
+        int n = s.size();
+        f = vector<vector<bool>>(n, vector<bool>(n));
+
+        for (int j = 0; j < n; j ++) {
+            for (int i = 0; i <= j; i ++) {
+                    if (i == j) f[i][j] = true;
+                else if (s[i] == s[j]) {
+                    if (i + 1 > j - 1 || f[i + 1][j - 1]) f[i][j] = true;
+                }
+            }
+        }
+
+        dfs(s, 0);
+        return ans;
+    }
+
+    void dfs(string& s, int u) {
+        if (u == s.size()) ans.push_back(path);
+        else {
+                for (int i = u; i < s.size(); i ++) {
+                    if (f[u][i]) {
+                        path.push_back(s.substr(u, i - u + 1));
+                        dfs(s, i + 1);
+                        path.pop_back();
+                    }
+                }
+            }
+        }
+};
+```
+
+## 132. 分割回文串 II
+
+给你一个字符串 s，请你将 s 分割成一些子串，使每个子串都是回文。
+
+返回符合要求的 最少分割次数 。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int minCut(string s) {
+        int n = s.size();
+        s = ' ' + s;
+
+        vector<vector<bool>> g(n + 1, vector<bool>(n + 1));
+        vector<int> f(n + 1, 1e8);
+
+        for (int j = 1; j <= n; j ++) {
+            for (int i = 1; i <= n; i ++) {
+                if (i == j) g[i][j] = true;
+                else {
+                    if (s[i] == s[j]) {
+                        if (i + 1 > j - 1 || g[i + 1][j - 1]) g[i][j] = true;
+                    }
+                }
+            }
+        }
+
+        f[0] = 0;
+        for (int i = 1; i <= n; i ++) {
+            for (int j = 1; j <= i; j ++) {
+                if (g[j][i]) {
+                    f[i] = min(f[i], f[j - 1] + 1);
+                }
+            }
+        }
+
+        return f[n] - 1;
+    }
+};
+```
+
+## 133. 克隆图
+
+给你无向 连通 图中一个节点的引用，请你返回该图的 深拷贝（克隆）。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    vector<Node*> neighbors;
+    Node() {
+        val = 0;
+        neighbors = vector<Node*>();
+    }
+    Node(int _val) {
+        val = _val;
+        neighbors = vector<Node*>();
+    }
+    Node(int _val, vector<Node*> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+};
+
+
+class Solution {
+public:
+    unordered_map<Node*, Node*> hash;
+
+    Node* cloneGraph(Node* node) {
+        if (!node) return NULL;
+
+        dfs(node);
+
+        for (auto [p, e] : hash) {
+            for (auto n : p->neighbors) {
+                e->neighbors.push_back(hash[n]);
+            }
+        }
+
+        return hash[node];
+    }
+
+    void dfs(Node* node) {
+        hash[node] = new Node(node->val);
+
+        for (auto p : node->neighbors) {
+            if (!hash.count(p)) dfs(p);
+        }
+    }
+};
+```
+
+## 134. 加油站
+
+在一条环路上有 n 个加油站，其中第 i 个加油站有汽油 gas[i] 升。
+
+你有一辆油箱容量无限的的汽车，从第 i 个加油站开往第 i+1 个加油站需要消耗汽油 cost[i] 升。你从其中的一个加油站出发，开始时油箱为空。
+
+给定两个整数数组 gas 和 cost ，如果你可以按顺序绕环路行驶一周，则返回出发时加油站的编号，否则返回 -1 。如果存在解，则 保证 它是 唯一 的。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+        int n = gas.size();
+
+        for (int i = 0, j = 0; i < n;) {
+            int left = 0;
+            for (j = 0; j < n; j ++) {
+                int k = (i + j) % n;
+                left = left + gas[k] - cost[k];
+                if (left < 0) break;
+            }
+            if (j == n) return i;
+            i = i + j + 1;
+        }
+        return -1;
+    }
+};
+```
+
+## 135. 分发糖果
+
+n 个孩子站成一排。给你一个整数数组 ratings 表示每个孩子的评分。
+
+你需要按照以下要求，给这些孩子分发糖果：
+
+每个孩子至少分配到 1 个糖果。
+相邻两个孩子评分更高的孩子会获得更多的糖果。
+请你给每个孩子分发糖果，计算并返回需要准备的 最少糖果数目 。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    vector<int> f;
+    vector<int> w;
+    int n;
+
+    int candy(vector<int>& ratings) {
+        n = ratings.size();
+        w = ratings;
+        int res = 0;
+        f.resize(n, -1);
+
+        for (int i = 0; i < n; i ++) res += dp(i);
+
+        return res;
+    }
+
+    int dp(int x) {
+        if (f[x] != -1) return f[x];
+
+        f[x] = 1;
+        if (x && w[x] > w[x - 1]) f[x] = max(f[x], dp(x - 1) + 1);
+        if (x + 1 < n && w[x] > w[x + 1]) f[x] = max(f[x], dp(x + 1) + 1);
+
+        return f[x];
+    }
+};
+```
+
+## 136. 只出现一次的数字
+
+给你一个 非空 整数数组 nums ，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。
+
+你必须设计并实现线性时间复杂度的算法来解决此问题，且该算法只使用常量额外空间。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int ans = 0;
+
+        for (int i = 0; i < nums.size(); i ++) {
+            ans ^= nums[i];
+        }
+
+        return ans;
+    }
+};
+```
+
+## 137. 只出现一次的数字 II
+
+给你一个整数数组 nums ，除某个元素仅出现 一次 外，其余每个元素都恰出现 三次 。请你找出并返回那个只出现了一次的元素。
+
+你必须设计并实现线性时间复杂度的算法且不使用额外空间来解决此问题。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+		int ans = 0;
+
+		for (int i = 0; i < 32; i ++) {
+			int total = 0;
+			for (int num : nums) {
+				total += ((num >> i) & 1);
+			}
+
+			if (total % 3) {
+				ans |= (1 << i);
+			}
+		}
+
+		return ans;
+    }
+};
+```
+
+## 138. 复制带随机指针的链表
+
+给你一个长度为 n 的链表，每个节点包含一个额外增加的随机指针 random ，该指针可以指向链表中的任何节点或空节点。
+
+构造这个链表的 深拷贝。 深拷贝应该正好由 n 个 全新 节点组成，其中每个新节点的值都设为其对应的原节点的值。新节点的 next 指针和 random 指针也都应指向复制链表中的新节点，并使原链表和复制链表中的这些指针能够表示相同的链表状态。复制链表中的指针都不应指向原链表中的节点 。
+
+例如，如果原链表中有 X 和 Y 两个节点，其中 X.random --> Y 。那么在复制链表中对应的两个节点 x 和 y ，同样有 x.random --> y 。
+
+返回复制链表的头节点。
+
+用一个由 n 个节点组成的链表来表示输入/输出中的链表。每个节点用一个 [val, random_index] 表示：
+
+val：一个表示 Node.val 的整数。
+random_index：随机指针指向的节点索引（范围从 0 到 n-1）；如果不指向任何节点，则为 null 。
+你的代码 只 接受原链表的头节点 head 作为传入参数。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* next;
+    Node* random;
+
+    Node(int _val) {
+        val = _val;
+        next = NULL;
+        random = NULL;
+    }
+};
+
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        for (auto p = head; p; p = p->next->next) {
+            auto q = new Node(p->val);
+            q->next = p->next;
+            p->next = q;
+        }
+
+        for (auto p = head; p; p = p->next->next) {
+            if (p->random) {
+                p->next->random = p->random->next;
+            }
+        }
+
+        auto dummy = new Node(-1), cur = dummy;
+        for (auto p = head; p; p = p->next) {
+            auto q = p->next;
+            cur = cur->next = q;
+            p->next = q->next;
+        }
+
+        return dummy->next;
+    }
+};
+```
+
+## 139. 单词拆分
+
+给你一个字符串 s 和一个字符串列表 wordDict 作为字典。请你判断是否可以利用字典中出现的单词拼接出 s 。
+
+注意：不要求字典中出现的单词全部都使用，并且字典中的单词可以重复使用。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        typedef unsigned long long ULL;
+        const int P = 131;
+        unordered_set<ULL> hash;
+        for (auto& word : wordDict) {
+            ULL h = 0;
+            for (auto c : word) h = h * P + c;
+            hash.insert(h);
+        }
+
+        int n = s.size();
+        vector<bool> f(n + 1);
+        s = ' ' + s;
+        f[0] = true;
+        for (int i = 0; i < n; i ++) {
+            if (f[i]) {
+                ULL h = 0;
+                for (int j = i + 1; j <= n; j ++) {
+                    h = h * P + s[j];
+                    if (hash.count(h)) f[j] = true;
+                }
+            }
+        }
+
+        return f[n];
+    }
+};
+```
+
+## 140. 单词拆分 II
+
+给定一个字符串 s 和一个字符串字典 wordDict ，在字符串 s 中增加空格来构建一个句子，使得句子中所有的单词都在词典中。以任意顺序 返回所有这些可能的句子。
+
+注意：词典中的同一个单词可能在分段中被重复使用多次。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int n;
+    unordered_set<string> hash;
+    vector<string> ans;
+    vector<bool> f;
+
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+        n = s.size();
+        for (auto& word : wordDict) hash.insert(word);
+        f.resize(n + 1);
+        f[n] = true;
+
+        for (int i = n - 1; i >= 0; i --) {
+            for (int j = i; j < n; j ++) {
+                if (hash.count(s.substr(i, j - i + 1)) && f[j + 1]) f[i] = true;
+            }
+        }
+        dfs(s, 0, "");
+
+        return ans;
+    }
+
+    void dfs(string& s, int u, string path) {
+        if (u == n) {
+            path.pop_back();
+            ans.push_back(path);
+        } else {
+            for (int i = u; i < n; i ++) {
+                if (hash.count(s.substr(u, i - u + 1)) && f[i + 1]) {
+                    dfs(s, i + 1, path + s.substr(u, i - u + 1) + ' ');
+                }
+            }
+        }
+    }
+};
+```
+
+## 141. 环形链表
+
+给你一个链表的头节点 head ，判断链表中是否有环。
+
+如果链表中有某个节点，可以通过连续跟踪 next 指针再次到达，则链表中存在环。 为了表示给定链表中的环，评测系统内部使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。注意：pos 不作为参数进行传递 。仅仅是为了标识链表的实际情况。
+
+如果链表中存在环 ，则返回 true 。 否则，返回 false 。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        if (!head) return false;
+        if (!head->next) return false;
+
+        auto slow = head;
+        auto fast = head->next;
+
+        while (slow != fast) {
+            if (!fast || !fast->next) return false;
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+
+        return true;
+    }
+};
+```
+
+## 142. 环形链表 II
+
+给定一个链表的头节点 head ，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。
+
+如果链表中有某个节点，可以通过连续跟踪 next 指针再次到达，则链表中存在环。 为了表示给定链表中的环，评测系统内部使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。如果 pos 是 -1，则在该链表中没有环。注意：pos 不作为参数进行传递，仅仅是为了标识链表的实际情况。
+
+不允许修改 链表。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        if (!head) return NULL;
+        if (!head->next) return NULL;
+
+        auto slow = head;
+        auto fast = head;
+
+        while (true) {
+            if (!fast || !fast->next) return NULL;
+            slow = slow->next;
+            fast = fast->next->next;
+
+            if (slow == fast) break;
+        }
+
+        fast = head;
+        while (fast != slow) {
+            fast = fast->next;
+            slow = slow->next;
+        }
+
+        return slow;
+    }
+};
+```

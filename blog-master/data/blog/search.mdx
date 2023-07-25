@@ -1,0 +1,279 @@
+---
+title: '搜索与图论模板题'
+date: '2023-06-19'
+tags: ['cpp', 'algorithms']
+summary: ' '
+draft: false
+author: lov3 camille
+---
+
+# DFS
+
+## 全排列
+
+类似于`next_permutation()`方法s：
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int n;
+vector<int> path;
+vector<bool> check(15, false);
+
+void dfs(int u) {
+	if (u == n + 1) {
+		for (int i = 0; i < n; i ++) {
+			cout << path[i] << ' ';
+		}
+		puts("");
+		return;
+	}
+
+	for (int i = 1; i <= n; i ++) {
+	    if (!check[i]) {
+            path.push_back(i);
+            check[i] = true;
+            dfs(u + 1);
+            check[i] = false;
+	    	path.pop_back();
+	    }
+	}
+}
+
+int main() {
+	scanf("%d", &n);
+
+	dfs(1);
+
+	return 0;
+}
+```
+
+## N-皇后
+
+n− 皇后问题是指将 n 个皇后放在 n×n 的国际象棋棋盘上，使得皇后不能相互攻击到，即任意两个皇后都不能处于同一行、同一列或同一斜线上。
+
+### 解法一：
+
+```cpp
+#include <iostream>
+
+using namespace std;
+
+const int N = 10;
+int n;
+char g[N][N];
+bool col[N], dg[N], udg[N];
+
+void dfs(int u) {
+    if (u == n) {
+        for (int i = 0; i < n; i ++) {
+            puts(g[i]);
+        }
+        puts("");
+        return;
+    }
+
+    for (int i = 0; i < n; i ++) {
+        if (!col[i] && !dg[u + i] && !udg[i - u + n]) {
+            g[u][i] = 'Q';
+            col[i] = dg[u + i] = udg[i - u + n] = true;
+            dfs(u + 1);
+            col[i] = dg[u + i] = udg[i - u + n] = false;
+            g[u][i] = '.';
+        }
+    }
+}
+
+int main() {
+    cin >> n;
+
+    for (int i = 0; i < n; i ++) {
+        for (int j = 0; j < n; j ++) {
+            g[i][j] = '.';
+        }
+    }
+
+    dfs(0);
+}
+```
+
+### 解法二：
+
+```cpp
+#include <iostream>
+
+using namespace std;
+
+const int N = 10;
+int n;
+char g[N][N];
+bool row[N], col[N], dg[N], udg[N];
+
+void dfs(int x, int y, int s) {
+    if (y == n) {
+        y = 0;
+        x += 1;
+    }
+
+    if (x == n) {
+        if (s == n) {
+            for (int i = 0; i < n; i ++) puts(g[i]);
+            puts("");
+        }
+        return;
+    }
+    // not put chess
+    dfs(x, y + 1, s);
+    // put chess
+    if (!row[x] && !col[y] && !dg[x + y] && !udg[y - x + n]) {
+        g[x][y] = 'Q';
+        row[x] = col[y] = dg[x + y] = udg[y - x + n] = true;
+        dfs(x, y + 1, s + 1);
+        row[x] = col[y] = dg[x + y] = udg[y - x + n] = false;
+        g[x][y] = '.';
+    }
+}
+
+int main() {
+    cin >> n;
+
+    for (int i = 0; i < n; i ++) {
+        for (int j = 0; j < n; j ++) {
+            g[i][j] = '.';
+        }
+    }
+
+    dfs(0, 0, 0);
+}
+```
+
+# BFS
+
+## 走迷宫
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int N = 1000;
+int n, m;
+int maze[N][N], path[N][N];
+
+typedef pair<int, int> PII;
+
+int bfs() {
+    int dx[] = {0, 0, -1, 1}, dy[] = {1, -1, 0, 0};
+
+    memset(path, -1, sizeof path);
+    path[0][0] = 0;
+    // 关键在于队列的使用
+    queue<PII> q;
+    q.push({0, 0});
+
+    while (!q.empty()) {
+        auto t = q.front();
+        q.pop();
+
+        for (int i = 0; i < 4; i ++) {
+            int new_x = t.first + dx[i], new_y = t.second + dy[i];
+            if (new_x >= 0 && new_x < n && new_y >= 0 && new_y < m && maze[new_x][new_y] == 0 && path[new_x][new_y] == -1) {
+                q.push({new_x, new_y});
+                path[new_x][new_y] = path[t.first][t.second] + 1;
+            }
+        }
+    }
+
+    return path[n - 1][m - 1];
+}
+
+int main() {
+    scanf("%d%d", &n, &m);
+
+    for (int i = 0; i < n; i ++) {
+        for (int j = 0; j < m; j ++) {
+            int num;
+            cin >> num;
+            maze[i][j] = num;
+        }
+    }
+
+    cout << bfs() << endl;;
+
+    return 0;
+}
+```
+
+## 8 数码
+
+通过将矩阵中的'x'与周围数字两两交换直到得到正确的排列, 最少需要交换多少步？
+
+示例矩阵：
+1 2 3
+x 4 6
+7 5 8
+
+正确矩阵：
+1 2 3
+4 5 6
+7 8 x
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int bfs(string start) {
+    queue<string> q;
+    unordered_map<string, int> d;
+    d[start] = 0;
+    q.push(start);
+    // use string to present a matrix(state)
+    string end = "12345678x";
+
+    while (!q.empty()) {
+        string t = q.front();
+        q.pop();
+
+        int distance = d[t];
+        // final state
+        if (t == end) return distance;
+
+        int pos = t.find('x');
+        // transfer 1-d index to a 2-d index
+        int x = pos / 3, y = pos % 3;
+        int dx[4] = {0, 0, -1, 1}, dy[4] = {-1, 1, 0, 0};
+        for (int i = 0; i < 4; i ++) {
+            int a = x + dx[i], b = y + dy[i];
+            if (a >= 0 && a < 3 && b >= 0 && b < 3) {
+                int cur_pos = a * 3 + b;
+                swap(t[pos], t[cur_pos]);
+                if (!d.count(t)) {
+                    d[t] = distance + 1;
+                    q.push(t);
+                }
+                swap(t[pos], t[cur_pos]);
+            }
+        }
+    }
+
+    return -1;
+}
+
+int main() {
+    char input[9];
+    int n = 0;
+    while (n < 9) {
+        char c;
+        cin >> c;
+        input[n ++] = c;
+    }
+
+    cout << bfs(input) << endl;
+
+    return 0;
+}
+```

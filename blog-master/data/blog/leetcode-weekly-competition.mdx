@@ -1,0 +1,1955 @@
+---
+title: 'LeetCode 周赛记录'
+date: '2022-12-18'
+tags: ['cpp', 'algorithms', 'LeetCode']
+summary: ' '
+draft: false
+author: lov3 camille
+---
+
+## 第 324 场周赛
+
+### 1. 统计相似字符串对的数目
+
+给你一个下标从 0 开始的字符串数组 words 。
+
+如果两个字符串由相同的字符组成，则认为这两个字符串 相似 。
+
+例如，"abca" 和 "cba" 相似，因为它们都由字符 'a'、'b'、'c' 组成。
+然而，"abacba" 和 "bcfd" 不相似，因为它们不是相同字符组成的。
+请你找出满足字符串 words[i] 和 words[j] 相似的下标对 (i, j) ，并返回下标对的数目，其中 0 {'<='} i < j {'<='} word.length - 1 。
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int similarPairs(vector<string>& words) {
+        int n = words.size();
+        int ans = 0;
+        unordered_map<string, int> mp;
+        for (int i = 0; i < n; i++) {
+            string s = words[i];
+            sort(s.begin(), s.end());
+            s.erase(unique(s.begin(), s.end()), s.end());
+            ans += mp[s];
+            mp[s]++;
+        }
+        return ans;
+    }
+};
+```
+
+### 2. 使用质因数之和替换后可以取到的最小值
+
+给你一个正整数 n 。
+
+请你将 n 的值替换为 n 的 质因数 之和，重复这一过程。
+
+注意，如果 n 能够被某个质因数多次整除，则在求和时，应当包含这个质因数同样次数。
+返回 n 可以取到的最小值。
+
+```cpp
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+class Solution {
+public:
+    // you need to prove that it is a monotonically decreasing function.
+    int work(int n) {
+        int res = 0;
+
+        for (int i = 2; i * i <= n; i++) {
+            if (n % i == 0) {
+                while (n % i == 0) n /= i, res += i;
+            }
+        }
+        if (n > 1) res += n;
+        return res;
+    }
+
+    int smallestValue(int n) {
+        while (true) {
+            int next = work(n);
+            if (next == n) break;
+            n = next;
+        }
+        return n;
+    }
+};
+```
+
+## 第 327 场周赛
+
+### 1. 正整数和负整数的最大计数
+
+给你一个按 非递减顺序 排列的数组 nums ，返回正整数数目和负整数数目中的最大值。
+
+换句话讲，如果 nums 中正整数的数目是 pos ，而负整数的数目是 neg ，返回 pos 和 neg 二者中的最大值。
+注意：0 既不是正整数也不是负整数。
+
+```cpp
+#include <vector>
+
+using namespace std;
+
+class Solution {
+public:
+    int maximumCount(vector<int>& nums) {
+        int neg = 0;
+        int pos = 0;
+
+        for (auto& num : nums) {
+            if (num < 0) {
+                neg++;
+            } else if (num > 0) {
+                pos++;
+            }
+        }
+
+        return max(neg, pos);
+    }
+};
+```
+
+### 2. 执行 K 次操作后的最大分数
+
+给你一个下标从 0 开始的整数数组 nums 和一个整数 k 。你的 起始分数 为 0 。
+
+在一步 操作 中：
+
+选出一个满足 0 {'<='} i {'<'} nums.length 的下标 i ，
+将你的 分数 增加 nums[i] ，并且
+将 nums[i] 替换为 ceil(nums[i] / 3) 。
+返回在 恰好 执行 k 次操作后，你可能获得的最大分数。
+
+向上取整函数 ceil(val) 的结果是大于或等于 val 的最小整数。
+
+```cpp
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+class Solution {
+public:
+    long long maxKelements(vector<int>& nums, int k) {
+        priority_queue<int> heap;
+        for (auto& num : nums) {
+            heap.push(num);
+        }
+        long long sum = 0;
+        for (int i = 0; i < k; i++) {
+            int max = heap.top();
+            sum += max;
+            heap.pop();
+            heap.push((max + 2) / 3); // don't use ceil() here;
+        }
+        return sum;
+    }
+};
+```
+
+## 第 328 场周赛
+
+### 1. 数组元素和与数字和的绝对差
+
+给你一个正整数数组 nums 。
+
+元素和 是 nums 中的所有元素相加求和。
+数字和 是 nums 中每一个元素的每一数位（重复数位需多次求和）相加求和。
+返回 元素和 与 数字和 的绝对差。
+
+注意：两个整数 x 和 y 的绝对差定义为 |x - y| 。
+
+```cpp
+#include <vector>
+#include <cmath>
+
+using namespace std;
+
+class Solution {
+public:
+    int differenceOfSum(vector<int>& nums) {
+        int esum = 0;
+        int nsum = 0;
+
+        for (int i = 0; i < nums.size(); i++) {
+            esum += nums[i];
+            nsum += num_sum(nums[i]);
+        }
+
+        return abs(esum - nsum);
+    }
+
+    int num_sum(int& n) {
+        int res = 0;
+        while (n) {
+            res += n % 10;
+            n = n / 10;
+        }
+        return res;
+    }
+};
+```
+
+## 第 331 场周赛
+
+### 1. 从数量最多的堆取走礼物
+
+给你一个整数数组 gifts ，表示各堆礼物的数量。每一秒，你需要执行以下操作：
+
+选择礼物数量最多的那一堆。
+如果不止一堆都符合礼物数量最多，从中选择任一堆即可。
+选中的那一堆留下平方根数量的礼物（向下取整），取走其他的礼物。
+返回在 k 秒后剩下的礼物数量。
+
+```cpp
+#include <cmath>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+class Solution {
+public:
+    long long pickGifts(vector<int>& gifts, int k) {
+        int n = gifts.size();
+        priority_queue<int> heap;
+        for (int i = 0; i < n; i++) {
+            heap.push(gifts[i]);
+        }
+
+        while (k) {
+            int top = heap.top();
+            int sqrt_top = int(sqrt(top));
+            heap.pop();
+            heap.push(sqrt_top);
+            k -= 1;
+        }
+
+        long long res = 0;
+        for (int i = 0; i < n; i++) {
+            res += heap.top();
+            heap.pop();
+        }
+        return res;
+    }
+};
+```
+
+### 2. 统计范围内的元音字符串数
+
+给你一个下标从 0 开始的字符串数组 words 以及一个二维整数数组 queries 。
+
+每个查询 queries[i] = [li, ri] 会要求我们统计在 words 中下标在 li 到 ri 范围内（包含 这两个值）并且以元音开头和结尾的字符串的数目。
+
+返回一个整数数组，其中数组的第 i 个元素对应第 i 个查询的答案。
+
+注意：元音字母是 'a'、'e'、'i'、'o' 和 'u' 。
+
+```cpp
+#include <vector>
+#include <unordered_set>
+#include <string>
+
+using namespace std;
+
+class Solution {
+public:
+    vector<int> vowelStrings(vector<string>& words, vector<vector<int>>& queries) {
+        int n = words.size();
+        int m = queries.size();
+        unordered_set<char> hash{'a', 'e', 'i', 'o', 'u'};
+        vector<int> ref(n);
+
+        for (int i = 0; i < n; i++) {
+            if (hash.count(words[i][0]) && hash.count(words[i].back())) ref[i] = 1;
+        }
+
+        vector<int> sum(n + 1);
+        for (int i = 1; i <= n; i++) {
+            sum[i] = sum[i - 1] + ref[i - 1];
+        }
+
+        vector<int> res(m);
+        for (int i = 0; i < m; i++) {
+            res[i] = sum[queries[i][1] + 1] - sum[queries[i][0]];
+        }
+
+        return res;
+    }
+};
+```
+
+## 第 332 场周赛
+
+### 1. 找出数组的串联值
+
+给你一个下标从 0 开始的整数数组 nums 。
+
+现定义两个数字的 串联  是由这两个数值串联起来形成的新数字。
+
+例如，15 和 49 的串联是 1549 。
+nums 的 串联值  最初等于 0 。执行下述操作直到 nums 变为空：
+
+如果 nums 中存在不止一个数字，分别选中 nums 中的第一个元素和最后一个元素，将二者串联得到的值加到 nums 的 串联值 上，然后从 nums 中删除第一个和最后一个元素。
+如果仅存在一个元素，则将该元素的值加到 nums 的串联值上，然后删除这个元素。
+返回执行完所有操作后 nums 的串联值。
+
+```cpp
+#include <vector>
+#include <string>
+
+using namespace std;
+
+class Solution {
+public:
+    long long findTheArrayConcVal(vector<int>& nums) {
+        typedef long long LL;
+        LL res = 0;
+
+        while (nums.size() > 1) {
+            int n = nums.size();
+            res += (stoi(to_string(nums[0]) + to_string(nums[n - 1])));
+            nums.pop_back();
+            nums.erase(nums.begin());
+        }
+
+        if (nums.size() == 1) res += nums[0];
+
+        return res;
+    }
+};
+```
+
+### 2. 统计公平数对的数目
+
+给你一个下标从 0 开始、长度为 n 的整数数组 nums，和两个整数 lower 和 upper ，返回 公平数对的数目 。
+
+如果 (i, j) 数对满足以下情况，则认为它是一个 公平数对 ：
+
+0 {'<='} i {'<'} j {'<'} n，且
+lower {'<='} nums[i] + nums[j] {'<='} upper
+
+```cpp
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+class Solution {
+public:
+
+    typedef long long LL;
+
+    long long count(vector<int>& nums, int upper) {
+        LL cnt = 0;
+        int left = 0, right = nums.size() - 1;
+
+        while (left < right) {
+            LL sum = nums[left] + nums[right];
+            if (sum <= upper) {
+                cnt += right - left;
+                left += 1;
+            } else right -= 1;
+        }
+
+        return cnt;
+    }
+
+    long long countFairPairs(vector<int>& nums, int lower, int upper) {
+        sort(nums.begin(), nums.end());
+        LL l_cnt = count(nums, lower - 1);
+        LL r_cnt = count(nums, upper);
+        return r_cnt - l_cnt;
+    }
+};
+```
+
+## 第 333 场周赛
+
+### 1. 合并两个二维数组 - 求和法
+
+给你两个 二维 整数数组 nums1 和 nums2.
+
+nums1[i] = [idi, vali] 表示编号为 idi 的数字对应的值等于 vali 。
+nums2[i] = [idi, vali] 表示编号为 idi 的数字对应的值等于 vali 。
+每个数组都包含 互不相同 的 id ，并按 id 以 递增 顺序排列。
+
+请你将两个数组合并为一个按 id 以递增顺序排列的数组，并符合下述条件：
+
+只有在两个数组中至少出现过一次的 id 才能包含在结果数组内。
+每个 id 在结果数组中 只能出现一次 ，并且其对应的值等于两个数组中该 id 所对应的值求和。如果某个数组中不存在该 id ，则认为其对应的值等于 0 。
+返回结果数组。返回的数组需要按 id 以递增顺序排列。
+
+```cpp
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+
+using namespace std;
+
+class Solution {
+public:
+    vector<vector<int>> mergeArrays(vector<vector<int>>& a, vector<vector<int>>& b) {
+        vector<vector<int>> res;
+
+        unordered_map<int, int> hash;
+        for (auto item : a) {
+            hash[item[0]] = item[1];
+        }
+
+        for (auto item : b) {
+            if (hash.count(item[0])) hash[item[0]] += item[1];
+            else hash[item[0]] = item[1];
+        }
+
+        for (auto h : hash) {
+            res.push_back({h.first, h.second});
+        }
+
+        sort(res.begin(), res.end());
+
+        return res;
+    }
+};
+```
+
+### 2. 将整数减少到零需要的最少操作数
+
+给你一个正整数 n ，你可以执行下述操作 任意 次：
+
+n 加上或减去 2 的某个 幂
+返回使 n 等于 0 需要执行的 最少 操作数。
+
+如果 x == 2i 且其中 i >= 0 ，则数字 x 是 2 的幂。
+
+```cpp
+#include <iostream>
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int minOperations(int m) {
+        int k = 0;
+
+        while (pow(2, k) < m) k++;
+
+        if (pow(2, k) == m) return 1;
+        else {
+            return 1 + minOperations(min(m - pow(2, k - 1), pow(2, k) - m));
+        }
+    }
+};
+```
+
+## 第 336 场周赛
+
+### 1. 统计范围内的元音字符串数
+
+给你一个下标从 0 开始的字符串数组 words 和两个整数：left 和 right 。
+
+如果字符串以元音字母开头并以元音字母结尾，那么该字符串就是一个 元音字符串 ，其中元音字母是 'a'、'e'、'i'、'o'、'u' 。
+
+返回 words[i] 是元音字符串的数目，其中 i 在闭区间 [left, right] 内。
+
+```cpp
+#include <vector>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+class Solution {
+public:
+    vector<char> ref = {'a', 'e', 'i', 'o', 'u'};
+
+    int vowelStrings(vector<string>& words, int left, int right) {
+        int res = 0;
+        for (int i = left; i <= right; i ++) {
+            if (judge(words[i])) res ++;
+        }
+        return res;
+    }
+
+    bool judge(string s) {
+        if (find(ref.begin(), ref.end(), s[0]) != ref.end() && find(ref.begin(), ref.end(), s[s.size() - 1]) != ref.end()) return true;
+        return false;
+    }
+};
+```
+
+### 2. 重排数组以得到最大前缀分数
+
+给你一个下标从 0 开始的整数数组 nums 。你可以将 nums 中的元素按 任意顺序 重排（包括给定顺序）。
+
+令 prefix 为一个数组，它包含了 nums 重新排列后的前缀和。换句话说，prefix[i] 是 nums 重新排列后下标从 0 到 i 的元素之和。nums 的 分数 是 prefix 数组中正整数的个数。
+
+返回可以得到的最大分数。
+
+```cpp
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+typedef long long LL;
+
+class Solution {
+public:
+    int maxScore(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        reverse(nums.begin(), nums.end());
+
+        int res = 0;
+        vector<LL> prefix(nums.size());
+        for (int i = 0; i < nums.size(); i ++) {
+            if (!i) prefix[i] = nums[i];
+            else prefix[i] = prefix[i - 1] + nums[i];
+        }
+
+        for (auto& e : prefix) {
+            if (e > 0) res ++;
+        }
+
+        return res;
+    }
+};
+```
+
+## 第 337 场周赛
+
+### 1. 美丽子集的数目
+
+给你一个由正整数组成的数组 nums 和一个 正 整数 k 。
+
+如果 nums 的子集中，任意两个整数的绝对差均不等于 k ，则认为该子数组是一个 美丽 子集。
+
+返回数组 nums 中 非空 且 美丽 的子集数目。
+
+nums 的子集定义为：可以经由 nums 删除某些元素（也可能不删除）得到的一个数组。只有在删除元素时选择的索引不同的情况下，两个子集才会被视作是不同的子集。
+
+```cpp
+#include <vector>
+
+using namespace std;
+
+class Solution {
+public:
+    vector<int> evenOddBit(int n) {
+        int even = 0, odd = 0;
+        int idx = 0;
+        while (n) {
+            if (n % 2 && (idx == 0 || idx % 2 == 0)) even ++;
+            else if (n % 2 && idx % 2 == 1) odd ++;
+            idx ++;
+            n /= 2;
+        }
+        return {even, odd};
+    }
+};
+```
+
+### 2. 检查骑士巡视方案
+
+骑士在一张 n x n 的棋盘上巡视。在有效的巡视方案中，骑士会从棋盘的 左上角 出发，并且访问棋盘上的每个格子 恰好一次 。
+
+给你一个 n x n 的整数矩阵 grid ，由范围 [0, n * n - 1] 内的不同整数组成，其中 grid[row][col] 表示单元格 (row, col) 是骑士访问的第 grid[row][col] 个单元格。骑士的行动是从下标 0 开始的。
+
+如果 grid 表示了骑士的有效巡视方案，返回 true；否则返回 false。
+
+注意，骑士行动时可以垂直移动两个格子且水平移动一个格子，或水平移动两个格子且垂直移动一个格子。下图展示了骑士从某个格子出发可能的八种行动路线。
+
+```cpp
+#include <vector>
+#include <unordered_map>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+typedef pair<int, int> PII;
+
+class Solution {
+public:
+    bool checkValidGrid(vector<vector<int>>& grid) {
+        int n = grid.size();
+        vector<PII> all;
+        all.push_back({-2, 1});
+        all.push_back({2, -1});
+        all.push_back({-2, -1});
+        all.push_back({2, 1});
+        all.push_back({1, 2});
+        all.push_back({1, -2});
+        all.push_back({-1, 2});
+        all.push_back({-1, -2});
+        int temp = grid[0][0];
+        if (temp != 0) return false;
+
+        int col = 0, row = 0;
+        unordered_map<int, PII> ref = choice(grid, col, row, n, all);
+        while (ref.size() && ref.find(temp + 1) != ref.end() && temp < n * n) {
+            col = ref[temp + 1].first;
+            row = ref[temp + 1].second;
+            temp += 1;
+            ref = choice(grid, col, row, n, all);
+        }
+        return temp == n * n - 1;
+    }
+
+    unordered_map<int, pair<int, int>> choice(vector<vector<int>>& grid, int raw_col, int raw_row, int n, vector<PII> all) {
+        unordered_map<int, pair<int, int>> ref;
+        for (auto& pair : all) {
+            int col, row;
+            col = raw_col + pair.first;
+            row = raw_row + pair.second;
+            if (n - 1 >= col && col>= 0 && n - 1 >= row && row >= 0) {
+                ref[grid[col][row]] = {col, row};
+            }
+        }
+        return ref;
+    }
+};
+```
+
+## 第 338 场周赛
+
+### 1. K 件物品的最大和
+
+袋子中装有一些物品，每个物品上都标记着数字 1 、0 或 -1 。
+
+给你四个非负整数 numOnes 、numZeros 、numNegOnes 和 k 。
+
+袋子最初包含：
+
+numOnes 件标记为 1 的物品。
+numZeroes 件标记为 0 的物品。
+numNegOnes 件标记为 -1 的物品。
+现计划从这些物品中恰好选出 k 件物品。返回所有可行方案中，物品上所标记数字之和的最大值。
+
+```cpp
+using namespace std;
+
+class Solution {
+public:
+    int kItemsWithMaximumSum(int numOnes, int numZeros, int numNegOnes, int k) {
+        if (k <= numOnes) {
+            return k;
+        } else if (k > numOnes && k <= numOnes + numZeros) {
+            return numOnes;
+        } else {
+            return numOnes - (k - numOnes - numZeros);
+        }
+    }
+};
+```
+
+### 3. 使数组元素全部相等的最少操作次数
+
+给你一个正整数数组 nums。
+
+同时给你一个长度为 m 的整数数组 queries。第 i 个查询中，你需要将 nums 中所有元素变成 queries[i]。你可以执行以下操作  任意  次：
+
+将数组里一个元素  增大  或者  减小 1。
+请你返回一个长度为 m 的数组 answer，其中 answer[i]是将 nums 中所有元素变成 queries[i] 的  最少  操作次数。
+
+注意，每次查询后，数组变回最开始的值。
+
+```cpp
+#include <vector>
+#include <bits/stdc++.h>
+
+using namespace std;
+
+typedef long long LL;
+
+class Solution {
+public:
+    vector<long long> minOperations(vector<int>& nums, vector<int>& queries) {
+        int n = nums.size();
+        sort(nums.begin(), nums.end());
+        vector<LL> res, psum(n + 1);
+
+        for (int i = 1; i <= n; i ++) psum[i] = psum[i - 1] + nums[i - 1];
+
+        for (LL q : queries) {
+            LL idx = lower_bound(nums.begin(), nums.end(), q) - nums.begin();
+            LL small = idx, large = n - idx;
+            LL cnt = q * small - psum[idx] + (psum[n] - psum[idx]) - q * large;
+            res.push_back(cnt);
+        }
+
+        return res;
+    }
+};
+```
+
+## 第 340 场周赛
+
+### 1. 对角线上的质数
+
+给你一个下标从 0 开始的二维整数数组 nums 。
+
+返回位于 nums 至少一条 对角线 上的最大 质数 。如果任一对角线上均不存在质数，返回 0 。
+
+```cpp
+#include <vector>
+
+using namespace std;
+
+class Solution {
+public:
+    int diagonalPrime(vector<vector<int>>& nums) {
+        int res = 0;
+        for (int i = 0; i < nums.size(); i ++) {
+            if (isPrime(nums[i][i])) res = max(res, nums[i][i]);
+            if (isPrime(nums[i][nums.size() - i - 1])) res = max(res,  nums[i][nums.size() - i - 1]);
+        }
+        return res;
+    }
+
+    bool isPrime(int n) {
+        if (n == 1) return false;
+        for(int i = 2; i * i <= n; i ++) {
+            if(n % i == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+};
+```
+
+### 2. 等值距离和
+
+给你一个下标从 0 开始的整数数组 nums 。现有一个长度等于 nums.length 的数组 arr 。对于满足 nums[j] == nums[i] 且 j != i 的所有 j ，arr[i] 等于所有 |i - j| 之和。如果不存在这样的 j ，则令 arr[i] 等于 0 。
+
+返回数组 arr 。
+
+```cpp
+#include <vector>
+#include <unordered_map>
+
+using namespace std;
+
+class Solution {
+public:
+    typedef long long LL;
+    vector<long long> distance(vector<int>& nums) {
+        int n = nums.size();
+        vector<LL> arr(n);
+        unordered_map<int, vector<LL>> ref;
+
+        for (int i = 0; i < n; i ++) {
+            ref[nums[i]].push_back(i);
+        }
+
+        for (auto& it : ref) {
+            vector<LL> sub_arr = it.second;
+            int m = it.second.size();
+            vector<LL> sum(m);
+            sum[0] = sub_arr[0];
+            for (int i = 1; i < m; i ++) {
+                sum[i] = sum[i - 1] + sub_arr[i];
+            }
+
+            for (int i = 0; i < m; i ++) {
+                if (i == 0) {
+                    arr[sub_arr[i]] = sum[m - 1] - sum[i] * m;
+                    continue;
+                }
+                LL l = sub_arr[i] * i - sum[i - 1];
+                LL r = sum[m - 1] - sum[i] - (m - i - 1LL) * sub_arr[i];
+                arr[sub_arr[i]] = l + r;
+            }
+        }
+
+        return arr;
+    }
+};
+```
+
+## 第 341 场周赛
+
+### 1. 一最多的行
+
+给你一个大小为 m x n 的二进制矩阵 mat ，请你找出包含最多 1 的行的下标（从 0 开始）以及这一行中 1 的数目。
+
+如果有多行包含最多的 1 ，只需要选择 行下标最小 的那一行。
+
+返回一个由行下标和该行中 1 的数量组成的数组。
+
+```cpp
+#include <vector>
+#include <unordered_map>
+#include <numeric>
+
+using namespace std;
+
+class Solution {
+public:
+    vector<int> rowAndMaximumOnes(vector<vector<int>>& mat) {
+        unordered_map<int, int> cnt;
+        int m = mat.size(), n = mat[0].size();
+        for (int i = 0; i < m; i ++) {
+            cnt[i] = accumulate(mat[i].begin(), mat[i].end(), 0);
+        }
+
+        int l = 0;
+        int r = 0;
+        for (auto it : cnt) {
+            if (it.second > r) {
+                l = it.first;
+                r = it.second;
+            } else if (it.second == r) {
+                l = min(l, it.first);
+            }
+        }
+
+        return {l, r};
+    }
+};
+```
+
+### 2. 找出可整除性得分最大的整数
+
+给你两个下标从 0 开始的整数数组 nums 和 divisors 。
+
+divisors[i] 的 可整除性得分 等于满足 nums[j] 能被 divisors[i] 整除的下标 j 的数量。
+
+返回 可整除性得分 最大的整数 divisors[i] 。如果有多个整数具有最大得分，则返回数值最小的一个。
+
+```cpp
+#include <vector>
+#include <unordered_map>
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int maxDivScore(vector<int>& n, vector<int>& d) {
+        unordered_map<int, int> cnt;
+        sort(d.begin(), d.end());
+
+        for (int i = 0; i < d.size(); i ++) {
+            if (i == 0) {
+                for (int j = 0; j < n.size(); j ++) {
+                    if (n[j] % d[i] == 0) cnt[d[i]] ++;
+                }
+            }
+            if (i && d[i] != d[i - 1]) {
+                for (int j = 0; j < n.size(); j ++) {
+                    if (n[j] % d[i] == 0) cnt[d[i]] ++;
+                }
+            }
+        }
+
+        if (cnt.size() == 0) {
+            sort(d.begin(), d.end());
+            return d[0];
+        }
+
+        int score = 0;
+        int res = INT_MIN;
+        for (auto it : cnt) {
+            if (it.second > score) {
+                score = it.second;
+                res = it.first;
+            } else if (it.second == score) res = min(res, it.first);
+        }
+
+        return res;
+    }
+};
+```
+
+### 3. 构造有效字符串的最少插入数
+
+给你一个字符串 word ，你可以向其中任何位置插入 "a"、"b" 或 "c" 任意次，返回使 word 有效 需要插入的最少字母数。
+
+如果字符串可以由 "abc" 串联多次得到，则认为该字符串 有效 。
+
+```cpp
+#include <string>
+
+using namespace std;
+
+class Solution {
+public:
+    int addMinimum(string s) {
+        int t = s[0] - s.back() + 2;
+        int ans = 0;
+        for (int i = 1; i < s.size(); i ++) {
+            ans += (s[i] - s[i - 1] + 2) % 3;
+        }
+        return ans + t;
+    }
+};
+```
+
+## 第 342 场周赛
+
+### 3. 滑动子数组的美丽值
+
+给你一个长度为 n 的整数数组 nums，请你求出每个长度为 k 的子数组的 美丽值 。
+
+一个子数组的 美丽值  定义为：如果子数组中第 x 小整数  是 负数 ，那么美丽值为第 x 小的数，否则美丽值为 0。
+
+请你返回一个包含 n - k + 1 个整数的数组，依次  表示数组中从第一个下标开始，每个长度为 k 的子数组的  美丽值 。
+
+子数组指的是数组中一段连续 非空  的元素序列。
+
+```cpp
+#include <vector>
+#include <map>
+
+using namespace std;
+
+class Solution {
+public:
+    vector<int> getSubarrayBeauty(vector<int>& nums, int k, int x) {
+        vector<int> ans;
+        map<int, int> cnt;
+        int n = nums.size();
+
+        for (int i = 0; i < k; i ++) {
+            cnt[nums[i]] ++;
+        }
+
+        for (int i = 0; i < n - k + 1; i ++) {
+            int temp = x;
+            for (auto& item : cnt) {
+                temp -= item.second;
+                if (temp <= 0) {
+                    ans.push_back(item.first < 0 ? item.first : 0);
+                    break;
+                }
+            }
+            cnt[nums[i]] --;
+            if (i + k < n) cnt[nums[i + k]] ++;
+        }
+
+        return ans;
+    }
+};
+```
+
+## 第 344 场周赛
+
+### 1. 找出不同元素数目差数组
+
+给你一个下标从 0 开始的数组 nums ，数组长度为 n 。
+
+nums 的 不同元素数目差 数组可以用一个长度为 n 的数组 diff 表示，其中 diff[i] 等于前缀 nums[0, ..., i] 中不同元素的数目 减去 后缀 nums[i + 1, ..., n - 1] 中不同元素的数目。
+
+返回 nums 的 不同元素数目差 数组。
+
+注意 nums[i, ..., j] 表示 nums 的一个从下标 i 开始到下标 j 结束的子数组（包含下标 i 和 j 对应元素）。特别需要说明的是，如果 i > j ，则 nums[i, ..., j] 表示一个空子数组。
+
+```cpp
+#include <vector>
+#include <unordered_map>
+
+using namespace std;
+
+class Solution {
+public:
+    vector<int> distinctDifferenceArray(vector<int>& nums) {
+        vector<int> ans;
+
+        unordered_map<int, int> hash;
+        for (int i = 0; i < nums.size(); i ++) {
+            hash[nums[i]] ++;
+        }
+
+        for (int i = 0; i < nums.size(); i ++) {
+            int left = 0;
+            int right = 0;
+            auto hash_l = hash;
+            auto hash_r = hash;
+            for (int j = 0; j <= i; j ++) {
+                if (hash_l[nums[j]]) left ++, hash_l[nums[j]] = 0;
+            }
+
+            for (int j = i + 1; j < nums.size(); j ++) {
+                if (hash_r[nums[j]]) right ++, hash_r[nums[j]] = 0;
+            }
+
+            ans.push_back(left - right);
+        }
+
+        return ans;
+    }
+};
+```
+
+### 2. 频率跟踪器
+
+请你设计并实现一个能够对其中的值进行跟踪的数据结构，并支持对频率相关查询进行应答。
+
+实现 FrequencyTracker 类：
+
+FrequencyTracker()：使用一个空数组初始化 FrequencyTracker 对象。
+void add(int number)：添加一个 number 到数据结构中。
+void deleteOne(int number)：从数据结构中删除一个 number 。数据结构 可能不包含 number ，在这种情况下不删除任何内容。
+bool hasFrequency(int frequency): 如果数据结构中存在出现 frequency 次的数字，则返回 true，否则返回 false。
+
+```cpp
+#include <vector>
+#include <unordered_map>
+
+using namespace std;
+
+class FrequencyTracker {
+public:
+    const int N = 100010;
+
+    vector<int> store;
+    unordered_map<int, int> freq;
+    vector<int> bit;
+
+    FrequencyTracker() {
+        bit = vector<int>(N, 0);
+    }
+
+    void add(int number) {
+        store.push_back(number);
+        bit[freq[number]] --;
+        freq[number] ++;
+        bit[freq[number]] ++;
+    }
+
+    void deleteOne(int number) {
+        if (freq[number]) {
+            bit[freq[number]] --;
+            freq[number] --;
+            bit[freq[number]] ++;
+        }
+    }
+
+    bool hasFrequency(int frequency) {
+        if (bit[frequency]) return true;
+        return false;
+    }
+};
+
+/**
+ * Your FrequencyTracker object will be instantiated and called as such:
+ * FrequencyTracker* obj = new FrequencyTracker();
+ * obj->add(number);
+ * obj->deleteOne(number);
+ * bool param_3 = obj->hasFrequency(frequency);
+ */
+```
+
+### 3. 有相同颜色的相邻元素数目
+
+给你一个下标从 0 开始、长度为 n 的数组 nums。一开始，所有元素都是 未染色 （值为 0）的。
+
+给你一个二维整数数组 queries，其中 queries[i] = [indexi, colori]。
+
+对于每个操作，你需要将数组 nums 中下标为 indexi 的格子染色为 colori。
+
+请你返回一个长度与 queries 相等的数组 answer，其中 answer[i]是前 i 个操作  之后 ，相邻元素颜色相同的数目。
+
+更正式的，answer[i] 是执行完前 i 个操作后，0 {'<='} j {'<'} n - 1 的下标 j 中，满足 nums[j] == nums[j + 1] 且 nums[j] != 0 的数目。
+
+```cpp
+#include <vector>
+#include <cstring>
+#include <iostream>
+
+using namespace std;
+
+class Solution {
+public:
+vector<int> colorTheArray(int n, vector<vector<int>>& queries) {
+        int nums[n];
+        vector<int> ans;
+
+        memset(nums, 0, sizeof(nums));
+        int cnt = 0;
+        for (auto& q : queries) {
+            int idx = q[0];
+
+            if (idx - 1 >= 0 && nums[idx] == nums[idx - 1] && nums[idx] != 0) cnt --;
+            if (idx + 1 < n && nums[idx] == nums[idx + 1] && nums[idx] != 0) cnt --;
+
+            int color = q[1];
+            nums[idx] = color;
+
+            if (idx - 1 >= 0 && nums[idx] == nums[idx - 1] && nums[idx] != 0) cnt ++;
+            if (idx + 1 < n && nums[idx] == nums[idx + 1] && nums[idx] != 0) cnt ++;
+
+            ans.push_back(cnt);
+        }
+        return ans;
+    }
+};
+```
+
+## 第 345 场周赛
+
+### 1. 找出转圈游戏输家
+
+n 个朋友在玩游戏。这些朋友坐成一个圈，按 顺时针方向 从 1 到 n 编号。从第 i 个朋友的位置开始顺时针移动 1 步会到达第 (i + 1) 个朋友的位置（1 {'<='} i {'<'} n），而从第 n 个朋友的位置开始顺时针移动 1 步会回到第 1 个朋友的位置。
+
+游戏规则如下：
+
+第 1 个朋友接球。
+
+接着，第 1 个朋友将球传给距离他顺时针方向 k 步的朋友。
+然后，接球的朋友应该把球传给距离他顺时针方向 2 _ k 步的朋友。
+接着，接球的朋友应该把球传给距离他顺时针方向 3 _ k 步的朋友，以此类推。
+换句话说，在第 i 轮中持有球的那位朋友需要将球传递给距离他顺时针方向 i \* k 步的朋友。
+
+当某个朋友第 2 次接到球时，游戏结束。
+
+在整场游戏中没有接到过球的朋友是 输家 。
+
+给你参与游戏的朋友数量 n 和一个整数 k ，请按升序排列返回包含所有输家编号的数组 answer 作为答案。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    vector<int> circularGameLosers(int n, int k) {
+        vector<int> ans;
+        vector<int> p(n, 0);
+        int r = 0;
+        int c = 0;
+
+        while (true) {
+            c = (c + r * k) % n;
+            p[c] += 1;
+            r += 1;
+            if (count(p.begin(), p.end(), 2)) break;
+        }
+
+        for (int i = 0; i < n; i ++) {
+            if (p[i] == 0) ans.push_back(i + 1);
+        }
+
+        return ans;
+    }
+};
+```
+
+### 2. 相邻值的按位异或
+
+下标从 0 开始、长度为 n 的数组 derived 是由同样长度为 n 的原始 二进制数组 original 通过计算相邻值的 按位异或（⊕）派生而来。
+
+特别地，对于范围 [0, n - 1] 内的每个下标 i ：
+
+如果 i = n - 1 ，那么 derived[i] = original[i] ⊕ original[0]
+否则 derived[i] = original[i] ⊕ original[i + 1]
+给你一个数组 derived ，请判断是否存在一个能够派生得到 derived 的 有效原始二进制数组 original 。
+
+如果存在满足要求的原始二进制数组，返回 true ；否则，返回 false 。
+
+二进制数组是仅由 0 和 1 组成的数组。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    bool doesValidArrayExist(vector<int>& derived) {
+        int n = derived[0];
+        for (int i = 1; i < derived.size(); i ++) {
+            n ^= derived[i];
+        }
+        return n == 0;
+    }
+};
+```
+
+### 3. 矩阵中移动的最大次数
+
+给你一个下标从 0 开始、大小为 m x n 的矩阵 grid ，矩阵由若干 正 整数组成。
+
+你可以从矩阵第一列中的 任一 单元格出发，按以下方式遍历 grid ：
+
+从单元格 (row, col) 可以移动到 (row - 1, col + 1)、(row, col + 1) 和 (row + 1, col + 1) 三个单元格中任一满足值 严格 大于当前单元格的单元格。
+返回你在矩阵中能够 移动 的 最大 次数。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int ans = 0;
+
+    int maxMoves(vector<vector<int>>& grid) {
+        int m = grid.size();
+        int n = grid[0].size();
+        vector<vector<bool>> visit(m, vector<bool>(n));
+
+        for (int i = 0; i < m; i ++) {
+            dfs(grid, i, 0, 0, visit);
+        }
+        return ans;
+    }
+
+    void dfs(vector<vector<int>>& grid, int r, int c, int cnt, vector<vector<bool>>& visit) {
+        int m = grid.size();
+        int n = grid[0].size();
+        vector<vector<int>> direction = {{-1, 1}, {0, 1}, {1, 1}};
+
+        for (auto d : direction) {
+            int r_n = r + d[0];
+            int c_n = c + d[1];
+
+            if (r_n >= m || r_n < 0 || c_n >= n || c_n < 0 || grid[r_n][c_n] <= grid[r][c]) {
+                ans = max(ans, cnt);
+                continue;
+            } else {
+                if (visit[r_n][c_n]) continue;
+                visit[r_n][c_n] = true;
+                dfs(grid, r_n, c_n, cnt + 1, visit);
+            }
+        }
+    }
+};
+```
+
+## 第 346 场周赛
+
+### 1. 删除子串后的字符串最小长度
+
+给你一个仅由 大写 英文字符组成的字符串 s 。
+
+你可以对此字符串执行一些操作，在每一步操作中，你可以从 s 中删除 任一个 "AB" 或 "CD" 子字符串。
+
+通过执行操作，删除所有 "AB" 和 "CD" 子串，返回可获得的最终字符串的 最小 可能长度。
+
+注意，删除子串后，重新连接出的字符串可能会产生新的 "AB" 或 "CD" 子串。
+
+```cpp
+#include <string>
+
+using namespace std;
+
+class Solution {
+public:
+    int minLength(string s) {
+        string sub1 = "AB";
+        string sub2 = "CD";
+
+        while (s.size()) {
+            auto start1 = s.find(sub1);
+            auto start2 = s.find(sub2);
+
+            if(start1 != string::npos){
+                s.erase(start1, 2);
+            } else if (start2 != string::npos) {
+                s.erase(start2, 2);
+            } else {
+                break;
+            }
+        }
+        return s.size();
+    }
+};
+```
+
+### 2. 字典序最小回文串
+
+给你一个由 小写英文字母 组成的字符串 s ，你可以对其执行一些操作。在一步操作中，你可以用其他小写英文字母 替换  s 中的一个字符。
+
+请你执行 尽可能少的操作 ，使 s 变成一个 回文串 。如果执行 最少 操作次数的方案不止一种，则只需选取 字典序最小 的方案。
+
+对于两个长度相同的字符串 a 和 b ，在 a 和 b 出现不同的第一个位置，如果该位置上 a 中对应字母比 b 中对应字母在字母表中出现顺序更早，则认为 a 的字典序比 b 的字典序要小。
+
+返回最终的回文字符串。
+
+```cpp
+#include <string>
+
+using namespace std;
+
+class Solution {
+public:
+    string makeSmallestPalindrome(string s) {
+        int len = s.size();
+
+        for (int i = 0; i < len; i ++) {
+            if (s[i] != s[len - i - 1]) {
+                if (s[i] - 'a' > s[len - i - 1] - 'a') s[i] = s[len - i - 1];
+                else s[len - i - 1] = s[i];
+            }
+        }
+
+        return s;
+    }
+};
+```
+
+### 3. 求一个整数的惩罚数
+
+给你一个正整数 n，请你返回 n 的  惩罚数 。
+
+n 的 惩罚数  定义为所有满足以下条件 i 的数的平方和：
+
+1 {'<='} i {'<='} n
+i \* i 的十进制表示的字符串可以分割成若干连续子字符串，且这些子字符串对应的整数值之和等于 i 。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    bool dfs(string s, int sum, int x, int i) {
+        if (sum == x && i == s.size()) return true;
+        for (int j = i; j < s.size(); j ++) {
+            int cur = stoi(s.substr(i, j - i + 1));
+            sum += cur;
+            if (sum > x) break;
+            if (dfs(s, sum, x, j + 1)) return true;
+            sum -= cur;
+        }
+        return false;
+    }
+
+    bool judge(int x) {
+        if (x * x == x) return true;
+        string s = to_string(x * x);
+        return dfs(s, 0, x, 0);
+    }
+
+    int punishmentNumber(int n) {
+        int res = 0;
+        for (int i = 1; i <= n; i ++) {
+            if (judge(i)) res += (i * i);
+        }
+        return res;
+    }
+};
+```
+
+## 第 348 场周赛
+
+### 1. 最小化字符串长度
+
+给你一个下标从 0 开始的字符串 s ，重复执行下述操作 任意 次：
+
+在字符串中选出一个下标 i ，并使 c 为字符串下标 i 处的字符。并在 i 左侧（如果有）和 右侧（如果有）各 删除 一个距离 i 最近 的字符 c 。
+请你通过执行上述操作任意次，使 s 的长度 最小化 。
+
+返回一个表示 最小化 字符串的长度的整数。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int minimizedStringLength(string s) {
+        unordered_map<char, int> hash;
+
+        for (auto c : s) {
+            hash[c] ++;
+        }
+
+        return hash.size();
+    }
+};
+```
+
+### 2. 半有序排列
+
+给你一个下标从 0 开始、长度为 n 的整数排列 nums 。
+
+如果排列的第一个数字等于 1 且最后一个数字等于 n ，则称其为 半有序排列 。你可以执行多次下述操作，直到将 nums 变成一个 半有序排列 ：
+
+选择 nums 中相邻的两个元素，然后交换它们。
+返回使 nums 变成 半有序排列 所需的最小操作次数。
+
+排列 是一个长度为 n 的整数序列，其中包含从 1 到 n 的每个数字恰好一次。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int semiOrderedPermutation(vector<int>& nums) {
+        int n = nums.size();
+        int min_p, max_p = 0;
+        for (int i = 0; i < n; i ++) {
+            if (nums[i] == 1) min_p = i;
+            if (nums[i] == n) max_p = i;
+        }
+
+        if (min_p < max_p) return min_p + (n - 1 - max_p);
+        else return min_p + (n - 1 - max_p) - 1;
+    }
+};
+```
+
+### 3. 查询后矩阵的和
+
+给你一个整数 n 和一个下标从 0 开始的 二维数组 queries，其中 queries[i] = [typei, indexi, vali]。
+
+一开始，给你一个下标从 0 开始的 n x n 矩阵，所有元素均为 0。每一个查询，你需要执行以下操作之一：
+
+如果 typei == 0，将第 indexi 行的元素全部修改为 vali，覆盖任何之前的值。
+如果 typei == 1，将第 indexi 列的元素全部修改为 vali，覆盖任何之前的值。
+请你执行完所有查询以后，返回矩阵中所有整数的和。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    long long matrixSumQueries(int n, vector<vector<int>>& queries) {
+        long long ans = 0;
+        unordered_set<int> vis[2];
+
+        for (int i = queries.size() - 1; i >= 0; i --) {
+            int type = queries[i][0], index = queries[i][1], val = queries[i][2];
+            if (!vis[type].count(index)) {
+                ans += (long long) (n - vis[type ^ 1].size()) * val;
+                vis[type].insert(index);
+            }
+        }
+        return ans;
+    }
+};
+```
+
+## 第 349 场周赛
+
+### 1. 既不是最小值也不是最大值
+
+给你一个整数数组 nums ，数组由 不同正整数 组成，请你找出并返回数组中 任一 既不是 最小值 也不是 最大值 的数字，如果不存在这样的数字，返回 -1 。
+
+返回所选整数。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int findNonMinOrMax(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int n = nums.size();
+        if (n == 1 || n == 2) return -1;
+        else {
+            return nums[1];
+        }
+    }
+};
+```
+
+### 2. 执行子串操作后的字典序最小字符串
+
+给你一个仅由小写英文字母组成的字符串 s 。在一步操作中，你可以完成以下行为：
+
+选则 s 的任一非空子字符串，可能是整个字符串，接着将字符串中的每一个字符替换为英文字母表中的前一个字符。例如，'b' 用 'a' 替换，'a' 用 'z' 替换。
+返回执行上述操作 恰好一次 后可以获得的 字典序最小 的字符串。
+
+子字符串 是字符串中的一个连续字符序列。
+
+现有长度相同的两个字符串 x 和 字符串 y ，在满足 x[i] != y[i] 的第一个位置 i 上，如果  x[i] 在字母表中先于 y[i] 出现，则认为字符串 x 比字符串 y 字典序更小 。
+
+
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    string smallestString(string s) {
+        int n = s.size();
+        int idx = 0;
+        while (idx < n && s[idx] == 'a') idx ++;
+        if (idx == n) {
+            s[n - 1] = 'z';
+        } else {
+            for (int i = idx; i < n; i ++) {
+                if (s[i] != 'a') s[i] = s[i] - 1;
+                else break;
+            }
+        }
+        return s;
+    }
+};
+```
+
+### 3. 收集巧克力
+
+给你一个长度为 n 、下标从 0 开始的整数数组 nums ，表示收集不同巧克力的成本。每个巧克力都对应一个不同的类型，最初，位于下标 i 的巧克力就对应第 i 个类型。
+
+在一步操作中，你可以用成本 x 执行下述行为：
+
+同时对于所有下标 0 {'<='} i {'<'} n - 1 进行以下操作， 将下标 i 处的巧克力的类型更改为下标 (i + 1) 处的巧克力对应的类型。如果 i == n - 1 ，则该巧克力的类型将会变更为下标 0 处巧克力对应的类型。
+假设你可以执行任意次操作，请返回收集所有类型巧克力所需的最小成本。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    long long minCost(vector<int>& nums, int x) {
+        vector<long long> sum;
+        int n = nums.size();
+        for (int i = 0; i < nums.size(); i ++) sum.push_back((long long) i * x);
+
+        for (int i = 0; i < nums.size(); i ++) {
+            int mn = nums[i];
+            for (int j = i; j < n + i; j ++) {
+                mn = min(mn, nums[j % n]);
+                sum[j - i] += mn;
+            }
+        }
+        return *min_element(sum.begin(), sum.end());
+    }
+};
+```
+
+## 第 350 场周赛
+
+### 1. 总行驶距离
+
+卡车有两个油箱。给你两个整数，mainTank 表示主油箱中的燃料（以升为单位），additionalTank 表示副油箱中的燃料（以升为单位）。
+
+该卡车每耗费 1 升燃料都可以行驶 10 km。每当主油箱使用了 5 升燃料时，如果副油箱至少有 1 升燃料，则会将 1 升燃料从副油箱转移到主油箱。
+
+返回卡车可以行驶的最大距离。
+
+注意：从副油箱向主油箱注入燃料不是连续行为。这一事件会在每消耗 5 升燃料时突然且立即发生。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int distanceTraveled(int mainTank, int additionalTank) {
+        int res = 0;
+
+        if (mainTank < 5) return mainTank * 10;
+        else {
+            while (mainTank >= 5) {
+                mainTank -= 5;
+                res += 50;
+                if (additionalTank >= 1)  {
+                    additionalTank -= 1;
+                    mainTank += 1;
+                }
+            }
+        }
+        return res + mainTank * 10;
+    }
+};
+```
+
+### 2. 找出分区值
+
+给你一个 正 整数数组 nums 。
+
+将 nums 分成两个数组：nums1 和 nums2 ，并满足下述条件：
+
+数组 nums 中的每个元素都属于数组 nums1 或数组 nums2 。
+两个数组都 非空 。
+分区值 最小 。
+分区值的计算方法是 |max(nums1) - min(nums2)| 。
+
+其中，max(nums1) 表示数组 nums1 中的最大元素，min(nums2) 表示数组 nums2 中的最小元素。
+
+返回表示分区值的整数。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int findValueOfPartition(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+
+        int ans = INT_MAX;
+        for (int i = 1; i < nums.size(); i ++) {
+            ans = min(ans, nums[i] - nums[i - 1]);
+        }
+
+        return ans;
+    }
+};
+```
+
+## 第 352 场周赛
+
+### 1. 最长奇偶子数组
+
+给你一个下标从 0 开始的整数数组 nums 和一个整数 threshold 。
+
+请你从 nums 的子数组中找出以下标 l 开头、下标 r 结尾 (0 {'<='} l {'<='} r {'<'} nums.length) 且满足以下条件的 最长子数组 ：
+
+nums[l] % 2 == 0
+对于范围 [l, r - 1] 内的所有下标 i ，nums[i] % 2 != nums[i + 1] % 2
+对于范围 [l, r] 内的所有下标 i ，nums[i] {'<='} threshold
+以整数形式返回满足题目要求的最长子数组的长度。
+
+注意：子数组 是数组中的一个连续非空元素序列。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int longestAlternatingSubarray(vector<int>& nums, int threshold) {
+        int ans = 0;
+        int n = nums.size();
+
+        for (int l = 0, r = 0; l < n, r < n; r ++) {
+            if (nums[l] % 2 != 0) {
+                l = l + 1;
+            }
+
+            if (r > l && (nums[r] % 2) == (nums[r - 1] % 2)) {
+                l = r;
+            }
+
+            if (nums[r] > threshold) {
+                l = r + 1;
+            }
+
+            ans = max(ans, r - l + 1);
+        }
+
+        return ans;
+    }
+};
+```
+
+### 2. 不间断子数组
+
+给你一个下标从 0 开始的整数数组 nums 。nums 的一个子数组如果满足以下条件，那么它是 不间断 的：
+
+i，i + 1 ，...，j 表示子数组中的下标。对于所有满足 i {'<='} i1, i2 {'<='} j 的下标对，都有 0 {'<='} |nums[i1] - nums[i2]| {'<='} 2 。
+请你返回 不间断 子数组的总数目。
+
+子数组是一个数组中一段连续 非空 的元素序列。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    long long continuousSubarrays(vector<int>& nums) {
+        long long ans = 0;
+        multiset<int> s;
+        int left = 0, n = nums.size();
+        for (int right = 0; right < n; right ++) {
+            s.insert(nums[right]);
+            while (*prev(s.end()) - *s.begin() > 2) {
+                s.erase(s.find(nums[left ++]));
+            }
+            ans += right - left + 1;
+        }
+        return ans;
+    }
+};
+```
+
+### 3. 和等于目标值的质数对
+
+给你一个整数 n 。如果两个整数 x 和 y 满足下述条件，则认为二者形成一个质数对：
+
+1 {'<='} x {'<='} y {'<='} n
+x + y == n
+x 和 y 都是质数
+请你以二维有序列表的形式返回符合题目要求的所有 [xi, yi] ，列表需要按 xi 的 非递减顺序 排序。如果不存在符合要求的质数对，则返回一个空数组。
+
+注意：质数是大于 1 的自然数，并且只有两个因子，即它本身和 1 。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    vector<int> ref;
+
+    vector<vector<int>> findPrimePairs(int n) {
+        for (int i = 0; i <= n; i ++) {
+            if (isPrime(i)) ref.push_back(i);
+        }
+
+        vector<vector<int>> ans;
+
+        int left = 0, right = ref.size() - 1;
+        while (left <= right) {
+            if (ref[left] + ref[right] == n) ans.push_back({ref[left ++], ref[right --]});
+            else if (ref[left] + ref[right] < n) left ++;
+            else right --;
+        }
+
+        return ans;
+    }
+
+    bool isPrime(int n) {
+        if (n < 2)
+            return false;
+        if (n < 4)
+            return true;
+        if (n % 2 == 0 || n % 3 == 0)
+            return false;
+        for (int i = 5; i * i <= n; i += 6) {
+            if (n % i == 0 || n % (i + 2) == 0)
+                return false;
+        }
+        return true;
+    }
+};
+```
+
+## 第 353 场周赛
+
+### 1. 找出最大的可达成数字
+
+给你两个整数 num 和 t 。
+
+如果整数 x 可以在执行下述操作不超过 t 次的情况下变为与 num 相等，则称其为 可达成数字 ：
+
+每次操作将 x 的值增加或减少 1 ，同时可以选择将 num 的值增加或减少 1 。
+返回所有可达成数字中的最大值。可以证明至少存在一个可达成数字。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int theMaximumAchievableX(int num, int t) {
+        return num + t * 2;
+    }
+};
+```
+
+### 2. 达到末尾下标所需的最大跳跃次数
+
+给你一个下标从 0 开始、由 n 个整数组成的数组 nums 和一个整数 target 。
+
+你的初始位置在下标 0 。在一步操作中，你可以从下标 i 跳跃到任意满足下述条件的下标 j ：
+
+0 {'<='} i < j < n
+-target {'<='} nums[j] - nums[i] {'<='} target
+返回到达下标 n - 1 处所需的 最大跳跃次数 。
+
+如果无法到达下标 n - 1 ，返回 -1 。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int ans = -1;
+    int n;
+    int target;
+    vector<int> nums;
+    vector<int> vis;
+
+    int maximumJumps(vector<int>& _nums, int _target) {
+        nums = _nums;
+        target = _target;
+        n = nums.size();
+        vis = vector<int>(n, 0);
+        dfs(0, 0);
+
+        return ans;
+    }
+
+    void dfs(int u, int step) {
+        if (u == n - 1) {
+            ans = max(ans, step);
+            return;
+        }
+
+        for (int i = u + 1; i < n; i ++) {
+            if (abs(nums[i] - nums[u]) <= target && vis[i] < step + 1) {
+                vis[i] = step + 1;
+                dfs(i, step + 1);
+            }
+        }
+    }
+};
+```
+
+## 第 354 场周赛
+
+### 1. 特殊元素平方和
+
+给你一个下标从 1 开始、长度为 n 的整数数组 nums 。
+
+对 nums 中的元素 nums[i] 而言，如果 n 能够被 i 整除，即 n % i == 0 ，则认为 num[i] 是一个 特殊元素 。
+
+返回 nums 中所有 特殊元素 的 平方和 。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int sumOfSquares(vector<int>& nums) {
+        int ans = 0;
+
+        int n = nums.size();
+        for (int i = 1; i <= n; i ++) {
+            if (n % i == 0) ans += nums[i - 1] * nums[i - 1];
+        }
+
+        return ans;
+    }
+};
+```
+
+### 2. 数组的最大美丽值
+
+给你一个下标从 0 开始的整数数组 nums 和一个 非负 整数 k 。
+
+在一步操作中，你可以执行下述指令：
+
+在范围 [0, nums.length - 1] 中选择一个 此前没有选过 的下标 i 。
+将 nums[i] 替换为范围 [nums[i] - k, nums[i] + k] 内的任一整数。
+数组的 美丽值 定义为数组中由相等元素组成的最长子序列的长度。
+
+对数组 nums 执行上述操作任意次后，返回数组可能取得的 最大 美丽值。
+
+注意：你 只 能对每个下标执行 一次 此操作。
+
+数组的 子序列 定义是：经由原数组删除一些元素（也可能不删除）得到的一个新数组，且在此过程中剩余元素的顺序不发生改变。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    int maximumBeauty(vector<int>& nums, int k) {
+        int n = nums.size();
+        int ans = 0;
+        sort(nums.begin(), nums.end());
+
+        int l = 0;
+        for (int r = 0; r < n; r ++) {
+            while (nums[r] - nums[l] > 2 * k && l < r) l ++;
+            ans = max(ans, r - l + 1);
+        }
+        return ans;
+    }
+};
+```
+
+## 第 355 场周赛
+
+### 1. 按分隔符拆分字符串
+
+给你一个字符串数组 words 和一个字符 separator ，请你按 separator 拆分 words 中的每个字符串。
+
+返回一个由拆分后的新字符串组成的字符串数组，不包括空字符串 。
+
+注意
+
+separator 用于决定拆分发生的位置，但它不包含在结果字符串中。
+拆分可能形成两个以上的字符串。
+结果字符串必须保持初始相同的先后顺序。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    vector<string> splitWordsBySeparator(vector<string>& words, char separator) {
+        vector<string> ans;
+
+        for (auto word : words) {
+            stringstream ss(word);
+            string token;
+            while (getline(ss, token, separator)) {
+                if (token != "") ans.push_back(token);
+            }
+        }
+
+        return ans;
+    }
+};
+```
+
+### 2. 合并后数组中的最大元素
+
+给你一个下标从 0 开始、由正整数组成的数组 nums 。
+
+你可以在数组上执行下述操作 任意 次：
+
+选中一个同时满足 0 {'<='} i < nums.length - 1 和 nums[i] {'<='} nums[i + 1] 的整数 i 。将元素 nums[i + 1] 替换为 nums[i] + nums[i + 1] ，并从数组中删除元素 nums[i] 。
+返回你可以从最终数组中获得的 最大 元素的值。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+public:
+    long long maxArrayValue(vector<int>& nums) {
+        long long ans = 0, init = 0, n = nums.size();
+
+        for (int i = n - 1; i >= 0; i --) {
+            if (nums[i] > init) init = nums[i];
+            else init += nums[i];
+            ans = max(ans, init);
+        }
+
+        return ans;
+    }
+};
+```

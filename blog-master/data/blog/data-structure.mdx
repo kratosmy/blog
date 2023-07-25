@@ -1,0 +1,893 @@
+---
+title: '数据结构模板题'
+date: '2023-3-21'
+tags: ['cpp', 'algorithms']
+summary: ' '
+draft: false
+author: lov3 camille
+---
+
+# 单链表
+
+实现一个单链表，链表初始为空，支持三种操作：
+
+1. 向链表头插入一个数；
+2. 删除第 k 个插入的数后面的数；
+3. 在第 k 个插入的数后插入一个数。
+
+现在要对该链表进行 M 次操作，进行完所有操作后，从头到尾输出整个链表。
+
+```cpp
+#include <iostream>
+
+using namespace std;
+
+const int N = 100010;
+
+// e is value array and ne is next pointers array, idx means current node
+int head, e[N], ne[N], idx;
+
+void init() {
+    head = -1;
+    idx = 0;
+}
+
+void add_to_head(int x) {
+    e[idx] = x;
+    ne[idx] = head;
+    head = idx ++;
+}
+
+void add(int k, int x) {
+    e[idx] = x;
+    ne[idx] = ne[k];
+    ne[k] = idx ++;
+}
+
+void remove(int k) {
+    ne[k] = ne[ne[k]];
+}
+
+int main() {
+    int m;
+    cin >> m;
+    init();
+
+    while (m --) {
+        char op;
+        int k, x;
+        cin >> op;
+
+        if (op == 'H') {
+            cin >> x;
+            add_to_head(x);
+        } else if (op == 'D') {
+            cin >> k;
+            if (!k) head = ne[head];
+            remove(k - 1);
+        } else {
+            cin >> k >> x;
+            add(k - 1, x);
+        }
+    }
+
+    for (int i = head; i != -1; i = ne[i]) cout << e[i] << ' ';
+    cout << endl;
+}
+```
+
+# 双链表
+
+实现一个双链表，链表初始为空，支持三种操作：
+
+1. 在最左侧插入一个数；
+2. 在最右侧插入一个数；
+3. 将第 k 个插入的数删除；
+4. 在第 k 个插入的数左侧插入一个数
+5. 在第 k 个插入的数右侧插入一个数
+
+现在要对该链表进行 M 次操作，进行完所有操作后，从头到尾输出整个链表。
+
+```cpp
+#include <iostream>
+
+using namespace std;
+
+const int N = 100010;
+
+int m;
+int e[N], l[N], r[N], idx;
+
+void insert(int a, int x) {
+    e[idx] = x;
+    r[idx] = r[a];
+    l[idx] = a;
+    l[r[a]] = idx;
+    r[a] = idx ++;
+}
+
+void remove(int a) {
+    l[r[a]] = l[a];
+    r[l[a]] = r[a];
+}
+
+int main() {
+    int m;
+    r[0] = 1, l[1] = 0;
+    idx = 2;
+
+    cin >> m;
+    while (m --) {
+        string op;
+        cin >> op;
+        int k, x;
+        if (op == "L") {
+            cin >> x;
+            insert(0, x);
+        } else if (op == "R") {
+            cin >> x;
+            insert(l[1], x);
+        } else if (op == "D") {
+            cin >> k;
+            remove(k + 1);
+        } else if (op == "IL") {
+            cin >> k >> x;
+            insert(l[k + 1], x);
+        } else {
+            cin >> k >> x;
+            insert(k + 1, x);
+        }
+    }
+
+    for (int i = r[0]; i != 1; i = r[i]) cout << e[i] << ' ';
+    cout << endl;
+
+    return 0;
+}
+```
+
+# 栈
+
+## 模拟栈
+
+实现一个栈，栈初始为空，支持四种操作：
+
+push x – 向栈顶插入一个数 x；
+pop – 从栈顶弹出一个数；
+empty – 判断栈是否为空；
+query – 查询栈顶元素。
+现在要对栈进行 M 个操作，其中的每个操作 3 和操作 4 都要输出相应的结果。
+
+```cpp
+#include <iostream>
+
+using namespace std;
+
+const int N = 100010;
+
+int stk[N];
+
+int main() {
+    int m, x;
+    cin >> m;
+
+    int tt = 0;
+    while (m --) {
+        string op;
+        cin >> op;
+        if (op == "push") {
+            cin >> x;
+            stk[tt ++] = x;
+        } else if (op == "pop") {
+            tt --;
+        } else if (op == "empty") {
+            if (tt == 0) cout << "YES" << endl;
+            else cout << "NO" << endl;
+        } else {
+            cout << stk[tt - 1] << endl;
+        }
+    }
+}
+```
+
+## 表达式求值
+
+经典的栈模板题，核心在于将数字和操作符用两个栈分别保存。
+
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <unordered_map>
+#include <stack>
+
+using namespace std;
+
+stack<int> num;
+stack<char> op;
+
+void eval() {
+    auto b = num.top(); num.pop();
+    auto a = num.top(); num.pop();
+    auto c = op.top(); op.pop();
+
+    int x;
+    if (c == '+') x = a + b;
+    else if (c == '-') x = a - b;
+    else if (c == '*') x = a * b;
+    else if (c == '/') x = a / b;
+    num.push(x);
+}
+
+int main() {
+    unordered_map<char, int> pr{{'+', 1}, {'-', 1}, {'*', 2}, {'/', 2}};
+    string str;
+    cin >> str;
+
+    for (int i = 0; i < str.size(); i ++) {
+        auto c = str[i];
+        if (isdigit(c)) {
+            int x = 0, j = i;
+            while (j < str.size() && isdigit(str[j])) {
+                x = x * 10 + str[j ++] - '0';
+            }
+            i = j - 1;
+            num.push(x);
+        } else if (c == '(') op.push(c);
+        else if (c == ')') {
+            while (op.top() != '(') eval();
+            op.pop();
+        } else {
+            while (op.size() && pr[op.top()] >= pr[c]) eval();
+            op.push(c);
+        }
+    }
+
+    while(op.size()) eval();
+    cout << num.top() << endl;
+    return 0;
+}
+```
+
+# 单调栈
+
+给定一个长度为 N 的整数数列，输出每个数左边第一个比它小的数，如果不存在则输出 −1。
+
+```cpp
+#include <iostream>
+
+using namespace std;
+
+const int N = 100010;
+int stk[N], tt = 0;
+
+int main() {
+    int n;
+    cin >> n;
+    while (n --) {
+        int x;
+        cin >> x;
+        while (tt && stk[tt] >= x) tt --;
+        if (tt > 0) cout << stk[tt] << ' ';
+        else cout << -1 << ' ';
+
+        stk[++ tt] = x;
+    }
+    return 0;
+}
+```
+
+# 滑动窗口
+
+求长度为 n， 窗口长度为 k 的窗口中的最大值和最小值。
+
+```cpp
+#include <iostream>
+
+using namespace std;
+
+const int N = 1000010;
+int a[N], q[N];
+int n, k;
+
+int main() {
+  cin >> n >> k;
+  for (int i = 0; i < n; i ++) {
+    cin >> a[i];
+  }
+
+  int hh = 0, tt = -1;
+  for (int i = 0; i < n; i ++) {
+    if (hh <= tt && q[hh] < i - k + 1) hh ++;
+    while (hh <= tt && a[q[tt]] > a[i]) tt --;
+    q[++ tt] = i;
+
+    if (i >= k - 1) cout << a[q[hh]] << ' ';
+  }
+
+  puts("");
+
+  int hh = 0, tt = -1;
+  for (int i = 0; i < n; i ++) {
+    if (hh <= tt && q[hh] < i - k + 1) hh ++;
+    while (hh <= tt && a[q[tt]] < a[i]) tt --;
+    q[++ tt] = i;
+
+    if (i >= k - 1) cout << a[q[hh]] << ' ';
+  }
+}
+```
+
+# KMP 字符串
+
+求出模式串 P 在字符串 S 中所有出现的位置的起始下标。
+
+```cpp
+#include <iostream>
+
+using namespace std;
+
+const int N = 10010, M = 100010;
+
+int n, m;
+char p[N], s[M];
+int ne[N];
+
+int main() {
+    cin >> n >> p + 1 >> m >> s + 1;
+
+    for (int i = 2, j = 0; i <= n; i ++) {
+        while (j && p[i] != p[j + 1]) j = ne[j];
+        if (p[i] == p[j + 1]) j ++;
+        ne[i] = j;
+    }
+
+    for (int i = 1, j = 0; i <= m; i ++) {
+        while (j && s[i] != p[j + 1])  j = ne[j];
+        if (s[i] == p[j + 1]) j ++;
+        if (j == n) {
+            cout << i - n << ' ';
+            j = ne[j];
+        }
+    }
+
+    return 0;
+}
+```
+
+# Trie(字典树)
+
+先插入一些字符串，然后查询某个字符串在集合中出现的次数。
+
+```cpp
+#include <iostream>
+
+using namespace std;
+
+const int N = 100010;
+
+int s[N][26], cnt[N], idx;
+char str[N];
+
+void insert(char str[]) {
+    int p = 0;
+    for (int i = 0; str[i]; i ++) {
+        int u = str[i] - 'a';
+        if (!s[p][u]) s[p][u] = ++ idx;
+        p = s[p][u];
+    }
+    cnt[p] ++;
+}
+
+int query(char str[]) {
+    int p = 0;
+    for (int i = 0; str[i]; i ++) {
+        int u = str[i] - 'a';
+        if (!s[p][u]) return 0;
+        p = s[p][u];
+    }
+    return cnt[p];
+}
+
+int main() {
+    int n;
+    cin >> n;
+    while (n --) {
+        char op[2];
+        cin >> op >> str;
+        if (op[0] == 'I') {
+            insert(str);
+        } else {
+            cout << query(str) << endl;
+        }
+    }
+    return 0;
+}
+```
+
+## 最大异或对
+
+```cpp
+#include <iostream>
+
+using namespace std;
+
+const int N = 100010, M = 1000000;
+int son[M][2], idx;
+int a[N];
+
+void insert(int x) {
+    int p = 0;
+    for (int i = 30; ~i; i --) {
+        int& s = son[p][x >> i & 1];
+        if (!s) s = ++ idx;
+        p = s;
+    }
+}
+
+int query(int x) {
+    int res = 0;
+    int p = 0;
+    for (int i = 30; ~i; i --) {
+        int s = x >> i & 1;
+        if (son[p][!s]) {
+            res += 1 << i;
+            p = son[p][!s];
+        } else {
+            p = son[p][s];
+        }
+    }
+    return res;
+}
+
+
+int main() {
+    int n;
+    cin >> n;
+    for (int i = 0; i < n; i ++) {
+        cin >> a[i];
+        insert(a[i]);
+    }
+
+    int res = 0;
+    for (int i = 0; i < n; i ++) {
+        res = max(res, query(a[i]));
+    }
+    cout << res << endl;
+}
+```
+
+# 并查集
+
+## 合并集合
+
+操作符为`M`则合并两个数所在集合，为`N`则查询两个数是否在一个集合中。
+
+```cpp
+#include <iostream>
+
+using namespace std;
+
+const int N = 100010;
+
+int n, m;
+int p[N];
+
+int find(int x) {
+    if (p[x] != x) p[x] = find(p[x]);
+    return p[x];
+}
+
+int main() {
+    cin >> n >> m;
+
+    for (int i = 0; i < n; i ++) p[i] = i;
+
+    char op;
+    int a, b;
+    while (m --) {
+        scanf("%s%d%d", &op, &a, &b);
+        if (op == 'M') {
+            p[find(a)] = find(b);
+        } else {
+            if (find(a) == find(b)) puts("Yes");
+            else puts("No");
+        }
+    }
+    return 0;
+}
+```
+
+## 连通块中点的数量
+
+对无向图进行操作，初始时图中没有边，操作有三种：
+
+1. 连接两个点；
+2. 查询两个点是否在一个连通块；
+3. 查询某点所在连通块中的点的总数。
+
+```cpp
+#include<iostream>
+
+using namespace std;
+
+const int N = 100010;
+int n, m;
+int p[N];
+int siz[N];
+
+int find(int x) {
+    if (p[x] != x) p[x] = find(p[x]);
+    return p[x];
+}
+
+int main() {
+    cin >> n >> m;
+    for (int i = 0; i <= n; i ++) {
+        p[i] = i;
+        siz[i] = 1;
+    }
+
+    while (m --) {
+        char op[5];
+        int a, b;
+        scanf("%s", &op);
+
+        if (op[0] == 'C') {
+            scanf("%d%d", &a, &b);
+            if (find(a) == find(b)) continue;
+            siz[find(b)] += siz[find(a)];
+            p[find(a)] = find(b);
+        } else if (op[1] == '1') {
+            scanf("%d%d", &a, &b);
+            if (find(a) == find(b)) puts("Yes");
+            else puts("No");
+        } else {
+            scanf("%d", &a);
+            printf("%d\n", siz[find(a)]);
+        }
+    }
+    return 0;
+}
+```
+
+## 食物链
+
+动物王国中有三类动物 A,B,C，这三类动物的食物链构成了有趣的环形。
+
+A 吃 B，B 吃 C，C 吃 A。
+
+现有 N 个动物，以 1∼N 编号。
+
+每个动物都是 A,B,C 中的一种，但是我们并不知道它到底是哪一种。
+
+有人用两种说法对这 N 个动物所构成的食物链关系进行描述：
+
+第一种说法是
+1 X Y
+，表示 X 和 Y 是同类。
+
+第二种说法是
+2 X Y
+，表示 X 吃 Y。
+
+此人对 N 个动物，用上述两种说法，一句接一句地说出 K 句话，这 K 句话有的是真的，有的是假的。
+
+当一句话满足下列三条之一时，这句话就是假话，否则就是真话。
+
+当前的话与前面的某些真的话冲突，就是假话；
+当前的话中 X 或 Y 比 N 大，就是假话；
+当前的话表示 X 吃 X，就是假话。
+
+你的任务是根据给定的 N 和 K 句话，输出假话的总数。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int N = 100010;
+int n, m;
+int p[N], d[N];
+
+int find(int x) {
+    if (p[x] != x) {
+        int t = find(p[x]);
+        d[x] += d[p[x]];
+        p[x] = t;
+    }
+    return p[x];
+}
+
+int main() {
+    scanf("%d%d", &n, &m);
+
+    for (int i = 1; i <= n; i ++) {
+        p[i] = i;
+    }
+
+    int res = 0;
+    while (m --) {
+        int t, x, y;
+        scanf("%d%d%d", &t, &x, &y);
+
+        if (x > n || y > n) res ++;
+        else {
+            int px = find(x), py = find(y);
+            if (t == 1) {
+                if (px == py && (d[x] - d[y]) % 3) res ++;
+                else if (px != py) {
+                    p[px] = py;
+                    d[px] = d[y] - d[x];
+                }
+            } else {
+                if (px == py && (d[x] - d[y] - 1) % 3) res ++;
+                else if (px != py) {
+                    p[px] = py;
+                    d[px] = d[y] - d[x] + 1;
+                }
+            }
+        }
+    }
+    printf("%d\n", res);
+
+    return 0;
+}
+```
+
+# 堆
+
+## 堆排序
+
+输入一个长度为 n 的整数数列，从小到大输出前 m 小的数。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int n, m;
+const int N = 100010;
+int h[N], siz;
+
+void down(int u) {
+    int t = u;
+    if (u * 2 <= siz && h[u * 2] < h[t]) t = u * 2;
+    if (u * 2 + 1 <= siz && h[u * 2 + 1] < h[t]) t = u * 2 + 1;
+
+    if (u != t) {
+        swap(h[u], h[t]);
+        down(t);
+    }
+}
+
+int main() {
+    scanf("%d%d", &n, &m);
+    for (int i = 1; i <= n; i ++) scanf("%d", &h[i]);
+    siz = n;
+
+    for (int i = n / 2; i > 0; i --) down(i);
+    while (m --) {
+        printf("%d ", h[1]);
+        h[1] = h[siz];
+        siz --;
+        down(1);
+    }
+}
+```
+
+## 模拟堆
+
+维护一个集合，初始时集合为空，支持如下几种操作：
+
+I x，插入一个数 x；
+PM，输出当前集合中的最小值；
+DM，删除当前集合中的最小值（数据保证此时的最小值唯一）；
+D k，删除第 k 个插入的数；
+C k x，修改第 k 个插入的数，将其变为 x；
+现在要进行 N 次操作，对于所有第 2 个操作，输出当前集合的最小值。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int n, m;
+const int N = 100010;
+int h[N], ph[N], hp[N], siz;
+
+void heap_swap(int a, int b) {
+    swap(ph[hp[a]], ph[hp[b]]);
+    swap(hp[a], hp[b]);
+    swap(h[a], h[b]);
+}
+
+void down(int u) {
+    int t = u;
+    if (u * 2 <= siz && h[u * 2] < h[t]) t = u * 2;
+    if (u * 2 + 1 <= siz && h[u * 2 + 1] < h[t]) t = u * 2 + 1;
+
+    if (u != t) {
+        heap_swap(u, t);
+        down(t);
+    }
+}
+
+void up(int u) {
+    while (u / 2 && h[u / 2] > h[u]) {
+        heap_swap(u / 2, u);
+        u /= 2;
+    }
+}
+
+int main() {
+    int n, m = 0;
+    scanf("%d", &n);
+    while (n --) {
+         char op[10];
+         int k, x;
+
+         scanf("%s", op);
+         if (!strcmp(op, "I")) {
+            scanf("%d", &x);
+            siz ++;
+            m ++;
+            ph[m] = siz, hp[siz] = m;
+            h[siz] = x;
+            up(siz);
+         } else if (!strcmp(op, "PM")) {
+            printf("%d\n", h[1]);
+         } else if (!strcmp(op, "DM")) {
+            heap_swap(1, siz);
+            siz --;
+            down(1);
+         } else if (!strcmp(op, "D")) {
+            scanf("%d", &k);
+            k = ph[k];
+            heap_swap(k, siz);
+            siz --;
+            down(k);
+            up(k);
+         } else {
+            scanf("%d%d", &k, &x);
+            k = ph[k];
+            h[k] = x;
+            down(k);
+            up(k);
+         }
+    }
+    return 0;
+}
+```
+
+# 堆
+
+## 模拟散列表 (拉链法)
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int N = 100003;
+
+int h[N], e[N], ne[N], idx;
+
+void insert(int x) {
+    int k = (x % N + N) % N;
+    e[idx] = x;
+    ne[idx] = h[k];
+    h[k] = idx ++;
+}
+
+bool query(int x) {
+    int k = (x % N + N) % N;
+    for (int i = h[k]; i != -1; i = ne[i]) {
+        if (e[i] == x) return true;
+    }
+    return false;
+}
+
+int main() {
+    int n;
+    scanf("%d", &n);
+
+    memset(h, -1, sizeof h);
+
+    while (n --) {
+        char op[2];
+        int x;
+        scanf("%s%d", op, &x);
+
+        if (*op == 'I') insert(x);
+        else {
+            if (query(x)) puts("Yes");
+            else puts("No");
+        }
+    }
+    return 0;
+}
+```
+
+## 模拟散列表 (开放寻址法)
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int N = 200003, null = 0x3f3f3f3f;
+
+int h[N];
+
+int find(int x) {
+    int k = (x % N + N) % N;
+    while (h[k] != null && h[k] != x) {
+        k ++;
+        if (k == N) k = 0;
+    }
+    return k;
+}
+
+int main() {
+    memset(h, 0x3f, sizeof h);
+    int n;
+    scanf("%d", &n);
+
+    while (n --) {
+        char op[2];
+        int x;
+        scanf("%s%d", op, &x);
+
+        int k = find(x);
+        if (*op == 'I') h[k] = x;
+        else {
+            if (h[k] == null) puts("No");
+            else puts("Yes");
+        }
+    }
+    return 0;
+}
+```
+
+## 字符串哈希
+
+给定一个长度为 n 的字符串，再给定 m 个询问，每个询问包含四个整数 l1,r1,l2,r2，请你判断 [l1,r1] 和 [l2,r2] 这两个区间所包含的字符串子串是否完全相同。
+
+字符串中只包含大小写英文字母和数字。
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+typedef unsigned long long ULL;
+
+const int N = 100010, P = 131;
+char str[N];
+int n, m;
+ULL h[N], p[N];
+
+ULL get(int l, int r) {
+    return h[r] - h[l] * p[r - l + 1];
+}
+
+int main() {
+    scanf("%d%d%s", &n, &m, str + 1);
+
+    p[0] = 1;
+    for (int i = 1; i < n; i ++) {
+        p[i] = p[i - 1] * P;
+        h[i] = h[i - 1] * P + str[i];
+    }
+
+    while (m --) {
+        int l1, r1, l2, r2;
+        scanf("%d%d%d%d", &l1, &r1, &l2, &r2);
+
+        if (get(l1, r1) == get(l2, r2)) puts("Yes");
+        else puts("No");
+    }
+
+    return 0;
+}
+```
