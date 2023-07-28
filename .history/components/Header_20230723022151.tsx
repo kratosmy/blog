@@ -29,7 +29,7 @@ export default function Header() {
                     }
                   )}
                 >
-                  lov3camille.
+                  kratos.
                 </div>
               </Link>
             </div>

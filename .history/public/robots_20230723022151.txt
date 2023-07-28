@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://lov3camille.top/sitemap.xml
+Sitemap: https://kratos.top/sitemap.xml

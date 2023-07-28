@@ -6,8 +6,8 @@ import { allBlogs } from 'contentlayer/generated';
 import { redirect } from 'next/navigation';
 
 export const metadata = {
-  title: 'Blog - Lov3 Camille',
-  description: 'My Blogs - Lov3 Camille',
+  title: 'Blog - kratos',
+  description: 'My Blogs - kratos',
 };
 
 export default function BlogPage({ params }: { params: { page: string } }) {

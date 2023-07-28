@@ -1,6 +1,6 @@
 const siteMetadata = {
-  title: 'Lov3 Camille',
-  author: 'Lov3 Camille',
+  title: 'kratos',
+  author: 'kratos',
   headerTitle: 'kratos',
   description: 'Software Developer at Morgan Stanley',
   language: 'en-us',
@@ -13,7 +13,7 @@ const siteMetadata = {
   email: 'kratosmy@proton.me',
   github: 'https://github.com/kratosmy',
   twitter: 'https://twitter.com/kratosmy_',
-  linkedin: 'https://www.linkedin.com/in/kratos/',
+  linkedin: 'https://www.linkedin.com/in/kratosmy',
   spotify: 'https://open.spotify.com/user/tbm4i6cjkxly6n091mhjew7kp',
   steam: 'https://steamcommunity.com/id/kratos/',
   locale: 'en-US',

@@ -1,6 +1,6 @@
 const siteMetadata = {
-  title: 'Lov3 Camille',
-  author: 'Lov3 Camille',
+  title: 'kratos',
+  author: 'kratos',
   headerTitle: 'kratos',
   description: 'Software Developer at Morgan Stanley',
   language: 'en-us',
