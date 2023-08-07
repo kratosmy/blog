@@ -1953,3 +1953,55 @@ public:
     }
 };
 ```
+
+## 第 357 场周赛
+
+### 1. 故障键盘
+
+你的笔记本键盘存在故障，每当你在上面输入字符 'i' 时，它会反转你所写的字符串。而输入其他字符则可以正常工作。
+
+给你一个下标从 0 开始的字符串 s ，请你用故障键盘依次输入每个字符。
+
+返回最终笔记本屏幕上输出的字符串。
+
+```cpp
+class Solution {
+public:
+    string finalString(string s) {
+        for (int i = 0; i < s.size(); i ++) {
+            if (s[i] == 'i') reverse(s.begin(), s.begin() + i);
+        }
+        s.erase(remove(s.begin(), s.end(), 'i'), s.end());
+
+        return s;
+    }
+};
+```
+
+### 2. 判断是否能拆分数组
+
+给你一个长度为 n 的数组 nums 和一个整数 m 。请你判断能否执行一系列操作，将数组拆分成 n 个 非空 数组。
+
+在每一步操作中，你可以选择一个 长度至少为 2 的现有数组（之前步骤的结果） 并将其拆分成 2 个子数组，而得到的 每个 子数组，至少 需要满足以下条件之一：
+
+子数组的长度为 1 ，或者
+子数组元素之和 大于或等于  m 。
+如果你可以将给定数组拆分成 n 个满足要求的数组，返回 true ；否则，返回 false 。
+
+注意：子数组是数组中的一个连续非空元素序列。
+
+```cpp
+class Solution {
+public:
+    bool canSplitArray(vector<int>& nums, int m) {
+        int n = nums.size();
+        if (n <= 2) return true;
+
+        for (int i = 0; i < n - 1; i ++) {
+            if (nums[i] + nums[i + 1] >= m) return true;
+        }
+
+        return false;
+    }
+};
+```
