@@ -27,6 +27,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <link rel="icon" type="image/png" sizes="16x16" href="/static/favicons/favicon.ico" />
         <meta name="msapplication-TileColor" content="#000000" />
         <meta name="theme-color" content="#000000" />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q24QNPTG8X"></script>
+        <script>
+          {`window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-Q24QNPTG8X');`}
+        </script>
         <script type="text/javascript">
           {`(function(c,l,a,r,i,t,y){
               c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
