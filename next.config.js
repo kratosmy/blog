@@ -13,4 +13,5 @@ module.exports = withContentlayer({
     appDir: true,
   },
   swcMinify: true,
+  output: 'standalone'
 });
