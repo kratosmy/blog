@@ -10,21 +10,21 @@ import Pre from './Pre';
 import TOCInline from './TOCInline';
 
 interface MDXLayout {
-  content: Blog | Authors;
-  [key: string]: unknown;
+    content: Blog | Authors;
+    [key: string]: unknown;
 }
 
 export const MDXComponents: ComponentMap = {
-  Image,
-  TOCInline,
-  a: CustomLink,
-  pre: Pre,
-  LinkButton,
+    Image,
+    TOCInline,
+    a: CustomLink,
+    pre: Pre,
+    LinkButton,
 };
 
 export const MDXLayoutRenderer = ({ content, ...rest }: MDXLayout) => {
-  const MDXLayout = useMDXComponent(content.body.code);
-  const mainContent = coreContent(content);
+    const MDXLayout = useMDXComponent(content.body.code);
+    const mainContent = coreContent(content);
 
-  return <MDXLayout content={mainContent} components={MDXComponents} {...rest} />;
+    return <MDXLayout content={mainContent} components={MDXComponents} {...rest} />;
 };

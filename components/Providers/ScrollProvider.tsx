@@ -4,23 +4,23 @@ import { useLenis } from '@studio-freight/react-lenis';
 import { createContext, ReactNode, useState } from 'react';
 
 interface ScrollValue {
-  scrollY: number;
+    scrollY: number;
 }
 
 export const ScrollContext = createContext<ScrollValue>({
-  scrollY: 0,
+    scrollY: 0,
 });
 
 interface ScrollProviderProps {
-  children: ReactNode;
+    children: ReactNode;
 }
 
 export const ScrollProvider = ({ children }: ScrollProviderProps) => {
-  const [scrollY, setScrollY] = useState(0);
+    const [scrollY, setScrollY] = useState(0);
 
-  useLenis(({ scroll }: any) => {
-    setScrollY(scroll);
-  });
+    useLenis(({ scroll }: any) => {
+        setScrollY(scroll);
+    });
 
-  return <ScrollContext.Provider value={{ scrollY }}>{children}</ScrollContext.Provider>;
+    return <ScrollContext.Provider value={{ scrollY }}>{children}</ScrollContext.Provider>;
 };
