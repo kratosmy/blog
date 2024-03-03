@@ -27,6 +27,7 @@
     "framer-motion": "10.12.16",
     "github-slugger": "1.4.0",
     "gsap": "3.12.1",
+    "lint-staged": "15.2.2",
     "logrocket": "3.0.1",
     "mdx-bundler": "9.0.1",
     "next": "13.4.8",
@@ -65,7 +66,7 @@
     "globby": "11.1.0",
     "husky": "8.0.3",
     "inquirer": "9.2.8",
-    "lint-staged": "13.1.0",
+    "lint-staged": "15.2.2",
     "postcss": "8.4.20",
     "prettier": "2.8.2",
     "prettier-plugin-tailwindcss": "0.2.1",
@@ -81,7 +82,5 @@
       "prettier --write"
     ]
   },
-  "resolutions": {
-    "string-width": "4.2.3"
-  }
+  "packageManager": "yarn@4.1.0"
 }
