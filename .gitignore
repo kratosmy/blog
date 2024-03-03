@@ -42,7 +42,7 @@ yarn-error.log*
 .contentlayer
 
 # history
-.history/
+.history
 
 # vscode
 .vscode
