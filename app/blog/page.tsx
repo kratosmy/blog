@@ -5,27 +5,27 @@ import { POSTS_PER_PAGE } from '@/types/default';
 import { allBlogs } from 'contentlayer/generated';
 
 export const metadata = {
-  title: 'Blog - kratos',
-  description: 'My Blogs - kratos',
+    title: 'Blog - kratos',
+    description: 'My Blogs - kratos',
 };
 
 export default function Blog() {
-  const activePosts = allBlogs.filter((p) => p.draft === false);
-  const posts = sortedBlogPost(activePosts);
-  const initialDisplayPosts = posts.slice(0, POSTS_PER_PAGE);
-  const pagination = {
-    currentPage: 1,
-    totalPages: Math.ceil(posts.length / POSTS_PER_PAGE),
-  };
+    const activePosts = allBlogs.filter((p) => p.draft === false);
+    const posts = sortedBlogPost(activePosts);
+    const initialDisplayPosts = posts.slice(0, POSTS_PER_PAGE);
+    const pagination = {
+        currentPage: 1,
+        totalPages: Math.ceil(posts.length / POSTS_PER_PAGE),
+    };
 
-  return (
-    <MainLayout>
-      <ListLayout
-        posts={posts}
-        initialDisplayPosts={initialDisplayPosts}
-        pagination={pagination}
-        title="Blog"
-      />
-    </MainLayout>
-  );
+    return (
+        <MainLayout>
+            <ListLayout
+                posts={posts}
+                initialDisplayPosts={initialDisplayPosts}
+                pagination={pagination}
+                title="Blog"
+            />
+        </MainLayout>
+    );
 }

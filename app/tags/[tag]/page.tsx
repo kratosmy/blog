@@ -5,24 +5,24 @@ import kebabCase from '@/lib/utils/kebabCase';
 import { allBlogs } from 'contentlayer/generated';
 
 export const metadata = {
-  title: 'Blog - kratos',
-  description: 'My Tags - kratos',
+    title: 'Blog - kratos',
+    description: 'My Tags - kratos',
 };
 
 export default function Tag({ params }: { params: { tag: string } }) {
-  const { tag } = params;
-  const posts = allCoreContent(
-    allBlogs.filter(
-      (post) => post.draft !== true && post.tags?.map((t) => kebabCase(t)).includes(tag)
-    )
-  );
+    const { tag } = params;
+    const posts = allCoreContent(
+        allBlogs.filter(
+            (post) => post.draft !== true && post.tags?.map((t) => kebabCase(t)).includes(tag)
+        )
+    );
 
-  // Capitalize first letter and convert space to dash
-  const title = tag[0].toUpperCase() + tag.split(' ').join('-').slice(1);
+    // Capitalize first letter and convert space to dash
+    const title = tag[0].toUpperCase() + tag.split(' ').join('-').slice(1);
 
-  return (
-    <MainLayout>
-      <ListLayout posts={posts} title={title} />
-    </MainLayout>
-  );
+    return (
+        <MainLayout>
+            <ListLayout posts={posts} title={title} />
+        </MainLayout>
+    );
 }

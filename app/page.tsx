@@ -6,15 +6,15 @@ import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 
 export default function Page() {
-  return (
-    // <ScrollProvider>
-    //   <Hero />
-    //   <SectionContainer>
-    //     <Suspense fallback="loading..">
-    //       <TopTracks />
-    //     </Suspense>
-    //   </SectionContainer>
-    // </ScrollProvider>
-    redirect('/blog')
-  );
+    return (
+        // <ScrollProvider>
+        //   <Hero />
+        //   <SectionContainer>
+        //     <Suspense fallback="loading..">
+        //       <TopTracks />
+        //     </Suspense>
+        //   </SectionContainer>
+        // </ScrollProvider>
+        redirect('/blog')
+    );
 }
