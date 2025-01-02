@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang class="mx-4">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <title>实现一个简易的C++ String类 - Kratos</title>
+  <link rel="stylesheet" href="/_astro/index.B3zaAnLi.css">
+<link rel="stylesheet" href="/_astro/index.Y6NSlHWR.css">
+<style>[data-astro-image]{width:100%;height:auto;object-fit:var(--fit);object-position:var(--pos);aspect-ratio:var(--w) / var(--h)}[data-astro-image=responsive]{max-width:calc(var(--w) * 1px);max-height:calc(var(--h) * 1px)}[data-astro-image=fixed]{width:calc(var(--w) * 1px);height:calc(var(--h) * 1px)}
+</style></head>
+  <body class="max-width dark:bg-[#333] bg-[#FBFBFBFF]"><div class="my-6 flex">
+  <a href="/" class="hover:cursor-pointer opacity-100 hover:opacity-80">
+    <i class="hidden">website header </i>
+    <h1 class="text-4xl font-bold text-stone-800 dark:text-stone-200">
+      Kratos
+    </h1>
+  </a>
+  <div class="text-sm place-content-center inline ml-auto">
+    <!--<LanguageIcon />-->
+    <span class="mx-1"></span>
+    <starlight-rapide-theme-select class="astro-e3sgix4a">
+  <button aria-label="ok" aria-live="polite" class="sl-flex astro-e3sgix4a" title="ok">
+    <svg aria-hidden="true" height="20" viewBox="0 0 24 24" width="20" class="dark:stroke-white dark:fill-white astro-e3sgix4a">
+      <mask class="moon astro-e3sgix4a" id="moon-mask-" fill="yellow" stroke="red">
+        <rect x="0" y="0" width="100%" height="100%" fill="white" class="astro-e3sgix4a"></rect>
+        <circle cx="24" cy="10" r="6" fill="black" class="astro-e3sgix4a"></circle>
+      </mask>
+      <circle class="sun astro-e3sgix4a" cx="12" cy="12" r="6" mask="url(#moon-mask-)"></circle>
+      <g class="sun-beams astro-e3sgix4a" stroke="black">
+        <line x1="12" y1="1" x2="12" y2="3" class="astro-e3sgix4a"></line>
+        <line x1="12" y1="21" x2="12" y2="23" class="astro-e3sgix4a"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" class="astro-e3sgix4a"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" class="astro-e3sgix4a"></line>
+        <line x1="1" y1="12" x2="3" y2="12" class="astro-e3sgix4a"></line>
+        <line x1="21" y1="12" x2="23" y2="12" class="astro-e3sgix4a"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" class="astro-e3sgix4a"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" class="astro-e3sgix4a"></line>
+      </g>
+    </svg>
+  </button>
+</starlight-rapide-theme-select>
+
+
+
+<script type="module">const r="panda-theme";function c(e){return e==="auto"||e==="dark"||e==="light"?e:"auto"}function d(){return c(typeof localStorage<"u"&&localStorage.getItem(r))}function l(e){typeof localStorage<"u"&&localStorage.setItem(r,e==="light"||e==="dark"?e:"")}function s(){return matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}function t(e){document.documentElement.dataset.theme=e==="auto"?s():e,e==="dark"?document.documentElement.classList.add("dark"):document.documentElement.classList.remove("dark"),l(e)}matchMedia("(prefers-color-scheme: light)").addEventListener("change",()=>{d()==="auto"&&t("auto")});customElements.define("starlight-rapide-theme-select",class extends HTMLElement{constructor(){super(),t(d());const a=this.querySelector("button");a?.addEventListener("click",()=>{const o=c(document.documentElement.dataset.theme),n=o==="dark"?"light":o==="light"?"dark":"auto";t(n),a?.setAttribute("aria-label",`${n} theme`)})}});</script>
+  </div>
+</div>
+    
+    <main>
+      
+  <a class="link mt-6" href="/">Back</a>
+  <main>
+    <div class="mt-6">
+      <h1 class="text-4xl">实现一个简易的C++ String类</h1>
+      <div class="flex sm:flex-row flex-col pb-2" style="border-bottom: 1px dashed;">
+        <span class="text-sm font-normal italic">
+          24 Sep, 2022
+        </span>
+        <div class="ml-auto flex gap-4">
+          <span class="text-sm font-normal italic">
+            4 min
+          </span>
+          <span class="text-sm font-normal italic">
+            (712 words)
+          </span>
+        </div>
+      </div>
+      <div class="w-full">
+        <article class="prose dark:prose-invert prose-stone dark:prose-gray w-full mt-6 mx-auto" style="max-width: none;">
+          <h1 id="概述">概述</h1>
+<p>实现 String 类的核心就是重写构造器和重载运算符.</p>
+<h2 id="头文件">头文件</h2>
+<p>我们需要定义的有：</p>
+<ul>
+<li>Original Constructor</li>
+<li>Copy Constructor</li>
+<li>Move Constructor</li>
+<li>Copy Assignment</li>
+<li>Move Assignment</li>
+<li>Destructor</li>
+<li>Indexer</li>
+<li>Equal/NotEqual Operator</li>
+</ul>
+<div class="expressive-code"><link rel="stylesheet" href="/_astro/ec.6xp1a.css"><script type="module" src="/_astro/ec.8zarh.js"></script><figure class="frame"><figcaption class="header"></figcaption><pre data-language="cpp"><code><div class="ec-line"><div class="code"><span style="--0:#F97583;--1:#BF3441">#ifndef</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#B392F0;--1:#6F42C1">CAMILLE_STRING_H</span></div></div><div class="ec-line"><div class="code"><span style="--0:#F97583;--1:#BF3441">#define</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#B392F0;--1:#6F42C1">CAMILLE_STRING_H</span></div></div><div class="ec-line"><div class="code">
+</div></div><div class="ec-line"><div class="code"><span style="--0:#99A0A6;--1:#616972">// using char to store</span></div></div><div class="ec-line"><div class="code"><span style="--0:#F97583;--1:#BF3441">class</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#B392F0;--1:#6F42C1">String</span><span style="--0:#E1E4E8;--1:#24292E"> {</span></div></div><div class="ec-line"><div class="code"><span class="indent">  </span><span style="--0:#F97583;--1:#BF3441">char*</span><span style="--0:#E1E4E8;--1:#24292E"> str;</span></div></div><div class="ec-line"><div class="code">
+</div></div><div class="ec-line"><div class="code"><span style="--0:#F97583;--1:#BF3441">public:</span></div></div><div class="ec-line"><div class="code"><span class="indent">  </span><span style="--0:#B392F0;--1:#6F42C1">String</span><span style="--0:#E1E4E8;--1:#24292E">(</span><span style="--0:#F97583;--1:#BF3441">const</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#F97583;--1:#BF3441">char*</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#FFAB70;--1:#AE4B07">s</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#F97583;--1:#BF3441">=</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#9ECBFF;--1:#032F62">""</span><span style="--0:#E1E4E8;--1:#24292E">);</span></div></div><div class="ec-line"><div class="code"><span class="indent">  </span><span style="--0:#B392F0;--1:#6F42C1">String</span><span style="--0:#E1E4E8;--1:#24292E">(</span><span style="--0:#F97583;--1:#BF3441">const</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#B392F0;--1:#6F42C1">String</span><span style="--0:#F97583;--1:#BF3441">&#x26;</span><span style="--0:#E1E4E8;--1:#24292E">);</span><span style="--0:#99A0A6;--1:#616972"> // copy constructor</span></div></div><div class="ec-line"><div class="code"><span class="indent">  </span><span style="--0:#B392F0;--1:#6F42C1">String</span><span style="--0:#F97583;--1:#BF3441">&#x26;</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#F97583;--1:#BF3441">operator</span><span style="--0:#B392F0;--1:#6F42C1">=</span><span style="--0:#E1E4E8;--1:#24292E">(</span><span style="--0:#F97583;--1:#BF3441">const</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#B392F0;--1:#6F42C1">String</span><span style="--0:#F97583;--1:#BF3441">&#x26;</span><span style="--0:#E1E4E8;--1:#24292E">);</span><span style="--0:#99A0A6;--1:#616972"> // copy assignment</span></div></div><div class="ec-line"><div class="code"><span class="indent">  </span><span style="--0:#B392F0;--1:#6F42C1">String</span><span style="--0:#E1E4E8;--1:#24292E">(</span><span style="--0:#B392F0;--1:#6F42C1">String</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#F97583;--1:#BF3441">&#x26;&#x26;</span><span style="--0:#E1E4E8;--1:#24292E">) </span><span style="--0:#F97583;--1:#BF3441">noexcept</span><span style="--0:#E1E4E8;--1:#24292E"> ;</span><span style="--0:#99A0A6;--1:#616972"> // move constructor</span></div></div><div class="ec-line"><div class="code"><span class="indent">  </span><span style="--0:#B392F0;--1:#6F42C1">String</span><span style="--0:#F97583;--1:#BF3441">&#x26;</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#F97583;--1:#BF3441">operator</span><span style="--0:#B392F0;--1:#6F42C1">=</span><span style="--0:#E1E4E8;--1:#24292E">(</span><span style="--0:#B392F0;--1:#6F42C1">String</span><span style="--0:#F97583;--1:#BF3441">&#x26;&#x26;</span><span style="--0:#E1E4E8;--1:#24292E">) </span><span style="--0:#F97583;--1:#BF3441">noexcept</span><span style="--0:#E1E4E8;--1:#24292E"> ;</span><span style="--0:#99A0A6;--1:#616972"> // move assignment</span></div></div><div class="ec-line"><div class="code"><span class="indent">  </span><span style="--0:#B392F0;--1:#6F42C1">~String</span><span style="--0:#E1E4E8;--1:#24292E">();</span><span style="--0:#99A0A6;--1:#616972"> // destructor</span></div></div><div class="ec-line"><div class="code"><span class="indent"><span style="--0:#E1E4E8;--1:#24292E">  </span></span><span style="--0:#E1E4E8;--1:#24292E">operator </span><span style="--0:#F97583;--1:#BF3441">const</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#F97583;--1:#BF3441">char*</span><span style="--0:#E1E4E8;--1:#24292E"> ();</span></div></div><div class="ec-line"><div class="code"><span class="indent">  </span><span style="--0:#B392F0;--1:#6F42C1">String</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#F97583;--1:#BF3441">operator</span><span style="--0:#B392F0;--1:#6F42C1">+</span><span style="--0:#E1E4E8;--1:#24292E">(</span><span style="--0:#F97583;--1:#BF3441">const</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#B392F0;--1:#6F42C1">String</span><span style="--0:#F97583;--1:#BF3441">&#x26;</span><span style="--0:#E1E4E8;--1:#24292E">);</span></div></div><div class="ec-line"><div class="code"><span class="indent">  </span><span style="--0:#B392F0;--1:#6F42C1">String</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#F97583;--1:#BF3441">&#x26;operator</span><span style="--0:#B392F0;--1:#6F42C1">+=</span><span style="--0:#E1E4E8;--1:#24292E">(</span><span style="--0:#F97583;--1:#BF3441">const</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#B392F0;--1:#6F42C1">String</span><span style="--0:#F97583;--1:#BF3441">&#x26;</span><span style="--0:#E1E4E8;--1:#24292E">);</span></div></div><div class="ec-line"><div class="code"><span class="indent">  </span><span style="--0:#F97583;--1:#BF3441">char</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#F97583;--1:#BF3441">operator</span><span style="--0:#B392F0;--1:#6F42C1">[]</span><span style="--0:#E1E4E8;--1:#24292E">(</span><span style="--0:#F97583;--1:#BF3441">int</span><span style="--0:#E1E4E8;--1:#24292E">) </span><span style="--0:#F97583;--1:#BF3441">const</span><span style="--0:#E1E4E8;--1:#24292E">;</span></div></div><div class="ec-line"><div class="code"><span class="indent">  </span><span style="--0:#F97583;--1:#BF3441">char</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#F97583;--1:#BF3441">&#x26;operator</span><span style="--0:#B392F0;--1:#6F42C1">[]</span><span style="--0:#E1E4E8;--1:#24292E">(</span><span style="--0:#F97583;--1:#BF3441">int</span><span style="--0:#E1E4E8;--1:#24292E">);</span></div></div><div class="ec-line"><div class="code"><span class="indent">  </span><span style="--0:#B392F0;--1:#6F42C1">String</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#F97583;--1:#BF3441">operator</span><span style="--0:#B392F0;--1:#6F42C1">()</span><span style="--0:#E1E4E8;--1:#24292E">(</span><span style="--0:#F97583;--1:#BF3441">int</span><span style="--0:#E1E4E8;--1:#24292E">, </span><span style="--0:#F97583;--1:#BF3441">int</span><span style="--0:#E1E4E8;--1:#24292E">);</span></div></div><div class="ec-line"><div class="code"><span class="indent">  </span><span style="--0:#F97583;--1:#BF3441">bool</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#F97583;--1:#BF3441">operator</span><span style="--0:#B392F0;--1:#6F42C1">==</span><span style="--0:#E1E4E8;--1:#24292E">(</span><span style="--0:#F97583;--1:#BF3441">const</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#B392F0;--1:#6F42C1">String</span><span style="--0:#F97583;--1:#BF3441">&#x26;</span><span style="--0:#E1E4E8;--1:#24292E">);</span></div></div><div class="ec-line"><div class="code"><span class="indent">  </span><span style="--0:#F97583;--1:#BF3441">bool</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#F97583;--1:#BF3441">operator</span><span style="--0:#B392F0;--1:#6F42C1">!=</span><span style="--0:#E1E4E8;--1:#24292E">(</span><span style="--0:#F97583;--1:#BF3441">const</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#B392F0;--1:#6F42C1">String</span><span style="--0:#F97583;--1:#BF3441">&#x26;</span><span style="--0:#E1E4E8;--1:#24292E">);</span></div></div><div class="ec-line"><div class="code"><span style="--0:#E1E4E8;--1:#24292E">};</span></div></div><div class="ec-line"><div class="code">
+</div></div><div class="ec-line"><div class="code"><span style="--0:#F97583;--1:#BF3441">#endif</span></div></div></code></pre><div class="copy"><button title="Copy to clipboard" data-copied="Copied!" data-code="#ifndef CAMILLE_STRING_H#define CAMILLE_STRING_H// using char to storeclass String {  char* str;public:  String(const char* s = &#x22;&#x22;);  String(const String&#x26;); // copy constructor  String&#x26; operator=(const String&#x26;); // copy assignment  String(String &#x26;&#x26;) noexcept ; // move constructor  String&#x26; operator=(String&#x26;&#x26;) noexcept ; // move assignment  ~String(); // destructor  operator const char* ();  String operator+(const String&#x26;);  String &#x26;operator+=(const String&#x26;);  char operator[](int) const;  char &#x26;operator[](int);  String operator()(int, int);  bool operator==(const String&#x26;);  bool operator!=(const String&#x26;);};#endif"><div></div></button></div></figure></div>
+        </article>
+      </div>
+      <div class="mt-9 flex text-sm font-italic opacity-80">
+        <span class="ml-auto">
+              Posted at 24 Sep, 2022
+            </span>
+      </div>
+    </div>
+  </main>
+
+    </main>
+  </body></html>

@@ -17,12 +17,7 @@ export default defineConfig({
     presetTypography({
       cssExtend: {
         a: {
-          // no underline
-          textDecoration: "none",
           "font-size": ".9em",
-          // add underline offset
-          textDecorationThickness: "0.2em",
-          textDecorationColor: "rgb(var(--color-primary-main))",
         },
         li: {
           "word-break": "break-all",

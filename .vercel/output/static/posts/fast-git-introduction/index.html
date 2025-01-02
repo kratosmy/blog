@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang class="mx-4">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <title>Git快速入门 - Kratos</title>
+  <link rel="stylesheet" href="/_astro/index.B3zaAnLi.css">
+<link rel="stylesheet" href="/_astro/index.Y6NSlHWR.css">
+<style>[data-astro-image]{width:100%;height:auto;object-fit:var(--fit);object-position:var(--pos);aspect-ratio:var(--w) / var(--h)}[data-astro-image=responsive]{max-width:calc(var(--w) * 1px);max-height:calc(var(--h) * 1px)}[data-astro-image=fixed]{width:calc(var(--w) * 1px);height:calc(var(--h) * 1px)}
+</style></head>
+  <body class="max-width dark:bg-[#333] bg-[#FBFBFBFF]"><div class="my-6 flex">
+  <a href="/" class="hover:cursor-pointer opacity-100 hover:opacity-80">
+    <i class="hidden">website header </i>
+    <h1 class="text-4xl font-bold text-stone-800 dark:text-stone-200">
+      Kratos
+    </h1>
+  </a>
+  <div class="text-sm place-content-center inline ml-auto">
+    <!--<LanguageIcon />-->
+    <span class="mx-1"></span>
+    <starlight-rapide-theme-select class="astro-e3sgix4a">
+  <button aria-label="ok" aria-live="polite" class="sl-flex astro-e3sgix4a" title="ok">
+    <svg aria-hidden="true" height="20" viewBox="0 0 24 24" width="20" class="dark:stroke-white dark:fill-white astro-e3sgix4a">
+      <mask class="moon astro-e3sgix4a" id="moon-mask-" fill="yellow" stroke="red">
+        <rect x="0" y="0" width="100%" height="100%" fill="white" class="astro-e3sgix4a"></rect>
+        <circle cx="24" cy="10" r="6" fill="black" class="astro-e3sgix4a"></circle>
+      </mask>
+      <circle class="sun astro-e3sgix4a" cx="12" cy="12" r="6" mask="url(#moon-mask-)"></circle>
+      <g class="sun-beams astro-e3sgix4a" stroke="black">
+        <line x1="12" y1="1" x2="12" y2="3" class="astro-e3sgix4a"></line>
+        <line x1="12" y1="21" x2="12" y2="23" class="astro-e3sgix4a"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" class="astro-e3sgix4a"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" class="astro-e3sgix4a"></line>
+        <line x1="1" y1="12" x2="3" y2="12" class="astro-e3sgix4a"></line>
+        <line x1="21" y1="12" x2="23" y2="12" class="astro-e3sgix4a"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" class="astro-e3sgix4a"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" class="astro-e3sgix4a"></line>
+      </g>
+    </svg>
+  </button>
+</starlight-rapide-theme-select>
+
+
+
+<script type="module">const r="panda-theme";function c(e){return e==="auto"||e==="dark"||e==="light"?e:"auto"}function d(){return c(typeof localStorage<"u"&&localStorage.getItem(r))}function l(e){typeof localStorage<"u"&&localStorage.setItem(r,e==="light"||e==="dark"?e:"")}function s(){return matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}function t(e){document.documentElement.dataset.theme=e==="auto"?s():e,e==="dark"?document.documentElement.classList.add("dark"):document.documentElement.classList.remove("dark"),l(e)}matchMedia("(prefers-color-scheme: light)").addEventListener("change",()=>{d()==="auto"&&t("auto")});customElements.define("starlight-rapide-theme-select",class extends HTMLElement{constructor(){super(),t(d());const a=this.querySelector("button");a?.addEventListener("click",()=>{const o=c(document.documentElement.dataset.theme),n=o==="dark"?"light":o==="light"?"dark":"auto";t(n),a?.setAttribute("aria-label",`${n} theme`)})}});</script>
+  </div>
+</div>
+    
+    <main>
+      
+  <a class="link mt-6" href="/">Back</a>
+  <main>
+    <div class="mt-6">
+      <h1 class="text-4xl">Git快速入门</h1>
+      <div class="flex sm:flex-row flex-col pb-2" style="border-bottom: 1px dashed;">
+        <span class="text-sm font-normal italic">
+          21 Jul, 2023
+        </span>
+        <div class="ml-auto flex gap-4">
+          <span class="text-sm font-normal italic">
+            5 min
+          </span>
+          <span class="text-sm font-normal italic">
+            (936 words)
+          </span>
+        </div>
+      </div>
+      <div class="w-full">
+        <article class="prose dark:prose-invert prose-stone dark:prose-gray w-full mt-6 mx-auto" style="max-width: none;">
+          <h2 id="基本概念">基本概念</h2>
+<p>大部分和Git有关的文章都在告诉你Git有哪些命令，如何使用它们可以加速你的开发进程，但很少有人探讨Git的内部原理。</p>
+<p>先考虑Git仓库的三个基本概念：Blob， Tree，Commits。</p>
+<h3 id="blob">Blob</h3>
+<p>Blob是二进制大对象的缩写。
+以下是ChatGPT的总结：</p>
+<ul>
+<li>Blob是Git中存储文件内容的基本对象之一。</li>
+<li>每个Blob对象由文件内容和SHA-1哈希值来标识。</li>
+<li>Blob对象与Git的树对象和提交对象一起构成了Git的三个基本对象类型。</li>
+</ul>
+<h3 id="tree">Tree</h3>
+<p>Git使用树对象来存储文件夹。每棵树都包含一组子树（子文件夹）或者Blob（文件）。它同样通过哈希值来标识，值得注意的是，
+任何一个子文件的修改都会导致根树的哈希值改变，可谓牵一发而动全身。</p>
+<h3 id="commits">Commits</h3>
+<p>Commits是由Tree和其他一些元数据组成，同样通过哈希值标识。</p>
+<h2 id="git操作相关概念">Git操作相关概念</h2>
+<h3 id="ref">Ref</h3>
+<p>Git里通过一个有向无环图来指示一组Ref（空指针为起点），这些引用主要是方便人们查阅，因为哈希值太长了。比如HEAD Ref就是指向最近一次的提交。</p>
+<h3 id="三个区域">三个区域</h3>
+<ul>
+<li>Working Directory：表示当前正在使用的目录；</li>
+<li>Staging Area： 也可以理解为缓存或者索引，里面暂存你的更改；</li>
+<li>Repository：通过Commit Staging Area里的内容，得到Git Directory，也叫树或者数据库。</li>
+</ul>
+<h3 id="merge与rebase">Merge与Rebase</h3>
+<p>中文翻译为合并与变基，字面即可理解，下面适当展开：</p>
+<ul>
+<li>Git Merge会保留原始的Commits，然后会有一个新的Commit指向HEAD，里面可能会包含一些为解决冲突而产生的新代码。</li>
+<li>Git Rebase会复制原始的Commits，然后以旧的HEAD为起点继续向后添加新节点，这样可以保证这个DAG图保持一个直线。</li>
+</ul>
+<p>一般情况下，Rebase更加推荐使用，这样你的Commit会“脱颖而出”（“the cream rises to the top”），但也要注意，如果其他人
+在基于你的Commit进行开发，那么尽量不要使用Rebase。</p>
+<h2 id="结语">结语</h2>
+<p>最后的最后，尽量使用Intellij开发，因为他的Local History真的可以救命，有时候<code>git reflog</code>也不一定管用。</p>
+        </article>
+      </div>
+      <div class="mt-9 flex text-sm font-italic opacity-80">
+        <span class="ml-auto">
+              Posted at 21 Jul, 2023
+            </span>
+      </div>
+    </div>
+  </main>
+
+    </main>
+  </body></html>

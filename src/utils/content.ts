@@ -1,6 +1,4 @@
 import { getCollection } from "astro:content";
-import groupBy from "lodash/groupBy";
-import keys from "lodash/keys";
 import { DateTime } from "luxon";
 
 export const getAllPosts = async (
@@ -22,8 +20,8 @@ export const getAllPosts = async (
     })
     .sort((a, b) => {
       return (
-        DateTime.fromJSDate(b.date).toMillis() -
-        DateTime.fromJSDate(a.date).toMillis()
+        DateTime.fromJSDate(new Date(b.date)).toMillis() -
+        DateTime.fromJSDate(new Date(a.date)).toMillis()
       );
     });
 
