@@ -1,0 +1,39 @@
+---
+import "../styles/index.css";
+import Header from "./Header.astro";
+import Navbar from "./Navbar.astro";
+import { useLocale } from "@utils/locale";
+import '@fontsource/ibm-plex-sans';
+
+const { t, locale } = useLocale(Astro.url);
+
+export const prerender = true;
+
+export interface Props {
+  title: string | undefined;
+  navbar?: boolean;
+  description?: string;
+}
+
+let { title, navbar, description } = Astro.props;
+if (navbar === undefined) navbar = true;
+if (!description) description = t("layout.description");
+const fullTitle = `${title} - ${t("layout.title")}`;
+---
+
+<!doctype html>
+<html lang={locale} class="mx-4">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <title>{fullTitle}</title>
+  </head>
+  <body class="max-width dark:bg-[#333] bg-[#FBFBFBFF]"
+    ><Header/>
+    {navbar && <Navbar />}
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>

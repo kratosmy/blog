@@ -1,0 +1,36 @@
+---
+import { useLocale } from "@utils/locale";
+
+const { url } = Astro;
+const { path, t, locale } = useLocale(url);
+
+const items = [];
+// function page in root path
+function isRootPage() {
+  return (
+    url.pathname === "/" ||
+    ["tags/", "posts/"].some((i) => url.pathname.includes(i))
+  );
+}
+---
+
+<nav>
+  <a
+    href={path("/")}
+    class="link mr-4 animated hover:no-underline"
+    class:list={isRootPage() ? "active" : ""}>{t("nav.posts")}</a
+  >
+  {
+    items.map((item) => {
+      return (
+        <a
+          href={path(`/${item}`)}
+          class="link mr-4 animated hover:no-underline"
+          class:list={url.toString().includes(item) ? "active" : ""}
+        >
+          {t(`nav.${item}`)}
+        </a>
+      );
+    })
+  }
+</nav>

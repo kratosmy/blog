@@ -1,0 +1,19 @@
+---
+import { useLocale } from "@utils/locale";
+import ThemeSelect from "../components/ThemeSelect.astro";
+const { path } = useLocale(Astro.url);
+---
+
+<div class="my-6 flex">
+  <a href={path("/")} class="hover:cursor-pointer opacity-100 hover:opacity-80">
+    <i class="hidden">website header </i>
+    <h1 class="text-4xl font-bold text-stone-800 dark:text-stone-200">
+      Kratos
+    </h1>
+  </a>
+  <div class="text-sm place-content-center inline ml-auto">
+    <!--<LanguageIcon />-->
+    <span class="mx-1"></span>
+    <ThemeSelect />
+  </div>
+</div>

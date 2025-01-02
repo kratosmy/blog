@@ -1,0 +1,85 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { slugifySpace } from "@utils/format";
+import { useLocale } from "@utils/locale";
+import { formatDateYMD } from "@utils/format";
+import { getAllPosts } from "@utils/content";
+
+const { path, t, locale } = useLocale(Astro.url);
+const { tag } = Astro.props;
+const { posts, tags } = await getAllPosts(locale, tag);
+
+const filterType = "tags";
+const filterName = tag;
+
+function getTitle(post: any) {
+  if (!locale || locale === "zh") return post.title;
+  const enTitle = post["title-en"];
+  if (!enTitle) return post.title;
+  return enTitle;
+}
+---
+
+<Layout title={t("nav.posts")}>
+  <div class="mb-4">
+    <h1 class="font-bold">Posts</h1>
+    <p class="text-sm">
+      Subscribe to <a href="/atom.xml" class="link-static">Atom Feed</a>
+    </p>
+  </div>
+  
+  {
+    filterName && (
+      <div class="mt-2">
+        <span class="text-xl font-bold italic ml-2">
+          " {t(`${filterType}.` + filterName)} "
+        </span>
+      </div>
+    )
+  }
+  <hr class="my-2 border-b border-dashed border-gray-300 border-[1px]" />
+  <main class="mt-8">
+    <ul class="list-none pl-0">
+      {
+        posts.map((post: any) => {
+          return (
+          <li class="my-4">
+              <div class="flex items-center">
+                <span
+                  style={{ flex: "0 0 5rem" }}
+                  class="text-gray-500 whitespace-nowrap"
+                >
+                  <time class="mr-8 italic">{formatDateYMD(post.date)}</time>
+                </span>
+                <span class="flex-1 truncate">
+                  <a
+                    rel="prefetch-intent"
+                    href={path(post.url)}
+                    class="link-static inline-block"
+                  >
+                    {getTitle(post)}
+                  </a>
+                </span>
+              </div>
+            </li>
+          );
+        })
+      }
+    </ul>
+
+    <div class="mt-6">
+      {
+        [...tags].map((tag) => {
+          return (
+            <a
+              class="mr-1 text-sm link my-1 hover:font-bold"
+              href={"/tags/" + slugifySpace(tag) + "/"}
+            >
+              #{t("tags." + tag)}
+            </a>
+          );
+        })
+      }
+    </div>
+  </main>
+</Layout>
