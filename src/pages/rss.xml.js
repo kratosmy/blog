@@ -28,7 +28,7 @@ export async function GET({ params }) {
       await rss({
         title: "Kratos's blog",
         description: "Kratos's blog",
-        site: "https://blog.kratosmy.uk",
+        site: "https://blog.changshaking.com",
         items: posts,
       })
     ).body,

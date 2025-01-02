@@ -27,7 +27,7 @@ export default defineConfig({
   serverIslands: true,
 
   // prefetch: true,
-  site: "https://blog.kratosmy.uk",
+  site: "https://blog.changshaking.com",
   scopedStyleStrategy: "class",
   // trailingSlash: 'always',
   build: {
