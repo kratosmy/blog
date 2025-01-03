@@ -1,6 +1,7 @@
 import rss from "@astrojs/rss";
 import { getCollection } from "astro:content";
 import MarkdownIt from "markdown-it";
+
 export const prerender = true;
 
 const parser = new MarkdownIt();

@@ -1,18 +1,14 @@
 // @ts-check
-import { defineConfig, envField } from "astro/config";
-import vercel from "@astrojs/vercel";
+import { defineConfig } from "astro/config";
 
 import UnoCSS from "unocss/astro";
-import remarkWikiLink from "./src/plugins/wiki-link/index.ts";
-import { getPermalinks } from "./src/plugins/wiki-link/getPermalinks.ts";
 import yaml from "@rollup/plugin-yaml";
 import expressiveCode from "astro-expressive-code";
 
 import remarkDirective from "remark-directive";
-import { RDBilibiliPlugin } from "./src/plugins/remark-directive.mjs";
-import { InternalLinkPlugin } from "./src/plugins/remark-internal-link.mjs";
-import remarkObsidianCallout from "./src/plugins/callout/index.js";
 import mdx from "@astrojs/mdx";
+
+import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
 export default defineConfig({
@@ -34,26 +30,11 @@ export default defineConfig({
     format: "directory",
   },
   markdown: {
-    syntaxHighlight: false,
+    theme: 'everforest-dark',
+    syntaxHighlight: 'shiki',
     remarkRehype: {
       footnoteLabel: " ",
-    },
-    remarkPlugins: [
-      remarkDirective,
-      InternalLinkPlugin,
-      [
-        remarkWikiLink,
-        {
-          permalinks: getPermalinks("src/content/posts"),
-          pathFormat: "obsidian-short",
-          hrefTemplate: (permalink) => {
-            const href = permalink.replaceAll("src/content/posts", "/") + "/";
-            if (!href.startsWith("/")) return "/" + href;
-            return href;
-          },
-        },
-      ],
-    ],
+    }
   },
 
   integrations: [
@@ -66,7 +47,5 @@ export default defineConfig({
     mdx(),
   ],
   output: "server",
-  adapter: vercel({
-    // functionPerRoute: false
-  }),
+  adapter: cloudflare(),
 });

@@ -27,7 +27,7 @@ function getTitle(post: any) {
       Subscribe to <a href="/rss.xml" class="link-static">Atom Feed</a>
     </p>
   </div>
-  
+
   {
     filterName && (
       <div class="mt-2">
@@ -43,10 +43,10 @@ function getTitle(post: any) {
       {
         posts.map((post: any) => {
           return (
-          <li class="my-4">
-              <div class="flex items-center">
+            <li class="my-4">
+              <div class="flex flex-nowrap">
                 <span
-                  style={{ flex: "0 0 5rem" }}
+                  style={{ flex: "0 0 10rem" }}
                   class="text-gray-500 whitespace-nowrap"
                 >
                   <time class="mr-8 italic">{formatDateYMD(post.date)}</time>
@@ -55,7 +55,7 @@ function getTitle(post: any) {
                   <a
                     rel="prefetch-intent"
                     href={path(post.url)}
-                    class="link-static inline-block"
+                    class="link-static"
                   >
                     {getTitle(post)}
                   </a>

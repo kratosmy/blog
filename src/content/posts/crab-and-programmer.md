@@ -1,9 +1,9 @@
 ---
-title: '程序员与螃蟹'
-date: '2024-06-14'
+title: "程序员与螃蟹"
+date: "2024-06-14"
 draft: false
-author: 'kratos'
-tags: ['life']
+author: "kratos"
+tags: ["life"]
 ---
 
 前几天和老婆吃小杨生煎的时候谈到现在的蟹粉生煎没啥味道了，由此联想到自己以及程序员群体。

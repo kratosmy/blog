@@ -1,10 +1,7 @@
 import { getCollection } from "astro:content";
 import { DateTime } from "luxon";
 
-export const getAllPosts = async (
-  locale: string,
-  tag: string,
-) => {
+export const getAllPosts = async (locale: string, tag: string) => {
   const allPosts = await getCollection("posts");
   const filteredPosts = allPosts
     .map((i) => ({

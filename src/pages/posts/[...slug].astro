@@ -15,8 +15,7 @@ if (!post) {
   });
 }
 const wordCount = post.body.replace(/\s+/g, "").length;
-const { title, tags, date, lastModified, notificationTypes } =
-  post.data;
+const { title, tags, date, lastModified, notificationTypes } = post.data;
 const { Content } = await render(post);
 
 export async function getStaticPaths() {

@@ -5,9 +5,12 @@ const { path } = useLocale(Astro.url);
 ---
 
 <div class="my-6 flex">
-  <a href={path("/")} class="hover:cursor-pointer opacity-100 hover:opacity-80">
+  <a
+    href={path("/")}
+    class="hover:cursor-pointer opacity-100 hover:opacity-80 no-underline"
+  >
     <i class="hidden">website header </i>
-    <h1 class="text-4xl font-bold text-stone-800 dark:text-stone-200">
+    <h1 class="text-4xl leading-tight font-bold text-black dark:text-white">
       Kratos
     </h1>
   </a>

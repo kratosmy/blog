@@ -1,10 +1,10 @@
 ---
-title: 'Git快速入门'
-date: '2023-07-21'
-summary: 'A Fast Intro to Git Internals'
+title: "Git快速入门"
+date: "2023-07-21"
+summary: "A Fast Intro to Git Internals"
 draft: false
-author: 'kratos'
-tags: ['Basic Computer Science']
+author: "kratos"
+tags: ["Basic Computer Science"]
 ---
 
 ## 基本概念

@@ -3,7 +3,7 @@ import "../styles/index.css";
 import Header from "./Header.astro";
 import Navbar from "./Navbar.astro";
 import { useLocale } from "@utils/locale";
-import '@fontsource/ibm-plex-sans';
+import "@fontsource/ibm-plex-sans";
 
 const { t, locale } = useLocale(Astro.url);
 
@@ -28,8 +28,8 @@ const fullTitle = `${title} - ${t("layout.title")}`;
     <meta name="viewport" content="width=device-width" />
     <title>{fullTitle}</title>
   </head>
-  <body class="max-width dark:bg-[#333] bg-[#FBFBFBFF]"
-    ><Header/>
+  <body class="max-width dark:bg-[#333] bg-[#FBFBFBFF]">
+    <Header />
     {navbar && <Navbar />}
     <main>
       <slot />
