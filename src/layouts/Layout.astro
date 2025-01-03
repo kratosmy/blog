@@ -4,6 +4,7 @@ import Header from "./Header.astro";
 import Navbar from "./Navbar.astro";
 import { useLocale } from "@utils/locale";
 import "@fontsource/ibm-plex-sans";
+import { GoogleAnalytics } from 'astro-analytics';
 
 const { t, locale } = useLocale(Astro.url);
 
@@ -35,4 +36,5 @@ const fullTitle = `${title} - ${t("layout.title")}`;
       <slot />
     </main>
   </body>
+  <GoogleAnalytics id="G-4P87FNH31R" />
 </html>

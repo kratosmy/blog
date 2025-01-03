@@ -29,6 +29,9 @@ importers:
       astro:
         specifier: ^5.1.1
         version: 5.1.1(@types/node@22.10.2)(jiti@2.4.2)(rollup@4.29.1)(tsx@4.19.2)(typescript@5.7.2)(yaml@2.6.1)
+      astro-analytics:
+        specifier: ^2.7.0
+        version: 2.7.0
       astro-expressive-code:
         specifier: latest
         version: 0.38.3(astro@5.1.1(@types/node@22.10.2)(jiti@2.4.2)(rollup@4.29.1)(tsx@4.19.2)(typescript@5.7.2)(yaml@2.6.1))
@@ -1574,6 +1577,9 @@ packages:
   astring@1.9.0:
     resolution: {integrity: sha512-LElXdjswlqjWrPpJFg1Fx4wpkOCxj1TDHlSV4PlaRxHGWko024xICaa97ZkMfs6DRKlCguiAI+rbXv5GWwXIkg==}
     hasBin: true
+
+  astro-analytics@2.7.0:
+    resolution: {integrity: sha512-/qctBn7LF9DS3ff2YYFrYtCkLLw2fboPDJUgg3HErygGbEBvebW/eGRftZH4ykDJhlCvwTsSEKz/vff7WllyAw==}
 
   astro-eslint-parser@1.1.0:
     resolution: {integrity: sha512-F6NW1RJo5pp2kPnnM97M5Ohw8zAGjv83MpxHqfAochH68n/kiXN57+hYaNUCA7XkScoVNr6yzvly3hsY34TGfQ==}
@@ -5138,6 +5144,8 @@ snapshots:
       tslib: 2.8.1
 
   astring@1.9.0: {}
+
+  astro-analytics@2.7.0: {}
 
   astro-eslint-parser@1.1.0(typescript@5.7.2):
     dependencies:

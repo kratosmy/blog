@@ -17,6 +17,7 @@
     "@astrojs/vercel": "latest",
     "@fontsource/ibm-plex-sans": "^5.1.1",
     "astro": "^5.1.1",
+    "astro-analytics": "^2.7.0",
     "astro-expressive-code": "latest",
     "cobe": "latest",
     "lodash": "latest",
