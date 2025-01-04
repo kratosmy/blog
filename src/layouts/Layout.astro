@@ -5,6 +5,7 @@ import Navbar from "./Navbar.astro";
 import { useLocale } from "@utils/locale";
 import "@fontsource/ibm-plex-sans";
 import { GoogleAnalytics } from 'astro-analytics';
+import { SEO } from "astro-seo";
 import Footer from "./Footer.astro";
 
 const { t, locale } = useLocale(Astro.url);
@@ -24,12 +25,39 @@ const fullTitle = `${title} - ${t("layout.title")}`;
 ---
 
 <!doctype html>
-<html lang={locale} class="mx-4">
+<html lang='en' class="mx-4">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <title>{fullTitle}</title>
+    <SEO
+      title="Kratos's Blog"
+      description="Kratos's Blog"
+      openGraph={{
+        basic: {
+          title: "Kratos's Blog",
+          type: "Blog",
+          image: "https://user-images.githubusercontent.com/5182256/131216951-8f74f425-f775-463d-a11b-0e01ad9fce8d.png",
+        }
+      }}
+      twitter={{
+        creator: "@kratosmoy"
+      }}
+      extend={{
+        // extending the default link tags
+        link: [{ rel: "icon", href: "/favicon.ico" }],
+        // extending the default meta tags
+        meta: [
+          {
+            name: "twitter:image",
+            content: "https://user-images.githubusercontent.com/5182256/131216951-8f74f425-f775-463d-a11b-0e01ad9fce8d.png",
+          },
+          { name: "twitter:title", content: "Tinker Tailor Soldier Spy" },
+          { name: "twitter:description", content: "Agent" },
+        ],
+      }}
+    />
   </head>
   <body class="max-width dark:bg-[#333] bg-[#FBFBFBFF]">
     <Header />
