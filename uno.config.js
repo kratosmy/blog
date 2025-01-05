@@ -69,10 +69,10 @@ export default defineConfig({
   ],
   theme: {
     fontWeight: {
-      medium: '500',
-      semibold: '600',
-      bold: '900',
-      extrabold: '800'
-    }
-  }
+      medium: "500",
+      semibold: "600",
+      bold: "900",
+      extrabold: "800",
+    },
+  },
 });

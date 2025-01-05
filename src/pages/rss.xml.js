@@ -28,8 +28,8 @@ export async function GET({ params }) {
     (
       await rss({
         title: "Kratos's blog",
-        description: "Kratos's blog",
-        site: "https://blog.changshaking.com",
+        description: "A place to write down my tech life.",
+        site: "https://johnwick.blog",
         items: posts,
       })
     ).body,

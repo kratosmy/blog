@@ -5,7 +5,6 @@ import UnoCSS from "unocss/astro";
 import yaml from "@rollup/plugin-yaml";
 import expressiveCode from "astro-expressive-code";
 
-import remarkDirective from "remark-directive";
 import mdx from "@astrojs/mdx";
 import icon from "astro-icon";
 
@@ -26,10 +25,10 @@ export default defineConfig({
   compressHTML: false,
   experimental: {},
   devToolbar: {
-    enabled: true
+    enabled: true,
   },
   // prefetch: true,
-  site: "https://blog.changshaking.com",
+  site: "https://johnwick.blog",
   scopedStyleStrategy: "class",
   // trailingSlash: 'always',
   build: {
@@ -37,19 +36,26 @@ export default defineConfig({
   },
   markdown: {
     shikiConfig: {
-      theme: 'everforest-dark',
+      theme: "everforest-dark",
     },
-    syntaxHighlight: 'shiki',
+    syntaxHighlight: "shiki",
     remarkRehype: {
       footnoteLabel: " ",
-    }
+    },
   },
 
-  integrations: [UnoCSS(), expressiveCode({
-    themeCssSelector: (theme) => {
-      return "." + theme.type;
-    },
-  }), mdx(), sitemap(), partytown(), icon()],
+  integrations: [
+    UnoCSS(),
+    expressiveCode({
+      themeCssSelector: (theme) => {
+        return "." + theme.type;
+      },
+    }),
+    mdx(),
+    sitemap(),
+    partytown(),
+    icon(),
+  ],
   output: "server",
   adapter: cloudflare(),
 });

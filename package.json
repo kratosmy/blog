@@ -21,6 +21,7 @@
     "astro": "^5.1.1",
     "astro-analytics": "^2.7.0",
     "astro-expressive-code": "latest",
+    "astro-page-insight": "^0.10.0",
     "astro-seo": "^0.8.4",
     "cobe": "latest",
     "lodash": "latest",
