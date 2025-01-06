@@ -21,10 +21,6 @@ function getTitle(post: any) {
 ---
 
 <Layout title={t("nav.posts")}>
-  <div class="mb-4">
-    <h1 class="font-bold">Posts</h1>
-  </div>
-
   {
     filterName && (
       <div class="mt-2">
@@ -34,7 +30,6 @@ function getTitle(post: any) {
       </div>
     )
   }
-  <hr class="my-2 border-b border-dashed border-gray-300 border-[1px]" />
   <main class="mt-8">
     <ul class="list-none pl-0">
       {

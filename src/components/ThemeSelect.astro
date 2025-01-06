@@ -128,7 +128,7 @@ const id = `moon-mask-`;
   type Theme = "auto" | "dark" | "light";
 
   /** Key in `localStorage` to store color theme preference at. */
-  const storageKey = "panda-theme";
+  const storageKey = "theme";
 
   /** Get a typesafe theme string from any JS value (unknown values are coerced to `'auto'`). */
   function parseTheme(theme: unknown): Theme {

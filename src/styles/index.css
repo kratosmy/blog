@@ -28,7 +28,7 @@ div {
 }
 
 .link-static:hover {
-  color: rgb(var(--color-text-link));
+  color: rgb(var(--color-text-link-hover));
   text-decoration-thickness: 0.125rem;
   text-underline-offset: 5px;
 }
@@ -38,7 +38,7 @@ div {
   color: rgb(var(--color-text-link));
   display: inline; /* 添加这行 */
   padding: 0; /* 确保没有额外的padding */
-  margin: 0; /* 确保没有额外的margin */
+  margin-right: 1.5rem;
 }
 
 .link:hover {
