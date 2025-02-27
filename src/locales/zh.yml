@@ -2,6 +2,7 @@ layout:
   title: John Wick
 nav:
   posts: Posts
+  projects: Projects
 post:
   back: Back
   post_at: Posted at

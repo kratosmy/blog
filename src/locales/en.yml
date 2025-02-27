@@ -2,10 +2,11 @@ layout:
   title: John Wick
 nav:
   posts: Posts
+  projects: Projects
 post:
   back: Back
   post_at: Posted at
-  last_modified_at: Last modified at
+  last_modified_at: Last modified at  
 message:
   404-content: Page not found
   back-later: Work not finished yet, please come back later
