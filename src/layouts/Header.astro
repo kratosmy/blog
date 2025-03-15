@@ -11,7 +11,7 @@ const { path } = useLocale(Astro.url);
   >
     <i class="hidden">website header </i>
     <h1 class="text-4xl leading-tight font-bold text-black dark:text-white">
-      John Wick
+      柳长街
     </h1>
   </a>
   <div class="text-sm place-content-center inline ml-auto">
@@ -20,3 +20,17 @@ const { path } = useLocale(Astro.url);
     <ThemeSelect />
   </div>
 </div>
+
+<style>
+  @font-face {
+    font-family: 'CyLy';
+    src: url('/fonts/ChenYuluoyan-2.0-Thin.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  h1 {
+    font-family: 'CyLy', sans-serif;
+  }
+</style>

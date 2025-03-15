@@ -73,6 +73,6 @@ export default defineConfig({
       semibold: "600",
       bold: "900",
       extrabold: "800",
-    },
+    }
   },
 });
