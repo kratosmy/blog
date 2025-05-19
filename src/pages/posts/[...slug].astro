@@ -1,32 +1,32 @@
 ---
-import Layout from "@layouts/Layout.astro";
-import { useLocale } from "@utils/locale";
-import { formatDateYMD } from "@utils/format";
-import { getCollection, getEntry, render } from "astro:content";
+import { getCollection, getEntry, render } from 'astro:content'
+import Layout from '@layouts/Layout.astro'
+import { formatDateYMD } from '@utils/format'
+import { useLocale } from '@utils/locale'
 
-export const prerender = true;
-const { path, t, locale } = useLocale(Astro.url);
-let { slug } = Astro.params;
-const post = await getEntry("posts", slug);
+export const prerender = true
+const { path, t, locale } = useLocale(Astro.url)
+let { slug } = Astro.params
+const post = await getEntry('posts', slug)
 if (!post) {
   return new Response(null, {
     status: 404,
-    statusText: "Not found",
-  });
+    statusText: 'Not found',
+  })
 }
-const wordCount = post.body.replace(/\s+/g, "").length;
-const { title, tags, date, lastModified, notificationTypes } = post.data;
-const { Content } = await render(post);
+const wordCount = post.body.replace(/\s+/g, '').length
+const { title, tags, date, lastModified, notificationTypes } = post.data
+const { Content } = await render(post)
 
 export async function getStaticPaths() {
-  const notes = await getCollection("posts", (i) => !i.slug?.includes(".en."));
+  const notes = await getCollection('posts', (i) => !i.slug?.includes('.en.'))
   return notes.map((note) => {
     return {
       params: {
         slug: note.slug,
       },
-    };
-  });
+    }
+  })
 }
 ---
 

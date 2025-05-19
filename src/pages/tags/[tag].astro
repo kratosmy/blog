@@ -1,10 +1,10 @@
 ---
-import PostsLayout from "@layouts/PostsLayout.astro";
-import { getCollection } from "astro:content";
-export const prerender = true;
+import { getCollection } from 'astro:content'
+import PostsLayout from '@layouts/PostsLayout.astro'
+export const prerender = true
 
 export async function getStaticPaths() {
-  const posts = await getCollection("posts");
+  const posts = await getCollection('posts')
   const tags = [
     ...new Set(
       posts
@@ -12,19 +12,19 @@ export async function getStaticPaths() {
         .map((i) => i.data.tags)
         .flat(),
     ),
-  ];
+  ]
   return tags.map((tag) => {
     return {
       params: {
-        tag: tag?.replace(/\s/g, "-"),
+        tag: tag?.replace(/\s/g, '-'),
       },
       props: {
         tag,
       },
-    };
-  });
+    }
+  })
 }
-const { tag } = Astro.props;
+const { tag } = Astro.props
 ---
 
 <PostsLayout tag={tag} />

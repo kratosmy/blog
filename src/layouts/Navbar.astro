@@ -1,16 +1,16 @@
 ---
-import { useLocale } from "@utils/locale";
+import { useLocale } from '@utils/locale'
 
-const { url } = Astro;
-const { path, t, locale } = useLocale(url);
+const { url } = Astro
+const { path, t, locale } = useLocale(url)
 
-const items = ["projects"];
+const items = ['projects']
 // function page in root path
 function isRootPage() {
   return (
-    url.pathname === "/" ||
-    ["tags/", "posts/"].some((i) => url.pathname.includes(i))
-  );
+    url.pathname === '/' ||
+    ['tags/', 'posts/'].some((i) => url.pathname.includes(i))
+  )
 }
 ---
 

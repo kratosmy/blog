@@ -1,21 +1,21 @@
 ---
-import ProjectsLayout from '../../layouts/ProjectsLayout.astro';
+import ProjectsLayout from '../../layouts/ProjectsLayout.astro'
 
 // 这里可以是从API或本地文件获取的项目数据
 const projects = [
   {
-    title: "Project 1",
-    description: "This is the first project",
-    image: "/images/project1.jpg",
-    link: "/projects/project-1",
-    tags: ["Web", "Design"],
-    date: "2023-01-01"
+    title: 'Project 1',
+    description: 'This is the first project',
+    image: '/images/project1.jpg',
+    link: '/projects/project-1',
+    tags: ['Web', 'Design'],
+    date: '2023-01-01',
   },
   // ... 更多项目
-];
+]
 
-const currentPage = 1;
-const totalPages = 3;
+const currentPage = 1
+const totalPages = 3
 ---
 
 <ProjectsLayout 

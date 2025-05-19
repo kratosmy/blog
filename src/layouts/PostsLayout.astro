@@ -1,22 +1,22 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import { slugifySpace } from "@utils/format";
-import { useLocale } from "@utils/locale";
-import { formatDateYMD } from "@utils/format";
-import { getAllPosts } from "@utils/content";
+import { getAllPosts } from '@utils/content'
+import { slugifySpace } from '@utils/format'
+import { formatDateYMD } from '@utils/format'
+import { useLocale } from '@utils/locale'
+import Layout from '../layouts/Layout.astro'
 
-const { path, t, locale } = useLocale(Astro.url);
-const { tag } = Astro.props;
-const { posts, tags } = await getAllPosts(locale, tag);
+const { path, t, locale } = useLocale(Astro.url)
+const { tag } = Astro.props
+const { posts, tags } = await getAllPosts(locale, tag)
 
-const filterType = "tags";
-const filterName = tag;
+const filterType = 'tags'
+const filterName = tag
 
 function getTitle(post: any) {
-  if (!locale || locale === "zh") return post.title;
-  const enTitle = post["title-en"];
-  if (!enTitle) return post.title;
-  return enTitle;
+  if (!locale || locale === 'zh') return post.title
+  const enTitle = post['title-en']
+  if (!enTitle) return post.title
+  return enTitle
 }
 ---
 

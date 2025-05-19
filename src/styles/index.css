@@ -162,11 +162,11 @@ a.animated.active:after {
 .prose
   :where(a):not(
     :where(
-      [data-footnote-ref],
-      [data-footnote-backref],
-      .not-prose,
-      .not-prose *
-    )
+        [data-footnote-ref],
+        [data-footnote-backref],
+        .not-prose,
+        .not-prose *
+      )
   ) {
   text-decoration-color: var(--color-primary-main);
   @apply mx-1;
@@ -181,11 +181,11 @@ a.animated.active:after {
 .prose
   :where(a):not(
     :where(
-      [data-footnote-ref],
-      [data-footnote-backref],
-      .not-prose,
-      .not-prose *
-    )
+        [data-footnote-ref],
+        [data-footnote-backref],
+        .not-prose,
+        .not-prose *
+      )
   ):not(.internal) {
   @apply after:content-['↗'] after:ml-0;
 }
@@ -195,11 +195,11 @@ a.animated.active:after {
 .prose
   :where(a):not(
     :where(
-      [data-footnote-ref],
-      [data-footnote-backref],
-      .not-prose,
-      .not-prose *
-    )
+        [data-footnote-ref],
+        [data-footnote-backref],
+        .not-prose,
+        .not-prose *
+      )
   ):where(.internal)::after {
   content: "]";
   margin-right: 0;
@@ -210,11 +210,11 @@ a.animated.active:after {
 .prose
   :where(a):not(
     :where(
-      [data-footnote-ref],
-      [data-footnote-backref],
-      .not-prose,
-      .not-prose *
-    )
+        [data-footnote-ref],
+        [data-footnote-backref],
+        .not-prose,
+        .not-prose *
+      )
   ):where(.internal)::before {
   content: "[";
   margin-right: 0;

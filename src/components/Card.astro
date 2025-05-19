@@ -1,15 +1,15 @@
 ---
 interface Props {
-  title: string;
-  description?: string;
-  image?: string;
-  link?: string;
-  tags?: string[];
-  fixedHeight?: boolean;
-  wide?: boolean;
+  title: string
+  description?: string
+  image?: string
+  link?: string
+  tags?: string[]
+  fixedHeight?: boolean
+  wide?: boolean
 }
 
-const { title, description, image, link, tags = [] } = Astro.props;
+const { title, description, image, link, tags = [] } = Astro.props
 ---
 
 <div class="relative flex flex-col my-6 bg-white shadow-sm border border-slate-200 rounded-lg w-[800px] h-[200px] p-6">

@@ -1,25 +1,25 @@
 // @ts-check
-import { defineConfig } from "astro/config";
+import { defineConfig } from 'astro/config'
 
-import UnoCSS from "unocss/astro";
-import yaml from "@rollup/plugin-yaml";
-import expressiveCode from "astro-expressive-code";
+import yaml from '@rollup/plugin-yaml'
+import expressiveCode from 'astro-expressive-code'
+import UnoCSS from 'unocss/astro'
 
-import mdx from "@astrojs/mdx";
-import icon from "astro-icon";
+import mdx from '@astrojs/mdx'
+import icon from 'astro-icon'
 
-import cloudflare from "@astrojs/cloudflare";
+import cloudflare from '@astrojs/cloudflare'
 
-import sitemap from "@astrojs/sitemap";
+import sitemap from '@astrojs/sitemap'
 
-import partytown from "@astrojs/partytown";
+import partytown from '@astrojs/partytown'
 
 // https://astro.build/config
 export default defineConfig({
   vite: {
     plugins: [yaml()],
     build: {
-      assetsDir: "assets",
+      assetsDir: 'assets',
     },
   },
   compressHTML: false,
@@ -28,19 +28,19 @@ export default defineConfig({
     enabled: true,
   },
   // prefetch: true,
-  site: "https://johnwick.blog",
-  scopedStyleStrategy: "class",
+  site: 'https://johnwick.blog',
+  scopedStyleStrategy: 'class',
   // trailingSlash: 'always',
   build: {
-    format: "directory",
+    format: 'directory',
   },
   markdown: {
     shikiConfig: {
-      theme: "everforest-dark",
+      theme: 'everforest-dark',
     },
-    syntaxHighlight: "shiki",
+    syntaxHighlight: 'shiki',
     remarkRehype: {
-      footnoteLabel: " ",
+      footnoteLabel: ' ',
     },
   },
 
@@ -48,7 +48,7 @@ export default defineConfig({
     UnoCSS(),
     expressiveCode({
       themeCssSelector: (theme) => {
-        return "." + theme.type;
+        return '.' + theme.type
       },
     }),
     mdx(),
@@ -56,6 +56,6 @@ export default defineConfig({
     partytown(),
     icon(),
   ],
-  output: "server",
+  output: 'server',
   adapter: cloudflare(),
-});
+})
