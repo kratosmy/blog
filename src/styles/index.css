@@ -45,6 +45,27 @@ div {
   color: rgb(var(--color-text-link-hover));
 }
 
+/* 添加标签样式 */
+a.link[href^="/tags/"] {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  margin: 0.3rem;
+  border-radius: 1.5rem;
+  background-color: rgba(var(--color-primary-main), 0.1);
+  transition: all 0.2s ease;
+  min-width: 2.5rem;
+  text-align: center;
+}
+
+a.link[href^="/tags/"]:hover {
+  background-color: rgba(var(--color-primary-main), 0.2);
+  transform: translateY(-1px);
+}
+
+a.link[href^="/tags/"]:active {
+  transform: translateY(0);
+}
+
 a.animated {
   --animated-underline-from: rgb(var(--color-text-link));
   --animated-underline-to: rgb(var(--color-text-link));
