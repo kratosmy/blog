@@ -4,12 +4,13 @@ import { useLocale } from '@utils/locale'
 const { url } = Astro
 const { path, t, locale } = useLocale(url)
 
-const items = ['projects']
+// const items = ['projects']
+const items = []
 // function page in root path
 function isRootPage() {
   return (
     url.pathname === '/' ||
-    ['tags/', 'posts/'].some((i) => url.pathname.includes(i))
+    ['posts/'].some((i) => url.pathname.includes(i))
   )
 }
 ---
