@@ -6,17 +6,31 @@ const { path, t, locale } = useLocale(url)
 
 // const items = ['projects']
 const items = []
-// function page in root path
+
+// function to check if current page is root/posts page
 function isRootPage() {
   return (
-    url.pathname === '/' || ['posts/'].some((i) => url.pathname.includes(i))
+    url.pathname === '/' ||
+    url.pathname === '/zh/' ||
+    url.pathname === '/en/' ||
+    url.pathname.includes('/posts/') ||
+    url.pathname.includes('/tags/')
   )
 }
+
+// detect current language from URL
+function getCurrentLanguage() {
+  if (url.pathname.startsWith('/en/')) return 'en'
+  if (url.pathname.startsWith('/zh/')) return 'zh'
+  return 'zh' // default
+}
+
+const currentLang = getCurrentLanguage()
 ---
 
 <nav>
   <a
-    href={path("/")}
+    href={`/${currentLang}/`}
     class="link mr-4 animated hover:no-underline"
     class:list={isRootPage() ? "active" : ""}>{t("nav.posts")}</a
   >
@@ -24,7 +38,7 @@ function isRootPage() {
     items.map((item) => {
       return (
         <a
-          href={path(`/${item}`)}
+          href={`/${currentLang}/${item}/`}
           class="link mr-4 animated hover:no-underline"
           class:list={url.toString().includes(item) ? "active" : ""}
         >

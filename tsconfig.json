@@ -9,7 +9,8 @@
       "@utils/*": ["src/utils/*"],
       "@plugins/*": ["src/plugins/*"],
       "@assets/*": ["src/assets/*"],
-      "@loaders/*": ["src/loaders/*"]
+      "@loaders/*": ["src/loaders/*"],
+      "@types/*": ["src/types/*"]
     },
     "strictNullChecks": true, // add if using `base` template
     "allowJs": true // required, and included with all Astro templates

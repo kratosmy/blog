@@ -201,14 +201,9 @@ a.animated.active:after {
  * prose link
  */
 .prose
-  :where(a):not(
-    :where(
-        [data-footnote-ref],
-        [data-footnote-backref],
-        .not-prose,
-        .not-prose *
-      )
-  ) {
+:where(a):not(
+  :where([data-footnote-ref], [data-footnote-backref], .not-prose, .not-prose *)
+) {
   text-decoration-color: var(--color-primary-main);
   @apply mx-1;
 }
@@ -234,14 +229,9 @@ a.animated.active:after {
 /*prose link add ' [[ link ]] ' when class have 'internal'*/
 
 .prose
-  :where(a):not(
-    :where(
-        [data-footnote-ref],
-        [data-footnote-backref],
-        .not-prose,
-        .not-prose *
-      )
-  ):where(.internal)::after {
+:where(a):not(
+  :where([data-footnote-ref], [data-footnote-backref], .not-prose, .not-prose *)
+):where(.internal)::after {
   content: "]";
   margin-right: 0;
   margin-left: 0;

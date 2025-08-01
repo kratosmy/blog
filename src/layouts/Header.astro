@@ -1,12 +1,24 @@
 ---
 import { useLocale } from '@utils/locale'
 import ThemeSelect from '../components/ThemeSelect.astro'
-const { path } = useLocale(Astro.url)
+import LanguageSelect from '../components/LanguageSelect.astro'
+
+const { url } = Astro
+const { path } = useLocale(url)
+
+// detect current language from URL
+function getCurrentLanguage() {
+  if (url.pathname.startsWith('/en/')) return 'en'
+  if (url.pathname.startsWith('/zh/')) return 'zh'
+  return 'zh' // default
+}
+
+const currentLang = getCurrentLanguage()
 ---
 
 <div class="my-6 flex">
   <a
-    href={path("/")}
+    href={`/${currentLang}/`}
     class="hover:cursor-pointer opacity-100 hover:opacity-80 no-underline"
   >
     <i class="hidden">website header </i>
@@ -14,9 +26,8 @@ const { path } = useLocale(Astro.url)
       John Wick
     </h1>
   </a>
-  <div class="text-sm place-content-center inline ml-auto">
-    <!--<LanguageIcon />-->
-    <span class="mx-1"></span>
+  <div class="text-sm place-content-center inline ml-auto flex items-center gap-3">
+    <LanguageSelect />
     <ThemeSelect />
   </div>
 </div>

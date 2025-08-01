@@ -6,11 +6,9 @@ import zh from '../locales/zh.yml'
 const getLocale = (url: URL) => ''
 
 const useLocalePath = (lang: string) => {
-  lang ??= ''
-  if (lang === 'zh') {
-    lang = ''
-  }
-  const start = lang ? '/en' : ''
+  const normalizedLang = lang ?? ''
+  const localeLang = normalizedLang === 'zh' ? '' : normalizedLang
+  const start = localeLang ? '/en' : ''
   return (path: string) => {
     let url = start + path
     if (!url.endsWith('/')) url += '/'
@@ -19,13 +17,13 @@ const useLocalePath = (lang: string) => {
 }
 
 const useTranslation = (lang: string) => {
-  if (!lang) lang = 'zh'
-  return (key: string) => {
-    const data = lang === 'zh' ? [zh, en] : [en, zh]
-    const r = get(data[0], key)
+  const normalizedLang = lang || 'zh'
+  return (key: string): string => {
+    const data = normalizedLang === 'zh' ? [zh, en] : [en, zh]
+    const r = get(data[0], key) as string
     if (!r) {
       console.warn(`Translation for "${key}" not found`)
-      return key.split('.').pop()
+      return key.split('.').pop() || key
     }
     return r
   }

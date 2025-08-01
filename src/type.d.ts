@@ -8,6 +8,9 @@ declare module '@utils/*'
 declare module '@content/*'
 
 declare module 'remark-pangu' {
-  const pangu: any
+  interface PanguPlugin {
+    (): (tree: unknown) => void
+  }
+  const pangu: PanguPlugin
   export default pangu
 }

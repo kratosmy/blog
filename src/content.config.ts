@@ -1,18 +1,19 @@
 import { defineCollection, z } from 'astro:content'
 
-//@ts-ignore
+const postSchema = z.object({
+  title: z.string().optional(),
+  'title-en': z.string().optional(),
+  tags: z.array(z.string()).optional(),
+  date: z.string(),
+  lastModified: z.date().optional(),
+  notificationTypes: z.array(z.string()).optional(),
+  isDraft: z.boolean().optional(),
+  url: z.string().optional(),
+})
+
 const posts = defineCollection({
-  type: 'content', // v2.5.0 and later
-  schema: z.object({
-    title: z.string().optional(),
-    'title-en': z.string().optional(),
-    tags: z.array(z.string()).optional(),
-    date: z.string(),
-    lastModified: z.date().optional(),
-    notificationTypes: z.array(z.string()).optional(),
-    isDraft: z.boolean().optional(),
-    url: z.string().optional(),
-  }),
+  type: 'content',
+  schema: postSchema,
 })
 
 const docs = defineCollection({
@@ -29,7 +30,7 @@ const now = defineCollection({
 })
 
 export const collections = {
-  posts: posts,
-  docs: docs,
-  now: now,
+  posts,
+  docs,
+  now,
 }

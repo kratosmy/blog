@@ -1,10 +1,10 @@
 import { DateTime } from 'luxon'
 
 export function relativeTo(dateStr: string, locale = 'zh') {
-  locale ??= 'zh'
+  const normalizedLocale = locale ?? 'zh'
   return DateTime.fromISO(dateStr).toRelative({
     base: DateTime.now(),
-    locale: locale,
+    locale: normalizedLocale,
   })
 }
 

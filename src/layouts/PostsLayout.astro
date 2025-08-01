@@ -5,8 +5,9 @@ import { formatDateYMD } from '@utils/format'
 import { useLocale } from '@utils/locale'
 import Layout from '../layouts/Layout.astro'
 
-const { path, t, locale } = useLocale(Astro.url)
-const { tag } = Astro.props
+const { path, t, locale: urlLocale } = useLocale(Astro.url)
+const { tag, locale: propsLocale } = Astro.props
+const locale = propsLocale || urlLocale || 'zh'
 const { posts, tags } = await getAllPosts(locale, tag)
 
 const filterType = 'tags'
@@ -62,10 +63,11 @@ function getTitle(post: any) {
     <div class="mt-6">
       {
         [...tags].map((tag) => {
+          const tagUrl = `/${locale}/tags/${slugifySpace(tag)}/`
           return (
             <a
               class="mr-3 mb-2 text-base link hover:font-bold inline-block"
-              href={"/tags/" + slugifySpace(tag) + "/"}
+              href={tagUrl}
             >
               #{t("tags." + tag)}
             </a>

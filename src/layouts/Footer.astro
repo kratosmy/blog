@@ -2,22 +2,22 @@
 import { Icon } from 'astro-icon/components'
 ---
 
-<footer class="flex justify-center space-x-4 py-8">
+<footer class="flex justify-center items-center space-x-4 py-8">
   <a
     href="https://github.com/kratosmy"
     target="_blank"
     rel="noopener noreferrer"
     aria-label="github link"
-    class="text-[#8cc2DD]"
+    class="text-[#8cc2DD] hover:opacity-80 transition-opacity flex items-center"
   >
-    <Icon name="hugeicons:github" size={30} />
+    <Icon name="hugeicons:github" size={24} />
   </a>
   <a
     href="/rss.xml"
     target="_blank"
     aria-label="rss link"
-    class="text-[#8cc2DD]"
+    class="text-[#8cc2DD] hover:opacity-80 transition-opacity flex items-center"
   >
-    <Icon name="tabler:rss" size={30} />
+    <Icon name="tabler:rss" size={24} />
   </a>
 </footer>

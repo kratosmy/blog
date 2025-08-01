@@ -1,0 +1,30 @@
+---
+const { url } = Astro
+
+// detect current language from URL
+function getCurrentLanguage() {
+  if (url.pathname.startsWith('/en/')) return 'en'
+  if (url.pathname.startsWith('/zh/')) return 'zh'
+  return 'zh' // default
+}
+
+const currentLang = getCurrentLanguage()
+---
+
+<div class="flex gap-1 items-center text-sm">
+  <a
+    href={url.pathname.replace(/^\/(zh|en)/, '/zh')}
+    class="hover:opacity-80 transition-opacity"
+    class:list={currentLang === 'zh' ? 'font-bold text-black dark:text-white' : 'text-gray-500 dark:text-gray-400'}
+  >
+    中
+  </a>
+  <span class="text-gray-400 dark:text-gray-500">|</span>
+  <a
+    href={url.pathname.replace(/^\/(zh|en)/, '/en')}
+    class="hover:opacity-80 transition-opacity"
+    class:list={currentLang === 'en' ? 'font-bold text-black dark:text-white' : 'text-gray-500 dark:text-gray-400'}
+  >
+    EN
+  </a>
+</div>

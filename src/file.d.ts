@@ -1,4 +1,4 @@
 declare module '*.yml' {
-  const value: any // Add type definitions here if desired
+  const value: Record<string, unknown>
   export default value
 }

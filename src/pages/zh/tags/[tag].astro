@@ -1,0 +1,20 @@
+---
+import Layout from '@layouts/Layout.astro'
+import PostsLayout from '@layouts/PostsLayout.astro'
+import { getAllPosts } from '@utils/content'
+import { useLocale } from '@utils/locale'
+
+export const prerender = true
+const { path, t, locale } = useLocale(Astro.url)
+const { tag } = Astro.params
+const { posts } = await getAllPosts('zh', tag || '')
+
+export async function getStaticPaths() {
+  const { tags } = await getAllPosts('zh', '')
+  return Array.from(tags).map((tag) => ({
+    params: { tag },
+  }))
+}
+---
+
+<PostsLayout posts={posts} tag={tag} locale="zh" />

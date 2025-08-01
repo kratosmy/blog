@@ -1,4 +1,5 @@
-export function parseSlug(fileName: string) {
+export function parseSlug(fileName: string): string | undefined {
   const dirs = fileName.split('/')
-  const name = dirs.pop()!.split('.').shift()
+  const lastDir = dirs.pop()
+  return lastDir?.split('.').shift()
 }
