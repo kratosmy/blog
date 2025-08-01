@@ -1,5 +1,5 @@
 /// <reference path="../.astro/types.d.ts" />
-interface ImportMetaEnv {}
+type ImportMetaEnv = {}
 
 interface ImportMeta {
   readonly env: ImportMetaEnv

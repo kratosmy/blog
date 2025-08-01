@@ -10,7 +10,7 @@ export function relativeTo(dateStr: string, locale = 'zh') {
 
 export function formatDateMD(
   dateStr: string | Date | undefined,
-  locale: string = 'zh',
+  locale = 'zh',
 ) {
   const date =
     dateStr instanceof String
@@ -22,10 +22,7 @@ export function formatDateMD(
   return date.toFormat('MM-dd')
 }
 
-export function formatDateYMD(
-  dateStr: string | number | Date,
-  locale: string = 'zh',
-) {
+export function formatDateYMD(dateStr: string | number | Date, locale = 'zh') {
   const months = [
     'Jan',
     'Feb',

@@ -4,3 +4,15 @@ node_modules/
 .idea/
 .vercel/
 /.wrangler/
+.aider*
+
+# Build outputs
+dist/
+
+# Cache directories
+.cache/
+.temp/
+
+# OS generated files
+.DS_Store
+Thumbs.db

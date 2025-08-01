@@ -9,8 +9,7 @@ const items = []
 // function page in root path
 function isRootPage() {
   return (
-    url.pathname === '/' ||
-    ['posts/'].some((i) => url.pathname.includes(i))
+    url.pathname === '/' || ['posts/'].some((i) => url.pathname.includes(i))
   )
 }
 ---

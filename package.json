@@ -7,7 +7,12 @@
     "start": "astro dev",
     "build": "astro check --minimumSeverity error && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "format": "biome format --write .",
+    "lint": "biome lint --write .",
+    "check": "biome check --write .",
+    "format:check": "biome format .",
+    "lint:check": "biome lint ."
   },
   "dependencies": {
     "@astrojs/check": "latest",
@@ -41,19 +46,18 @@
     "@types/luxon": "latest",
     "@types/markdown-it": "latest",
     "@types/node": "^22.10.1",
-    "@typescript-eslint/parser": "^8.19.0",
     "astro-icon": "^1.1.5",
-    "eslint": "^9.17.0",
-    "eslint-plugin-astro": "^1.3.1",
     "hastscript": "latest",
     "mdast-util-to-string": "latest",
     "mdast-util-wiki-link": "latest",
     "micromark-util-symbol": "latest",
-    "prettier": "^3.4.2",
-    "prettier-plugin-astro": "^0.14.1",
     "remark-obsidian-callout": "latest",
     "shiki": "^1.26.0",
+    "simple-git-hooks": "^2.13.1",
     "unist-util-visit": "latest",
     "unocss": "latest"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm format && git add ."
   }
 }

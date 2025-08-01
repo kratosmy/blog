@@ -24,11 +24,6 @@ export const getAllPosts = async (locale: string, tag: string) => {
 
   return {
     posts: filteredPosts,
-    tags: new Set(
-      filteredPosts
-        .filter((i) => i.tags)
-        .map((i) => i.tags)
-        .flat(),
-    ),
+    tags: new Set(filteredPosts.filter((i) => i.tags).flatMap((i) => i.tags)),
   }
 }
