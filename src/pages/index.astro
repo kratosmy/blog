@@ -1,4 +1,6 @@
 ---
-// 重定向到中文首页
-return Astro.redirect('/zh/')
+import PostsLayout from '@layouts/PostsLayout.astro'
+export const prerender = true
 ---
+
+<PostsLayout posts={undefined} tag="" locale="zh" />

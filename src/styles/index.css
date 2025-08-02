@@ -45,8 +45,22 @@ div {
   color: rgb(var(--color-text-link-hover));
 }
 
-/* 添加标签样式 */
-a.link[href^="/tags/"] {
+/* 导航栏链接样式 - 统一的普通链接样式 */
+.nav-link {
+  @apply hover:cursor-pointer no-underline animated;
+  color: rgb(var(--color-text-link));
+  display: inline;
+  padding: 0;
+  margin-right: 1.5rem;
+}
+
+.nav-link:hover {
+  color: rgb(var(--color-text-link-hover));
+}
+
+/* 页面内容中的标签使用按钮样式 */
+.prose a.link[href*="/tags/"],
+.tag-list a.link[href*="/tags/"] {
   display: inline-block;
   padding: 0.4rem 1rem;
   margin: 0.3rem;
@@ -61,26 +75,30 @@ a.link[href^="/tags/"] {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-a.link[href^="/tags/"]:hover {
+.prose a.link[href*="/tags/"]:hover,
+.tag-list a.link[href*="/tags/"]:hover {
   background-color: rgba(var(--color-primary-main), 0.3);
   transform: translateY(-1px);
   border-color: rgba(var(--color-primary-main), 0.4);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-a.link[href^="/tags/"]:active {
+.prose a.link[href*="/tags/"]:active,
+.tag-list a.link[href*="/tags/"]:active {
   transform: translateY(0);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 /* 深色主题下的标签样式 */
-:root.dark a.link[href^="/tags/"] {
+:root.dark .prose a.link[href*="/tags/"],
+:root.dark .tag-list a.link[href*="/tags/"] {
   background-color: rgba(var(--color-primary-main), 0.1);
   border-color: rgba(var(--color-primary-main), 0.15);
   box-shadow: none;
 }
 
-:root.dark a.link[href^="/tags/"]:hover {
+:root.dark .prose a.link[href*="/tags/"]:hover,
+:root.dark .tag-list a.link[href*="/tags/"]:hover {
   background-color: rgba(var(--color-primary-main), 0.2);
   border-color: rgba(var(--color-primary-main), 0.25);
   box-shadow: none;

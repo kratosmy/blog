@@ -1,0 +1,30 @@
+---
+import Layout from '@layouts/Layout.astro'
+import { getAllPosts } from '@utils/content'
+import { slugifySpace } from '@utils/format'
+import { useLocale } from '@utils/locale'
+
+export const prerender = true
+const { path, t, locale } = useLocale(Astro.url)
+const { posts, tags } = await getAllPosts('en', '')
+---
+
+<Layout title={t('nav.tags')}>
+  <main class="mt-8">    
+    <div class="flex flex-wrap gap-3">
+      {
+        [...tags].map((tag) => {
+          const tagUrl = `/en/tags/${slugifySpace(tag)}/`
+          return (
+            <a
+              href={tagUrl}
+              class="inline-flex items-center px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 no-underline"
+            >
+              {t("tags." + tag)}
+            </a>
+          );
+        })
+      }
+    </div>
+  </main>
+</Layout>

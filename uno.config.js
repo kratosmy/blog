@@ -4,6 +4,7 @@ import {
   presetMini,
   presetTypography,
   presetUno,
+  presetIcons,
   transformerDirectives,
 } from 'unocss'
 
@@ -14,6 +15,16 @@ export default defineConfig({
   transformers: [transformerDirectives()],
   presets: [
     presetUno(),
+    presetIcons({
+      collections: {
+        tabler: () =>
+          import('@iconify/json/json/tabler.json').then((i) => i.default),
+        hugeicons: () =>
+          import('@iconify/json/json/hugeicons.json').then((i) => i.default),
+        'line-md': () =>
+          import('@iconify/json/json/line-md.json').then((i) => i.default),
+      },
+    }),
     presetTypography({
       cssExtend: {
         a: {

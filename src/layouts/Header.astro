@@ -10,15 +10,23 @@ const { path } = useLocale(url)
 function getCurrentLanguage() {
   if (url.pathname.startsWith('/en/')) return 'en'
   if (url.pathname.startsWith('/zh/')) return 'zh'
+  if (url.pathname === '/') return 'zh' // root path is Chinese
   return 'zh' // default
 }
 
 const currentLang = getCurrentLanguage()
+
+// get the correct home URL based on current language
+function getHomeUrl() {
+  if (currentLang === 'en') return '/en/'
+  if (url.pathname === '/') return '/' // stay on root for Chinese
+  return '/zh/'
+}
 ---
 
 <div class="my-6 flex">
   <a
-    href={`/${currentLang}/`}
+    href={getHomeUrl()}
     class="hover:cursor-pointer opacity-100 hover:opacity-80 no-underline"
   >
     <i class="hidden">website header </i>

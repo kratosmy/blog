@@ -2,8 +2,18 @@ import get from 'lodash/get'
 import en from '../locales/en.yml'
 import zh from '../locales/zh.yml'
 
-// set english as default
-const getLocale = (url: URL) => ''
+// Extract locale from URL path
+const getLocale = (url: URL) => {
+  const pathname = url.pathname
+  if (pathname.startsWith('/en/') || pathname === '/en') {
+    return 'en'
+  }
+  if (pathname.startsWith('/zh/') || pathname === '/zh') {
+    return 'zh'
+  }
+  // Default to Chinese for root paths
+  return 'zh'
+}
 
 const useLocalePath = (lang: string) => {
   const normalizedLang = lang ?? ''

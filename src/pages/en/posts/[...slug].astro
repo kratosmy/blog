@@ -16,7 +16,15 @@ if (!post) {
   })
 }
 const readingStats = calculateReadingStats(post.body, 'en')
-const { title, tags, date, lastModified, notificationTypes } = post.data
+const {
+  title,
+  'title-en': titleEn,
+  tags,
+  date,
+  lastModified,
+  notificationTypes,
+} = post.data
+const displayTitle = titleEn || title
 const { Content } = await render(post)
 
 export async function getStaticPaths() {
@@ -33,11 +41,11 @@ export async function getStaticPaths() {
 }
 ---
 
-<Layout title={title} navbar={false}>
-  <a class="link mt-6" href={path("/")}>{t("post.back")}</a>
+<Layout title={displayTitle} navbar={false}>
+  <a class="link mt-6" href="/en/">{t("post.back")}</a>
   <main>
     <div class="mt-6">
-      <h1 class="text-4xl">{title}</h1>
+      <h1 class="text-4xl">{displayTitle}</h1>
       <div
         class="flex sm:flex-row flex-col pb-2"
         style="border-bottom: 1px dashed;"

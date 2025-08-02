@@ -1,12 +1,14 @@
 layout:
   title: John Wick
+  description: John Wick's personal blog
 nav:
   posts: Posts
   projects: Projects
+  tags: Tags
 post:
   back: Back
   post_at: Posted at
-  last_modified_at: Last modified at  
+  last_modified_at: Last modified at
 message:
   404-content: Page not found
   back-later: Work not finished yet, please come back later
@@ -15,3 +17,12 @@ message:
 pagination:
   previous: Previous
   next: Next
+tags:
+  reading: Reading
+  movie: Movie
+  series: TV Series
+  life: Life
+  c: C Language
+  cpp: C++
+  cmu_15_213: CMU 15-213
+  "Basic Computer Science": Basic Computer Science

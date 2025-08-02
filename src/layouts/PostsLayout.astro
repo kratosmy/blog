@@ -47,7 +47,7 @@ function getTitle(post: any) {
                 <span class="flex-1 truncate">
                   <a
                     rel="prefetch-intent"
-                    href={path(post.url)}
+                    href={post.url}
                     class="link-static"
                   >
                     {getTitle(post)}
@@ -60,20 +60,6 @@ function getTitle(post: any) {
       }
     </ul>
 
-    <div class="mt-6">
-      {
-        [...tags].map((tag) => {
-          const tagUrl = `/${locale}/tags/${slugifySpace(tag)}/`
-          return (
-            <a
-              class="mr-3 mb-2 text-base link hover:font-bold inline-block"
-              href={tagUrl}
-            >
-              #{t("tags." + tag)}
-            </a>
-          );
-        })
-      }
-    </div>
+
   </main>
 </Layout>

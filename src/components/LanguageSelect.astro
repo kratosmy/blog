@@ -5,26 +5,52 @@ const { url } = Astro
 function getCurrentLanguage() {
   if (url.pathname.startsWith('/en/')) return 'en'
   if (url.pathname.startsWith('/zh/')) return 'zh'
+  if (url.pathname === '/') return 'zh' // root path is Chinese
   return 'zh' // default
 }
 
 const currentLang = getCurrentLanguage()
+
+// get the opposite language URL
+function getToggleUrl() {
+  if (currentLang === 'zh') {
+    // Switch to English
+    if (url.pathname === '/') return '/en/'
+    if (url.pathname.startsWith('/zh/')) {
+      return url.pathname.replace(/^\/zh/, '/en')
+    }
+    return `/en${url.pathname}`
+  } else {
+    // Switch to Chinese
+    if (url.pathname.startsWith('/en/')) {
+      const pathWithoutLang = url.pathname.replace(/^\/en/, '')
+      return pathWithoutLang === '/' ? '/' : `/zh${pathWithoutLang}`
+    }
+    return url.pathname
+  }
+}
+
+const toggleUrl = getToggleUrl()
+const toggleTitle = currentLang === 'zh' ? 'Switch to English' : '切换到中文'
 ---
 
-<div class="flex gap-1 items-center text-sm">
-  <a
-    href={url.pathname.replace(/^\/(zh|en)/, '/zh')}
-    class="hover:opacity-80 transition-opacity"
-    class:list={currentLang === 'zh' ? 'font-bold text-black dark:text-white' : 'text-gray-500 dark:text-gray-400'}
+<a
+  href={toggleUrl}
+  class="flex items-center justify-center w-8 h-8 rounded-md transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+  title={toggleTitle}
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke-width="1.5"
+    stroke="currentColor"
+    class="w-4 h-4"
   >
-    中
-  </a>
-  <span class="text-gray-400 dark:text-gray-500">|</span>
-  <a
-    href={url.pathname.replace(/^\/(zh|en)/, '/en')}
-    class="hover:opacity-80 transition-opacity"
-    class:list={currentLang === 'en' ? 'font-bold text-black dark:text-white' : 'text-gray-500 dark:text-gray-400'}
-  >
-    EN
-  </a>
-</div>
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      d="m10.5 21 5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 0 1 6-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 0 1-3.827-5.802"
+    ></path>
+  </svg>
+</a>

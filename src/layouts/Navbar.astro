@@ -4,8 +4,7 @@ import { useLocale } from '@utils/locale'
 const { url } = Astro
 const { path, t, locale } = useLocale(url)
 
-// const items = ['projects']
-const items = []
+const items = ['tags']
 
 // function to check if current page is root/posts page
 function isRootPage() {
@@ -22,24 +21,44 @@ function isRootPage() {
 function getCurrentLanguage() {
   if (url.pathname.startsWith('/en/')) return 'en'
   if (url.pathname.startsWith('/zh/')) return 'zh'
+  if (url.pathname === '/') return 'zh' // root path is Chinese
   return 'zh' // default
 }
 
 const currentLang = getCurrentLanguage()
+
+// get the correct home URL based on current language
+function getHomeUrl() {
+  if (currentLang === 'en') return '/en/'
+  if (url.pathname === '/') return '/' // stay on root for Chinese
+  return '/zh/'
+}
 ---
 
 <nav>
   <a
-    href={`/${currentLang}/`}
-    class="link mr-4 animated hover:no-underline"
+    href={getHomeUrl()}
+    class="nav-link mr-4 animated hover:no-underline"
     class:list={isRootPage() ? "active" : ""}>{t("nav.posts")}</a
   >
   {
     items.map((item) => {
+      // 根据当前页面路径决定链接格式
+      let itemUrl
+      if (currentLang === 'en') {
+        itemUrl = `/en/${item}/`
+      } else if (url.pathname === '/' || url.pathname.startsWith('/tags/') || url.pathname.startsWith('/projects/')) {
+        // 根路径或已经在根级别的页面，保持根级别链接
+        itemUrl = `/${item}/`
+      } else {
+        // 其他中文页面使用 /zh/ 前缀
+        itemUrl = `/zh/${item}/`
+      }
+      
       return (
         <a
-          href={`/${currentLang}/${item}/`}
-          class="link mr-4 animated hover:no-underline"
+          href={itemUrl}
+          class="nav-link mr-4 animated hover:no-underline"
           class:list={url.toString().includes(item) ? "active" : ""}
         >
           {t(`nav.${item}`)}
