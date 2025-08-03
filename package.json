@@ -23,6 +23,8 @@
     "@astrojs/sitemap": "^3.4.2",
     "@astrojs/vercel": "latest",
     "@fontsource/ibm-plex-sans": "^5.2.6",
+    "@fontsource/google-sans-code": "^5.2.1",
+    "@iconify-json/ph": "^1.2.2",
     "astro": "^5.12.7",
     "astro-analytics": "^2.7.0",
     "astro-expressive-code": "latest",
@@ -46,7 +48,7 @@
     "@types/luxon": "latest",
     "@types/markdown-it": "latest",
     "@types/node": "^24.1.0",
-    "astro-icon": "^1.1.5",
+
     "hastscript": "latest",
     "mdast-util-to-string": "latest",
     "mdast-util-wiki-link": "latest",

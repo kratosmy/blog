@@ -23,6 +23,7 @@ export default defineConfig({
           import('@iconify/json/json/hugeicons.json').then((i) => i.default),
         'line-md': () =>
           import('@iconify/json/json/line-md.json').then((i) => i.default),
+        ph: () => import('@iconify/json/json/ph.json').then((i) => i.default),
       },
     }),
     presetTypography({
@@ -40,6 +41,8 @@ export default defineConfig({
           padding: '0.15em 0.3em',
           'border-radius': '0.2em',
           'background-color': 'var(--color-code-bg)',
+          'font-family':
+            '"Google Sans Code", "Fira Code", "JetBrains Mono", Consolas, "Courier New", monospace',
         },
         'li code::after': {
           content: 'none',
@@ -57,6 +60,8 @@ export default defineConfig({
           padding: '0.15em 0.3em',
           'border-radius': '0.2em',
           'background-color': 'var(--color-code-bg)',
+          'font-family':
+            '"Google Sans Code", "Fira Code", "JetBrains Mono", Consolas, "Courier New", monospace',
         },
         'p code::after': {
           content: 'none',
@@ -74,6 +79,8 @@ export default defineConfig({
           padding: '0.15em 0.3em',
           'border-radius': '0.2em',
           'background-color': 'var(--color-code-bg)',
+          'font-family':
+            '"Google Sans Code", "Fira Code", "JetBrains Mono", Consolas, "Courier New", monospace',
         },
       },
     }),

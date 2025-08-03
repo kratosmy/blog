@@ -4,6 +4,7 @@ import { useLocale } from '@utils/locale'
 import Header from './Header.astro'
 import Navbar from './Navbar.astro'
 import '@fontsource/ibm-plex-sans'
+import '@fontsource/google-sans-code'
 import { SEO } from 'astro-seo'
 import Footer from './Footer.astro'
 
@@ -33,6 +34,7 @@ const fullTitle = `${title} - ${t('layout.title')}`
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
     <link rel="preload" href="/src/styles/index.css" as="style" />
+    <link rel="preload" href="/node_modules/@fontsource/google-sans-code/files/google-sans-code-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
     <style>
       /* Critical CSS - Above the fold styles */
       body { font-family: "IBM Plex Sans", sans-serif; margin: 0; }

@@ -6,7 +6,6 @@ import expressiveCode from 'astro-expressive-code'
 import UnoCSS from 'unocss/astro'
 
 import mdx from '@astrojs/mdx'
-import icon from 'astro-icon'
 
 import cloudflare from '@astrojs/cloudflare'
 
@@ -63,6 +62,8 @@ export default defineConfig({
       },
       styleOverrides: {
         borderRadius: '0.5rem',
+        codeFontFamily:
+          '"Google Sans Code", "Fira Code", "JetBrains Mono", Consolas, "Courier New", monospace',
       },
     }),
     mdx(),
@@ -71,9 +72,6 @@ export default defineConfig({
       config: {
         forward: ['dataLayer.push'],
       },
-    }),
-    icon({
-      iconDir: 'src/assets/icons',
     }),
   ],
   output: 'server',

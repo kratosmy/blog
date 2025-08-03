@@ -4,29 +4,8 @@ const id = `moon-mask-`
 
 <starlight-rapide-theme-select>
   <button aria-label="ok" aria-live="polite" class="sl-flex" title="ok">
-    <svg
-      aria-hidden="true"
-      height="20"
-      viewBox="0 0 24 24"
-      width="20"
-      class="dark:stroke-white dark:fill-white"
-    >
-      <mask class="moon" id={id} fill="yellow" stroke="red">
-        <rect x="0" y="0" width="100%" height="100%" fill="white"></rect>
-        <circle cx="24" cy="10" r="6" fill="black"></circle>
-      </mask>
-      <circle class="sun" cx="12" cy="12" r="6" mask={`url(#${id})`}></circle>
-      <g class="sun-beams" stroke="black">
-        <line x1="12" y1="1" x2="12" y2="3"></line>
-        <line x1="12" y1="21" x2="12" y2="23"></line>
-        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-        <line x1="1" y1="12" x2="3" y2="12"></line>
-        <line x1="21" y1="12" x2="23" y2="12"></line>
-        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-      </g>
-    </svg>
+    <div class="i-ph-sun dark:hidden w-5 h-5"></div>
+    <div class="i-ph-moon hidden dark:block w-5 h-5"></div>
   </button>
 </starlight-rapide-theme-select>
 
@@ -35,7 +14,8 @@ const id = `moon-mask-`
     --sl-rapide-theme-select-animation-duration: 400ms;
     --sl-rapide-theme-select-ease-elastic: cubic-bezier(0.5, 1.25, 0.75, 1.25);
 
-    align-self: stretch;
+    display: flex;
+    align-items: center;
   }
 
   button {
@@ -43,84 +23,19 @@ const id = `moon-mask-`
     background-color: transparent;
     border: none;
     cursor: pointer;
-    height: 100%;
-    margin-inline: 0.5rem 0.5rem;
-    padding-inline: 0.75rem;
+    height: 2rem;
+    width: 2.25rem;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    border-radius: 0.375rem;
   }
 
-  svg {
-    stroke-linecap: round;
-  }
-
-  svg :is(.moon, .sun, .sun-beams) {
-    transform-origin: center;
-  }
-
-  :global(.dark) svg .sun {
-    transform: scale(1.75);
-  }
-
-  :global(.dark) svg .sun-beams {
-    opacity: 0;
-  }
-
-  :global(.dark) svg .moon circle {
-    transform: translateX(-7px);
-  }
-
-  @supports (cx: 1) {
-    :global(.dark) svg .moon circle {
-      cx: 17;
-      transform: translateX(0);
-    }
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    svg .sun {
-      transition: transform var(--sl-rapide-theme-select-animation-duration)
-        var(--sl-rapide-theme-select-ease-elastic);
-    }
-
-    svg .sun-beams {
-      transition:
-        opacity var(--sl-rapide-theme-select-animation-duration) ease,
-        transform var(--sl-rapide-theme-select-animation-duration)
-          var(--sl-rapide-theme-select-ease-elastic);
-    }
-
-    svg .moon circle {
-      transition: transform
-        calc(var(--sl-rapide-theme-select-animation-duration) / 2) ease-out;
-    }
-
-    @supports (cx: 1) {
-      svg .moon circle {
-        transition: cx
-          calc(var(--sl-rapide-theme-select-animation-duration) / 2) ease-out;
-      }
-    }
-
-    :global(.dark) svg .sun {
-      transform: scale(1.75);
-      transition-duration: calc(
-        var(--sl-rapide-theme-select-animation-duration) / 2
-      );
-      transition-timing-function: ease;
-    }
-
-    :global(.dark) svg .sun-beams {
-      transform: rotateZ(-25deg);
-      transition-duration: calc(
-        var(--sl-rapide-theme-select-animation-duration) / 4
-      );
-    }
-
-    :global(.dark) svg .moon circle {
-      transition-delay: calc(
-        var(--sl-rapide-theme-select-animation-duration) / 4
-      );
-      transition-duration: var(--sl-rapide-theme-select-animation-duration);
-    }
+  /* Phosphor icons with simple transitions */
+  .i-ph-sun,
+  .i-ph-moon {
+    transition: all 0.2s ease;
   }
 </style>
 

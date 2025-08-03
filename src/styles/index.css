@@ -4,6 +4,21 @@ body {
   font-weight: 400; /* 默认值 */
 }
 
+/* 全局代码字体设置 */
+code,
+pre,
+.code,
+.hljs,
+[class*="language-"],
+.expressive-code {
+  font-family:
+    "Google Sans Code", "Fira Code", "JetBrains Mono", Consolas, "Courier New",
+    monospace !important;
+  font-feature-settings:
+    "liga" 1,
+    "calt" 1;
+}
+
 img {
   @apply max-w-md mx-h-[20%];
   content-visibility: auto;

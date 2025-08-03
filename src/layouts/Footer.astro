@@ -1,5 +1,5 @@
 ---
-import { Icon } from 'astro-icon/components'
+// Footer with Phosphor icons
 ---
 
 <footer class="flex justify-center items-center space-x-4 py-8">
@@ -8,16 +8,16 @@ import { Icon } from 'astro-icon/components'
     target="_blank"
     rel="noopener noreferrer"
     aria-label="github link"
-    class="text-[#8cc2DD] hover:opacity-80 transition-opacity flex items-center"
+    class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-all duration-200 flex items-center"
   >
-    <Icon name="hugeicons:github" size={24} />
+    <div class="i-ph-github-logo w-6 h-6"></div>
   </a>
   <a
     href="/rss.xml"
     target="_blank"
     aria-label="rss link"
-    class="text-[#8cc2DD] hover:opacity-80 transition-opacity flex items-center"
+    class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-all duration-200 flex items-center"
   >
-    <Icon name="tabler:rss" size={24} />
+    <div class="i-ph-rss w-6 h-6"></div>
   </a>
 </footer>
