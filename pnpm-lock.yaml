@@ -87,6 +87,9 @@ importers:
       '@iconify-json/tabler':
         specifier: ^1.2.20
         version: 1.2.20
+      '@iconify/json':
+        specifier: ^2.2.365
+        version: 2.2.365
       '@rollup/plugin-yaml':
         specifier: latest
         version: 4.1.2(rollup@4.41.0)
@@ -891,6 +894,9 @@ packages:
 
   '@iconify-json/tabler@1.2.20':
     resolution: {integrity: sha512-xnM7QO42USWGFM9ahH94uXhRxDOrN6nTNZ+glNHNjeyj6SB2YDeENr9AqrI1hWDacMK1FnjeFc4TI1oyF40Gcw==}
+
+  '@iconify/json@2.2.365':
+    resolution: {integrity: sha512-9ZLdIXnswa1XCssYqnCjmXtuxj0l4nkY33FTs8PYCj5rTfPrJlRiPWUDzZOocNsSqjssr5fVPo0ME1hO9h0/IQ==}
 
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
@@ -4903,6 +4909,11 @@ snapshots:
   '@iconify-json/tabler@1.2.20':
     dependencies:
       '@iconify/types': 2.0.0
+
+  '@iconify/json@2.2.365':
+    dependencies:
+      '@iconify/types': 2.0.0
+      pathe: 1.1.2
 
   '@iconify/types@2.0.0': {}
 

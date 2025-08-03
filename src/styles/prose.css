@@ -1,0 +1,111 @@
+/* Prose and content styles */
+
+/* Prose links */
+.prose
+:where(a):not(
+  :where([data-footnote-ref], [data-footnote-backref], .not-prose, .not-prose *)
+) {
+  text-decoration-color: var(--color-primary-main);
+  margin: 0 0.25rem;
+}
+
+/* External link arrows */
+.external-link {
+  position: relative;
+}
+
+.external-link::after {
+  content: "↗";
+  margin-left: 0;
+}
+
+.prose
+  :where(a):not(
+    :where(
+        [data-footnote-ref],
+        [data-footnote-backref],
+        .not-prose,
+        .not-prose *
+      )
+  ):not(.internal)::after {
+  content: "↗";
+  margin-left: 0;
+}
+
+/* Internal link brackets */
+.prose
+:where(a):not(
+  :where([data-footnote-ref], [data-footnote-backref], .not-prose, .not-prose *)
+):where(.internal)::after {
+  content: "]";
+  margin-right: 0;
+  margin-left: 0;
+  text-decoration: none;
+}
+
+.prose
+  :where(a):not(
+    :where(
+        [data-footnote-ref],
+        [data-footnote-backref],
+        .not-prose,
+        .not-prose *
+      )
+  ):where(.internal)::before {
+  content: "[";
+  margin-right: 0;
+}
+
+/* Blockquotes */
+.prose :where(blockquote):not(:where(.not-prose, .callout, .not-prose *)) {
+  background-color: #f3f4f6;
+  color: inherit;
+  font-size: 1rem;
+  margin: 0;
+  border-left: 6px solid rgb(var(--color-primary-main)) !important;
+  border-left-style: solid;
+  font-weight: normal;
+  border-radius: 0.5rem;
+  border-top-left-radius: 0.125rem;
+  border-bottom-left-radius: 0.125rem;
+  padding-left: 1rem;
+  padding: 0.5rem;
+}
+
+:root.dark
+  .prose
+  :where(blockquote):not(:where(.not-prose, .callout, .not-prose *)) {
+  background-color: #57534e;
+}
+
+.prose blockquote p {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+/* List markers */
+.prose :where(ol > li):not(:where(.not-prose, .not-prose *))::marker,
+.prose :where(ul > li):not(:where(.not-prose, .not-prose *))::marker,
+.prose :where(summary):not(:where(.not-prose, .not-prose *))::marker {
+  color: rgb(var(--color-primary-main));
+  margin-right: 1rem;
+  font-weight: 600;
+}
+
+/* Footnotes */
+[data-footnote-ref]::before {
+  content: " [";
+}
+
+[data-footnote-ref]::after {
+  content: "] ";
+}
+
+[data-footnote-backref] {
+  text-decoration: none;
+}
+
+[data-footnote-ref] {
+  font-weight: normal;
+  text-decoration: none;
+}

@@ -13,17 +13,41 @@ export default defineConfig({
   mode: 'per-module',
   injectEntry: process.env['NODE_ENV'] === 'development',
   transformers: [transformerDirectives()],
+
+  // Optimize for production
+  shortcuts: {
+    'max-width': 'max-w-[800px] mx-auto',
+    'link-base': 'hover:cursor-pointer no-underline',
+  },
+
+  // Extract commonly used utilities
+  safelist: [
+    'max-width',
+    'link-base',
+    'prose',
+    'dark:bg-stone-600',
+    'bg-gray-100',
+  ],
   presets: [
     presetUno(),
     presetIcons({
       collections: {
         tabler: () =>
-          import('@iconify/json/json/tabler.json').then((i) => i.default),
+          import('@iconify/json/json/tabler.json', {
+            with: { type: 'json' },
+          }).then((i) => i.default),
         hugeicons: () =>
-          import('@iconify/json/json/hugeicons.json').then((i) => i.default),
+          import('@iconify/json/json/hugeicons.json', {
+            with: { type: 'json' },
+          }).then((i) => i.default),
         'line-md': () =>
-          import('@iconify/json/json/line-md.json').then((i) => i.default),
-        ph: () => import('@iconify/json/json/ph.json').then((i) => i.default),
+          import('@iconify/json/json/line-md.json', {
+            with: { type: 'json' },
+          }).then((i) => i.default),
+        ph: () =>
+          import('@iconify/json/json/ph.json', { with: { type: 'json' } }).then(
+            (i) => i.default,
+          ),
       },
     }),
     presetTypography({

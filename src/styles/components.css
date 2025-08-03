@@ -1,0 +1,115 @@
+/* Component-specific styles */
+
+/* Code and typography */
+code,
+pre,
+.code,
+.hljs,
+[class*="language-"],
+.expressive-code {
+  font-family:
+    "Google Sans Code", "Fira Code", "JetBrains Mono", Consolas, "Courier New",
+    monospace !important;
+  font-feature-settings:
+    "liga" 1,
+    "calt" 1;
+}
+
+img {
+  max-width: 28rem;
+  max-height: 20%;
+  content-visibility: auto;
+  contain-intrinsic-size: 300px 200px;
+}
+
+/* Tag styles */
+.prose a.link[href*="/tags/"],
+.tag-list a.link[href*="/tags/"] {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  margin: 0.3rem;
+  border-radius: 1.5rem;
+  background-color: rgba(var(--color-primary-main), 0.2);
+  color: rgb(var(--color-primary-main));
+  font-weight: 600;
+  transition: all 0.2s ease;
+  min-width: 2.5rem;
+  text-align: center;
+  border: 2px solid rgba(var(--color-primary-main), 0.3);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.prose a.link[href*="/tags/"]:hover,
+.tag-list a.link[href*="/tags/"]:hover {
+  background-color: rgba(var(--color-primary-main), 0.3);
+  transform: translateY(-1px);
+  border-color: rgba(var(--color-primary-main), 0.4);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.prose a.link[href*="/tags/"]:active,
+.tag-list a.link[href*="/tags/"]:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Dark theme tag styles */
+:root.dark .prose a.link[href*="/tags/"],
+:root.dark .tag-list a.link[href*="/tags/"] {
+  background-color: rgba(var(--color-primary-main), 0.1);
+  border-color: rgba(var(--color-primary-main), 0.15);
+  box-shadow: none;
+}
+
+:root.dark .prose a.link[href*="/tags/"]:hover,
+:root.dark .tag-list a.link[href*="/tags/"]:hover {
+  background-color: rgba(var(--color-primary-main), 0.2);
+  border-color: rgba(var(--color-primary-main), 0.25);
+  box-shadow: none;
+}
+
+/* Animated links */
+a.animated {
+  --animated-underline-from: rgb(var(--color-text-link));
+  --animated-underline-to: rgb(var(--color-text-link));
+  position: relative;
+  box-decoration-break: clone;
+  text-decoration: none;
+}
+
+a.animated:after {
+  left: 0px;
+  right: 0px;
+  bottom: -4px;
+  content: "";
+  height: 2px;
+  width: 100%;
+  position: absolute;
+  transform: translateZ(0) scaleX(0);
+  transform-origin: left center;
+  transition: all 0.25s ease-in-out;
+  background-image: linear-gradient(
+    to right,
+    var(--animated-underline-from),
+    var(--animated-underline-to)
+  );
+}
+
+a.animated:hover:after {
+  transform: translateZ(0) scale(1);
+}
+
+a.animated.active:after {
+  transform: translateZ(0) scale(1);
+}
+
+/* Transitions */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.15s;
+}
+
+.duration-300 {
+  transition-duration: 0.3s;
+}

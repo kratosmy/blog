@@ -19,6 +19,7 @@ export default defineConfig({
     plugins: [yaml()],
     build: {
       assetsDir: 'assets',
+      cssCodeSplit: true,
       rollupOptions: {
         output: {
           manualChunks: {
@@ -75,5 +76,7 @@ export default defineConfig({
     }),
   ],
   output: 'server',
-  adapter: cloudflare(),
+  adapter: cloudflare({
+    imageService: 'compile',
+  }),
 })

@@ -16,21 +16,6 @@ const posts = defineCollection({
   schema: postSchema,
 })
 
-const docs = defineCollection({
-  type: 'content',
-  schema: z.object({
-    title: z.string(),
-    hidden: z.boolean().optional(),
-    lastModified: z.date().optional(),
-  }),
-})
-
-const now = defineCollection({
-  type: 'content',
-})
-
 export const collections = {
   posts,
-  docs,
-  now,
 }
