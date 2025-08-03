@@ -6,6 +6,8 @@ body {
 
 img {
   @apply max-w-md mx-h-[20%];
+  content-visibility: auto;
+  contain-intrinsic-size: 300px 200px;
 }
 
 time,

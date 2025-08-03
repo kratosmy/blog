@@ -20,14 +20,26 @@ export default defineConfig({
     plugins: [yaml()],
     build: {
       assetsDir: 'assets',
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ['lodash', 'luxon'],
+          },
+        },
+      },
     },
   },
-  compressHTML: false,
-  experimental: {},
-  devToolbar: {
-    enabled: true,
+  compressHTML: true,
+  experimental: {
+    contentCollectionCache: true,
   },
-  // prefetch: true,
+  devToolbar: {
+    enabled: false,
+  },
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: 'viewport',
+  },
   site: 'https://johnwick.blog',
   scopedStyleStrategy: 'class',
   // trailingSlash: 'always',
@@ -45,16 +57,27 @@ export default defineConfig({
   },
 
   integrations: [
-    UnoCSS(),
+    UnoCSS({
+      injectReset: false,
+    }),
     expressiveCode({
       themeCssSelector: (theme) => {
         return '.' + theme.type
       },
+      styleOverrides: {
+        borderRadius: '0.5rem',
+      },
     }),
     mdx(),
     sitemap(),
-    partytown(),
-    icon(),
+    partytown({
+      config: {
+        forward: ['dataLayer.push'],
+      },
+    }),
+    icon({
+      iconDir: 'src/assets/icons',
+    }),
   ],
   output: 'server',
   adapter: cloudflare(),
