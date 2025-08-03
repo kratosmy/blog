@@ -30,9 +30,6 @@ export default defineConfig({
     },
   },
   compressHTML: true,
-  experimental: {
-    contentCollectionCache: true,
-  },
   devToolbar: {
     enabled: false,
   },
