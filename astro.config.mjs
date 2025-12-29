@@ -7,8 +7,6 @@ import UnoCSS from 'unocss/astro'
 
 import mdx from '@astrojs/mdx'
 
-import cloudflare from '@astrojs/cloudflare'
-
 import sitemap from '@astrojs/sitemap'
 
 import partytown from '@astrojs/partytown'
@@ -75,8 +73,5 @@ export default defineConfig({
       },
     }),
   ],
-  output: 'server',
-  adapter: cloudflare({
-    imageService: 'compile',
-  }),
+  output: 'static',
 })
