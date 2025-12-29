@@ -18,11 +18,21 @@ export default defineConfig({
     build: {
       assetsDir: 'assets',
       cssCodeSplit: true,
+      minify: 'terser',
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+        },
+      },
       rollupOptions: {
         output: {
           manualChunks: {
             vendor: ['lodash', 'luxon'],
           },
+          assetFileNames: 'assets/[name].[hash][extname]',
+          chunkFileNames: 'chunks/[name].[hash].js',
+          entryFileNames: 'entry/[name].[hash].js',
         },
       },
     },
@@ -40,6 +50,8 @@ export default defineConfig({
   // trailingSlash: 'always',
   build: {
     format: 'directory',
+    inlineStylesheets: 'auto',
+    assets: '_astro',
   },
   markdown: {
     shikiConfig: {
