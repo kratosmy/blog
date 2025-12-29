@@ -35,7 +35,8 @@ export default defineConfig({
     prefetchAll: true,
     defaultStrategy: 'viewport',
   },
-  site: 'https://johnwick.blog',
+  site: 'https://kratosmy.github.io',
+  base: '/blog',
   scopedStyleStrategy: 'class',
   // trailingSlash: 'always',
   build: {
