@@ -36,7 +36,6 @@ export default defineConfig({
     defaultStrategy: 'viewport',
   },
   site: 'https://kratosmy.github.io',
-  base: '/blog',
   scopedStyleStrategy: 'class',
   // trailingSlash: 'always',
   build: {
