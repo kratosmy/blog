@@ -33,6 +33,7 @@
     "luxon": "latest",
     "markdown-it": "latest",
     "remark-directive": "latest",
+    "terser": "^5.44.1",
     "typescript": "latest"
   },
   "devDependencies": {
