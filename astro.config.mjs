@@ -26,7 +26,7 @@ export default defineConfig({
       rollupOptions: {
         output: {
           manualChunks: {
-            vendor: ['lodash', 'luxon'],
+            vendor: ['luxon'],
           },
           assetFileNames: 'assets/[name].[hash][extname]',
           chunkFileNames: 'chunks/[name].[hash].js',
@@ -42,7 +42,6 @@ export default defineConfig({
   prefetch: false,
   site: 'https://blog.changshaking.xyz',
   scopedStyleStrategy: 'class',
-  // trailingSlash: 'always',
   build: {
     format: 'directory',
     inlineStylesheets: 'auto',

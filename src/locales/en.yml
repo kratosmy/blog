@@ -3,7 +3,6 @@ layout:
   description: John Wick's personal blog
 nav:
   posts: Posts
-  projects: Projects
   tags: Tags
 post:
   back: Back
@@ -11,7 +10,6 @@ post:
   last_modified_at: Last modified at
 message:
   404-content: Page not found
-  back-later: Work not finished yet, please come back later
   loading: Loading...
   more-about: More about
 pagination:

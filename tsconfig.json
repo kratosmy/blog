@@ -7,13 +7,10 @@
       "@layouts/*": ["src/layouts/*"],
       "@styles/*": ["src/styles/*"],
       "@utils/*": ["src/utils/*"],
-      "@plugins/*": ["src/plugins/*"],
-      "@assets/*": ["src/assets/*"],
-      "@loaders/*": ["src/loaders/*"],
       "@types/*": ["src/types/*"]
     },
-    "strictNullChecks": true, // add if using `base` template
-    "allowJs": true // required, and included with all Astro templates
+    "strictNullChecks": true,
+    "allowJs": true
   },
   "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.astro"]
 }

@@ -1,28 +1,5 @@
-import { DateTime } from 'luxon'
-
-export function relativeTo(dateStr: string, locale = 'zh') {
-  const normalizedLocale = locale ?? 'zh'
-  return DateTime.fromISO(dateStr).toRelative({
-    base: DateTime.now(),
-    locale: normalizedLocale,
-  })
-}
-
-export function formatDateMD(
-  dateStr: string | Date | undefined,
-  locale = 'zh',
-) {
-  const date =
-    dateStr instanceof String
-      ? DateTime.fromISO(dateStr as string)
-      : DateTime.fromJSDate(dateStr as Date)
-  if (locale === 'en') {
-    return date.setLocale(locale).toFormat('dd, MMM')
-  }
-  return date.toFormat('MM-dd')
-}
-
-export function formatDateYMD(dateStr: string | number | Date, _locale = 'zh') {
+/** Format a date as `D Mon, YYYY` (e.g. 4 Aug, 2026). */
+export function formatDateYMD(dateStr: string | number | Date): string {
   const months = [
     'Jan',
     'Feb',
@@ -42,8 +19,4 @@ export function formatDateYMD(dateStr: string | number | Date, _locale = 'zh') {
   const month = months[d.getMonth()]
   const year = d.getFullYear()
   return `${day} ${month}, ${year}`
-}
-
-export function slugifySpace(old: string | undefined) {
-  return old?.replace(/\s/g, '-')
 }

@@ -1,32 +1,15 @@
 ---
-import { useLocale } from '@utils/locale'
+import { homeUrl, localeFromUrl } from '@utils/locale'
 import ThemeSelect from '../components/ThemeSelect.astro'
 import LanguageSelect from '../components/LanguageSelect.astro'
 
-const { url } = Astro
-const { path } = useLocale(url)
-
-// detect current language from URL
-function getCurrentLanguage() {
-  if (url.pathname.startsWith('/en/')) return 'en'
-  if (url.pathname.startsWith('/zh/')) return 'zh'
-  if (url.pathname === '/') return 'zh' // root path is Chinese
-  return 'zh' // default
-}
-
-const currentLang = getCurrentLanguage()
-
-// get the correct home URL based on current language
-function getHomeUrl() {
-  if (currentLang === 'en') return '/en/'
-  if (url.pathname === '/') return '/' // stay on root for Chinese
-  return '/zh/'
-}
+const locale = localeFromUrl(Astro.url)
+const home = homeUrl(locale)
 ---
 
 <div class="my-6 flex">
   <a
-    href={getHomeUrl()}
+    href={home}
     class="hover:cursor-pointer opacity-100 hover:opacity-80 no-underline"
   >
     <i class="hidden">website header </i>

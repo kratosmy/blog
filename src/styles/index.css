@@ -1,3 +1,4 @@
-/* Import modular CSS files */
+/* Modular CSS — critical is also inlined once via Layout */
 @import "./critical.css";
 @import "./components.css";
+@import "./prose.css";

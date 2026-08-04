@@ -1,13 +1,14 @@
 ---
 import PostsLayout from '@layouts/PostsLayout.astro'
-import { getTagStaticPaths } from '@utils/content'
+import { getStaticTagPaths } from '@utils/content'
 
 export const prerender = true
-const { tag } = Astro.params
 
 export async function getStaticPaths() {
-  return getTagStaticPaths('zh')
+  return getStaticTagPaths('zh')
 }
+
+const { tag } = Astro.params
 ---
 
 <PostsLayout tag={tag} locale="zh" />

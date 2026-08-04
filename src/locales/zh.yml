@@ -3,7 +3,6 @@ layout:
   description: John Wick的个人博客
 nav:
   posts: 文章
-  projects: 项目
   tags: 标签
 post:
   back: 返回
@@ -11,7 +10,6 @@ post:
   last_modified_at: 最后修改于
 message:
   404-content: 页面未找到
-  back-later: 工作尚未完成，请稍后再来
   loading: 加载中...
   more-about: 更多关于
 pagination:

@@ -1,6 +1,7 @@
 // uno.config.ts
 import {
   defineConfig,
+  presetMini,
   presetTypography,
   presetUno,
   presetIcons,
@@ -10,31 +11,30 @@ import {
 export default defineConfig({
   injectReset: false,
   mode: 'per-module',
-  injectEntry: process.env.NODE_ENV === 'development',
+  injectEntry: process.env['NODE_ENV'] === 'development',
   transformers: [transformerDirectives()],
 
-  // Optimize for production
   shortcuts: {
     'max-width': 'max-w-[800px] mx-auto',
     'link-base': 'hover:cursor-pointer no-underline',
   },
 
+  safelist: [
+    'max-width',
+    'link-base',
+    'prose',
+    'dark:bg-stone-600',
+    'bg-gray-100',
+    'i-ph-sun',
+    'i-ph-moon',
+    'i-ph-translate',
+    'i-ph-github-logo',
+    'i-ph-rss',
+  ],
   presets: [
     presetUno(),
     presetIcons({
       collections: {
-        tabler: () =>
-          import('@iconify-json/tabler/icons.json', {
-            with: { type: 'json' },
-          }).then((i) => i.default),
-        hugeicons: () =>
-          import('@iconify-json/hugeicons/icons.json', {
-            with: { type: 'json' },
-          }).then((i) => i.default),
-        'line-md': () =>
-          import('@iconify-json/line-md/icons.json', {
-            with: { type: 'json' },
-          }).then((i) => i.default),
         ph: () =>
           import('@iconify-json/ph/icons.json', {
             with: { type: 'json' },

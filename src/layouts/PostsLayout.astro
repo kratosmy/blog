@@ -1,23 +1,37 @@
 ---
-import { getPostCatalog } from '@utils/content'
+/**
+ * Post list module — sole loader for locale + optional tag filter.
+ * Presentational chrome only; data comes from listPosts inside this module.
+ */
+import { displayTitle, listPosts, resolveTag } from '@utils/content'
 import { formatDateYMD } from '@utils/format'
 import { useLocale } from '@utils/locale'
-import Layout from '../layouts/Layout.astro'
+import type { SupportedLocale } from '../types'
+import Layout from './Layout.astro'
+
+interface Props {
+  tag?: string
+  locale?: SupportedLocale
+}
 
 const { t, locale: urlLocale } = useLocale(Astro.url)
-const { tag, locale: propsLocale } = Astro.props
-const locale = propsLocale || urlLocale || 'zh'
-const { posts, activeTag } = await getPostCatalog(locale, { tag })
+const { tag: tagParam, locale: propsLocale } = Astro.props
+const locale: SupportedLocale = propsLocale || urlLocale || 'zh'
 
-const filterName = activeTag?.labelKey
+const resolvedTag = tagParam
+  ? ((await resolveTag(locale, tagParam)) ?? tagParam)
+  : undefined
+
+const { posts } = await listPosts(locale, { tag: resolvedTag })
+const filterName = resolvedTag
 ---
 
-<Layout title={t("nav.posts")}>
+<Layout title={t('nav.posts')}>
   {
     filterName && (
       <div class="mt-2">
         <span class="text-xl font-bold italic ml-2">
-          " {t(filterName)} "
+          " {t(`tags.${filterName}`)} "
         </span>
       </div>
     )
@@ -26,27 +40,30 @@ const filterName = activeTag?.labelKey
     <ul class="list-none pl-0">
       {
         posts.map((post) => {
+          const title = displayTitle(post)
           return (
             <li class="my-4">
               <div class="flex flex-nowrap">
                 <span
-                  style={{ flex: "0 0 10rem" }}
+                  style={{ flex: '0 0 10rem' }}
                   class="text-gray-500 whitespace-nowrap"
                 >
                   <time class="mr-8 italic">{formatDateYMD(post.date)}</time>
                 </span>
                 <span class="flex-1 truncate">
-                  <a href={post.url} class="link-static">
-                    {post.displayTitle}
+                  <a
+                    rel="prefetch-intent"
+                    href={post.url}
+                    class="link-static"
+                  >
+                    {title}
                   </a>
                 </span>
               </div>
             </li>
-          );
+          )
         })
       }
     </ul>
-
-
   </main>
 </Layout>

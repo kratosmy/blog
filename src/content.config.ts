@@ -1,6 +1,6 @@
 import { defineCollection, z } from 'astro:content'
 
-const postSchema = z.object({
+export const postSchema = z.object({
   title: z.string().optional(),
   'title-en': z.string().optional(),
   tags: z.array(z.string()).optional(),
@@ -10,6 +10,8 @@ const postSchema = z.object({
   isDraft: z.boolean().optional(),
   url: z.string().optional(),
 })
+
+export type PostFrontmatter = z.infer<typeof postSchema>
 
 const posts = defineCollection({
   type: 'content',

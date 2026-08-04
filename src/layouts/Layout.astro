@@ -1,13 +1,17 @@
 ---
+import criticalCss from '../styles/critical.css?raw'
 import '../styles/index.css'
 import { useLocale } from '@utils/locale'
+import { localeFromUrl } from '@utils/locale'
 import Header from './Header.astro'
 import Navbar from './Navbar.astro'
-import '@fontsource/ibm-plex-sans/latin-400.css'
+import '@fontsource/ibm-plex-sans'
+import '@fontsource/google-sans-code'
 import { SEO } from 'astro-seo'
 import Footer from './Footer.astro'
 
 const { t } = useLocale(Astro.url)
+const htmlLang = localeFromUrl(Astro.url)
 
 export const prerender = true
 
@@ -24,126 +28,43 @@ const fullTitle = `${title} - ${t('layout.title')}`
 ---
 
 <!doctype html>
-<html lang="en" class="mx-4">
+<html lang={htmlLang} class="mx-4">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <style is:inline>
-      /* Critical CSS - Above the fold styles */
-      body {
-        font-family: "IBM Plex Sans", sans-serif;
-        margin: 0;
-        overflow-y: scroll;
-        font-weight: 400;
-      }
-      .max-width {
-        max-width: 800px;
-        margin: 0 auto;
-      }
-      nav {
-        display: flex;
-        align-items: center;
-      }
 
-      /* Critical color variables */
-      :root {
-        --color-primary-main: 29 116 132;
-        --color-secondary-main: 20 79 90;
-        --color-text-heading: 0, 0, 0;
-        --color-text-body: 0, 0, 0;
-        --color-text-link: var(--color-primary-main);
-        --color-text-link-hover: var(--color-secondary-main);
-        --color-border: var(--color-primary-main);
-        --color-code-bg: #f3f4f6;
-      }
+    <!-- Single critical CSS source (critical.css) -->
+    <style is:inline set:html={criticalCss} />
 
-      :root.dark {
-        --color-bg-body: 51, 51, 51;
-        --color-primary-main: 140, 194, 221;
-        --color-secondary-main: 168 130 255;
-        --color-text-body: 214 211 209;
-        --color-text-heading: 255, 255, 255;
-        --color-text-link: var(--color-primary-main);
-        --color-text-link-hover: var(--color-secondary-main);
-        --color-border: var(--color-primary-main);
-        --color-code-bg: #1a202c;
-      }
+    <!-- FOUC: apply theme class before paint; ThemeSelect owns full policy -->
+    <script is:inline>
+      ;(function () {
+        try {
+          const stored = localStorage.getItem('theme')
+          const dark =
+            stored === 'dark' ||
+            ((!stored || stored === 'auto') &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches)
+          if (dark) document.documentElement.classList.add('dark')
+        } catch (_) {}
+      })()
+    </script>
 
-      /* Critical link styles */
-      .link-static {
-        color: rgb(var(--color-text-link));
-        text-decoration: none;
-        display: inline;
-        padding: 0;
-        margin: 0;
-      }
-
-      .link-static:hover {
-        color: rgb(var(--color-text-link-hover));
-        text-decoration: underline;
-        text-decoration-thickness: 0.125rem;
-        text-underline-offset: 5px;
-      }
-
-      time,
-      div {
-        color: rgb(var(--color-text-heading));
-      }
-
-      /* Critical layout styles */
-      .flex {
-        display: flex;
-      }
-      .items-center {
-        align-items: center;
-      }
-      .justify-center {
-        justify-content: center;
-      }
-      .space-x-4 > * + * {
-        margin-left: 1rem;
-      }
-      .py-8 {
-        padding-top: 2rem;
-        padding-bottom: 2rem;
-      }
-      .my-6 {
-        margin-top: 1.5rem;
-        margin-bottom: 1.5rem;
-      }
-      .mt-8 {
-        margin-top: 2rem;
-      }
-      .text-4xl {
-        font-size: 2.25rem;
-      }
-      .font-bold {
-        font-weight: 700;
-      }
-      .text-black {
-        color: #000;
-      }
-      .dark .text-white {
-        color: #fff;
-      }
-    </style>
-
-    <!-- CSS will be handled by Astro's build process -->
     <title>{fullTitle}</title>
     <SEO
-      title="Kratos's Blog"
-      description="A place sharing a life of a software engineer"
+      title={fullTitle}
+      description={description}
       openGraph={{
         basic: {
-          title: "Kratos's Blog",
-          type: "Blog",
-          image: "https://avatars.githubusercontent.com/u/63009984?v=4",
+          title: fullTitle,
+          type: 'website',
+          image: 'https://avatars.githubusercontent.com/u/63009984?v=4',
         },
       }}
       twitter={{
-        creator: "@kratosmy_",
+        creator: '@kratosmy_',
       }}
     />
   </head>
@@ -154,19 +75,11 @@ const fullTitle = `${title} - ${t('layout.title')}`
       <slot />
     </main>
     <Footer />
-    <!-- Non-blocking scripts -->
     <script defer>
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", () => {
-          navigator.serviceWorker
-            .register("/sw.js")
-            .then((registration) => {
-              console.log("SW registered: ", registration);
-            })
-            .catch((registrationError) => {
-              console.log("SW registration failed: ", registrationError);
-            });
-        });
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {})
+        })
       }
     </script>
   </body>
