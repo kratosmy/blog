@@ -4,7 +4,7 @@
  * Presentational chrome only; data comes from listPosts inside this module.
  */
 import { displayTitle, listPosts, resolveTag } from '@utils/content'
-import { formatDateYMD } from '@utils/format'
+import { formatArchiveDate } from '@utils/format'
 import { useLocale } from '@utils/locale'
 import type { SupportedLocale } from '../types'
 import Layout from './Layout.astro'
@@ -24,46 +24,53 @@ const resolvedTag = tagParam
 
 const { posts } = await listPosts(locale, { tag: resolvedTag })
 const filterName = resolvedTag
+const archive = posts.reduce<Map<string, typeof posts>>((groups, post) => {
+  const year = post.date.slice(0, 4)
+  const group = groups.get(year) ?? []
+  group.push(post)
+  groups.set(year, group)
+  return groups
+}, new Map())
 ---
 
 <Layout title={t('nav.posts')}>
-  {
-    filterName && (
-      <div class="mt-2">
-        <span class="text-xl font-bold italic ml-2">
-          " {t(`tags.${filterName}`)} "
-        </span>
-      </div>
-    )
-  }
-  <main class="mt-8">
-    <ul class="list-none pl-0">
-      {
-        posts.map((post) => {
-          const title = displayTitle(post)
-          return (
-            <li class="my-4">
-              <div class="flex flex-nowrap">
-                <span
-                  style={{ flex: '0 0 10rem' }}
-                  class="text-gray-500 whitespace-nowrap"
-                >
-                  <time class="mr-8 italic">{formatDateYMD(post.date)}</time>
-                </span>
-                <span class="flex-1 truncate">
-                  <a
-                    rel="prefetch-intent"
-                    href={post.url}
-                    class="link-static"
-                  >
-                    {title}
-                  </a>
-                </span>
-              </div>
-            </li>
-          )
-        })
-      }
-    </ul>
+  <main class="archive-page">
+    {
+      filterName && (
+        <h1 class="archive-filter">“{t(`tags.${filterName}`)}”</h1>
+      )
+    }
+    {
+      posts.length === 0 ? (
+        <p class="empty-state">{t('message.no-posts')}</p>
+      ) : (
+        <article class="archive" aria-label={t('nav.posts')}>
+          {Array.from(archive).map(([year, yearPosts]) => (
+            <section class="archive-year" aria-labelledby={`year-${year}`}>
+              <h2 id={`year-${year}`}>{year}</h2>
+              <ol>
+                {yearPosts.map((post) => {
+                  const title = displayTitle(post)
+                  return (
+                    <li class="archive-entry">
+                      <time datetime={post.date}>
+                        {formatArchiveDate(post.date, locale)}
+                      </time>
+                      <a
+                        rel="prefetch-intent"
+                        href={post.url}
+                        class="archive-link"
+                      >
+                        {title}
+                      </a>
+                    </li>
+                  )
+                })}
+              </ol>
+            </section>
+          ))}
+        </article>
+      )
+    }
   </main>
 </Layout>

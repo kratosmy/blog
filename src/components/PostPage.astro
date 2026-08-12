@@ -33,47 +33,38 @@ const homeHref = locale === 'en' ? '/en/' : '/zh/'
 ---
 
 <Layout title={title} navbar={false}>
-  <a class="link mt-6" href={homeHref}>{t('post.back')}</a>
-  <main>
-    <div class="mt-6">
-      <h1 class="text-4xl">{title}</h1>
-      <div
-        class="flex sm:flex-row flex-col pb-2"
-        style="border-bottom: 1px dashed;"
-      >
-        <span class="text-sm font-normal italic">
-          {formatDateYMD(date)}
-        </span>
-        <div class="ml-auto flex gap-4">
-          <span class="text-sm font-normal italic">
+  <main class="post-page">
+    <a class="post-back" href={homeHref}>
+      <span aria-hidden="true">←</span> {t('post.back')}
+    </a>
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">{title}</h1>
+        <div class="post-meta">
+          <time datetime={date}>{formatDateYMD(date)}</time>
+          <span class="post-meta__stats">
             {formatReadingTime(readingStats.readingTime, locale)}
-          </span>
-          <span class="text-sm font-normal italic">
-            ({readingStats.displayText})
+            <span aria-hidden="true"> · </span>
+            {readingStats.displayText}
           </span>
         </div>
+      </header>
+      <div class="post-body">
+        <Content />
       </div>
-      <div class="w-full">
-        <article
-          class="prose dark:prose-invert prose-stone dark:prose-gray w-full mt-6 mx-auto"
-          style="max-width: none;"
-        >
-          <Content />
-        </article>
-      </div>
-      <div class="mt-9 flex text-sm font-italic opacity-80">
+      <footer class="post-record">
         {
           lastModified ? (
-            <span class="ml-auto">
+            <span>
               {t('post.last_modified_at')} {formatDateYMD(lastModified)}
             </span>
           ) : (
-            <span class="ml-auto">
+            <span>
               {t('post.post_at')} {formatDateYMD(date)}
             </span>
           )
         }
-      </div>
-    </div>
+      </footer>
+    </article>
   </main>
 </Layout>

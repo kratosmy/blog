@@ -1,24 +1,23 @@
 ---
-import { homeUrl, localeFromUrl } from '@utils/locale'
+import { homeUrl, localeFromUrl, useLocale } from '@utils/locale'
 import ThemeSelect from '../components/ThemeSelect.astro'
 import LanguageSelect from '../components/LanguageSelect.astro'
 
 const locale = localeFromUrl(Astro.url)
 const home = homeUrl(locale)
+const { t } = useLocale(Astro.url)
 ---
 
-<div class="my-6 flex">
-  <a
-    href={home}
-    class="hover:cursor-pointer opacity-100 hover:opacity-80 no-underline"
-  >
-    <i class="hidden">website header </i>
-    <h1 class="text-4xl leading-tight font-bold text-black dark:text-white">
-      John Wick
-    </h1>
-  </a>
-  <div class="text-sm ml-auto flex items-center gap-2">
-    <LanguageSelect />
-    <ThemeSelect />
+<header class="site-header">
+  <div class="site-header__row">
+    <a href={home} class="site-title">
+      <span class="visually-hidden">Website home: </span>
+      <h1>John Wick</h1>
+    </a>
+    <div class="site-controls" aria-label="Display preferences">
+      <LanguageSelect />
+      <ThemeSelect />
+    </div>
   </div>
-</div>
+  <p class="site-description">{t('layout.description')}</p>
+</header>

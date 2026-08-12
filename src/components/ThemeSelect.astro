@@ -1,113 +1,76 @@
----
-const id = `moon-mask-`
----
-
-<starlight-rapide-theme-select>
-  <button aria-label="ok" aria-live="polite" class="sl-flex" title="ok">
-    <div class="i-ph-sun dark:hidden w-5 h-5"></div>
-    <div class="i-ph-moon hidden dark:block w-5 h-5"></div>
+<theme-select>
+  <button type="button" class="text-control" aria-label="Toggle color theme">
+    <span class="theme-label theme-label--light" aria-hidden="true">Dark</span>
+    <span class="theme-label theme-label--dark" aria-hidden="true">Light</span>
   </button>
-</starlight-rapide-theme-select>
-
-<style>
-  starlight-rapide-theme-select {
-    --sl-rapide-theme-select-animation-duration: 400ms;
-    --sl-rapide-theme-select-ease-elastic: cubic-bezier(0.5, 1.25, 0.75, 1.25);
-
-    display: flex;
-    align-items: center;
-  }
-
-  button {
-    align-items: center;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    height: 2rem;
-    width: 2.25rem;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    border-radius: 0.375rem;
-  }
-
-  /* Phosphor icons with simple transitions */
-  .i-ph-sun,
-  .i-ph-moon {
-    transition: all 0.2s ease;
-  }
-</style>
+</theme-select>
 
 <script>
-  type Theme = "auto" | "dark" | "light";
+  type Theme = 'auto' | 'dark' | 'light'
 
-  /** Key in `localStorage` to store color theme preference at. */
-  const storageKey = "theme";
+  const storageKey = 'theme'
 
-  /** Get a typesafe theme string from any JS value (unknown values are coerced to `'auto'`). */
   function parseTheme(theme: unknown): Theme {
-    return theme === "auto" || theme === "dark" || theme === "light"
+    return theme === 'auto' || theme === 'dark' || theme === 'light'
       ? theme
-      : "auto";
+      : 'auto'
   }
 
-  /** Load the user’s preference from `localStorage`. */
   function loadTheme(): Theme {
     return parseTheme(
-      typeof localStorage !== "undefined" && localStorage.getItem(storageKey),
-    );
+      typeof localStorage !== 'undefined' && localStorage.getItem(storageKey),
+    )
   }
 
-  /** Store the user’s preference in `localStorage`. */
   function storeTheme(theme: Theme): void {
-    if (typeof localStorage !== "undefined") {
+    if (typeof localStorage !== 'undefined') {
       localStorage.setItem(
         storageKey,
-        theme === "light" || theme === "dark" ? theme : "",
-      );
+        theme === 'light' || theme === 'dark' ? theme : '',
+      )
     }
   }
 
-  /** Get the preferred system color scheme. */
-  function getPreferredColorScheme(): "dark" | "light" {
-    return matchMedia("(prefers-color-scheme: light)").matches
-      ? "light"
-      : "dark";
+  function getPreferredColorScheme(): 'dark' | 'light' {
+    return matchMedia('(prefers-color-scheme: light)').matches
+      ? 'light'
+      : 'dark'
   }
 
-  function resolveTheme(theme: Theme): "dark" | "light" {
-    return theme === "auto" ? getPreferredColorScheme() : theme;
+  function resolveTheme(theme: Theme): 'dark' | 'light' {
+    return theme === 'auto' ? getPreferredColorScheme() : theme
   }
 
-  /** Update select menu UI, document theme, and local storage state. */
   function onThemeChange(theme: Theme): void {
-    const resolvedTheme = resolveTheme(theme);
-    document.documentElement.dataset["theme"] = resolvedTheme;
-    document.documentElement.classList.toggle("dark", resolvedTheme === "dark");
-    storeTheme(theme);
+    const resolvedTheme = resolveTheme(theme)
+    document.documentElement.dataset['theme'] = resolvedTheme
+    document.documentElement.classList.toggle('dark', resolvedTheme === 'dark')
+    storeTheme(theme)
   }
 
-  // React to changes in system color scheme.
-  matchMedia(`(prefers-color-scheme: light)`).addEventListener("change", () => {
-    if (loadTheme() === "auto") onThemeChange("auto");
-  });
+  matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => {
+    if (loadTheme() === 'auto') onThemeChange('auto')
+  })
 
-  customElements.define(
-    "starlight-rapide-theme-select",
-    class StarlightRapideThemeSelect extends HTMLElement {
-      constructor() {
-        super();
-        onThemeChange(loadTheme());
-        const button = this.querySelector("button");
-        button?.addEventListener("click", () => {
-          const theme = parseTheme(document.documentElement.dataset["theme"]);
-          const newTheme =
-            theme === "dark" ? "light" : theme === "light" ? "dark" : "auto";
-          onThemeChange(newTheme);
-          button?.setAttribute("aria-label", `${newTheme} theme`);
-        });
-      }
-    },
-  );
+  if (!customElements.get('theme-select')) {
+    customElements.define(
+      'theme-select',
+      class ThemeSelect extends HTMLElement {
+        constructor() {
+          super()
+          onThemeChange(loadTheme())
+          const button = this.querySelector('button')
+          button?.addEventListener('click', () => {
+            const theme = parseTheme(document.documentElement.dataset['theme'])
+            const nextTheme = theme === 'dark' ? 'light' : 'dark'
+            onThemeChange(nextTheme)
+            button.setAttribute(
+              'aria-label',
+              `Switch to ${nextTheme === 'dark' ? 'light' : 'dark'} theme`,
+            )
+          })
+        }
+      },
+    )
+  }
 </script>

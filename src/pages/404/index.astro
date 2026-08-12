@@ -1,11 +1,18 @@
 ---
 import Layout from '@layouts/Layout.astro'
-import { useLocale } from '@utils/locale'
+import { homeUrl, localeFromUrl, useLocale } from '@utils/locale'
+
+const locale = localeFromUrl(Astro.url)
 const { t } = useLocale(Astro.url)
 export const prerender = true
 ---
 
-<Layout title={t("message.404-content")}>
-  <h1>404</h1>
-  <p>{t("message.404-content")}</p>
+<Layout title={t('message.404-content')}>
+  <main class="not-found">
+    <p class="not-found__code">404</p>
+    <h1>{t('message.404-content')}</h1>
+    <a class="post-back" href={homeUrl(locale)}>
+      <span aria-hidden="true">←</span> {t('post.back')}
+    </a>
+  </main>
 </Layout>

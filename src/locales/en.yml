@@ -11,6 +11,7 @@ post:
 message:
   404-content: Page not found
   loading: Loading...
+  no-posts: No posts found.
   more-about: More about
 pagination:
   previous: Previous

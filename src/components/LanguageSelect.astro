@@ -4,12 +4,10 @@ import { localeFromUrl, toggleUrl } from '@utils/locale'
 const currentLang = localeFromUrl(Astro.url)
 const toggleHref = toggleUrl(Astro.url)
 const toggleTitle = currentLang === 'zh' ? 'Switch to English' : '切换到中文'
+const shortLabel = currentLang === 'zh' ? 'EN' : '中'
 ---
 
-<a
-  href={toggleHref}
-  class="flex items-center justify-center w-9 h-8 rounded-md transition-all duration-200 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-  title={toggleTitle}
->
-  <div class="i-ph-translate w-5 h-5"></div>
+<a href={toggleHref} class="text-control" title={toggleTitle}>
+  <span aria-hidden="true">{shortLabel}</span>
+  <span class="visually-hidden">{toggleTitle}</span>
 </a>

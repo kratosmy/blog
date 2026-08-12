@@ -11,26 +11,30 @@ function isPostsSection() {
     url.pathname === '/' ||
     url.pathname === '/zh/' ||
     url.pathname === '/en/' ||
-    url.pathname.includes('/posts/') ||
-    url.pathname.includes('/tags/')
+    url.pathname.includes('/posts/')
   )
 }
 ---
 
-<nav>
+<nav class="site-nav" aria-label="Primary navigation">
   <a
     href={homeUrl(locale)}
-    class="nav-link mr-4 animated hover:no-underline"
-    class:list={isPostsSection() ? 'active' : ''}>{t('nav.posts')}</a
+    class="site-nav__link"
+    class:list={isPostsSection() ? 'active' : ''}
+    aria-current={isPostsSection() ? 'page' : undefined}
   >
+    {t('nav.posts')}
+  </a>
   {
     items.map((item) => {
       const itemUrl = navUrl(locale, item)
+      const isActive = url.pathname.includes(`/${item}`)
       return (
         <a
           href={itemUrl}
-          class="nav-link mr-4 animated hover:no-underline"
-          class:list={url.pathname.includes(`/${item}`) ? 'active' : ''}
+          class="site-nav__link"
+          class:list={isActive ? 'active' : ''}
+          aria-current={isActive ? 'page' : undefined}
         >
           {t(`nav.${item}`)}
         </a>

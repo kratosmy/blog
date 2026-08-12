@@ -20,3 +20,17 @@ export function formatDateYMD(dateStr: string | number | Date): string {
   const year = d.getFullYear()
   return `${day} ${month}, ${year}`
 }
+
+/** Format an archive date without local-time drift. */
+export function formatArchiveDate(
+  dateStr: string,
+  locale: 'zh' | 'en',
+): string {
+  const [year, month, day] = dateStr.slice(0, 10).split('-').map(Number)
+  const date = new Date(Date.UTC(year, month - 1, day))
+  return new Intl.DateTimeFormat(locale === 'zh' ? 'zh-CN' : 'en-US', {
+    month: 'short',
+    day: '2-digit',
+    timeZone: 'UTC',
+  }).format(date)
+}

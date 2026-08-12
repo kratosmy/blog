@@ -11,6 +11,7 @@ post:
 message:
   404-content: 页面未找到
   loading: 加载中...
+  no-posts: 暂无文章。
   more-about: 更多关于
 pagination:
   previous: 上一页

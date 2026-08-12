@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-12T02:48:38.798391+00:00",
+  "title": "Design System: John Wick",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "tonalRamp": [
+          "#1c1b1a",
+          "#30302e",
+          "#55534f",
+          "#85817b",
+          "#b5b0a8",
+          "#d8d4cd",
+          "#efede9",
+          "#fbfbfb"
+        ]
+      },
+      "ink": {
+        "role": "primary",
+        "displayName": "Ink",
+        "tonalRamp": [
+          "#181817",
+          "#303030",
+          "#555453",
+          "#777573",
+          "#a19e99",
+          "#c9c6c0",
+          "#e9e7e3",
+          "#fbfbfb"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Journal Display",
+        "purpose": "Masthead, years, and article titles."
+      },
+      "body": {
+        "displayName": "Reading Body",
+        "purpose": "Archive and long-form prose."
+      },
+      "code": {
+        "displayName": "Code",
+        "purpose": "Code and technical source material only."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "ledger-rule",
+        "value": "260ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Draw the archive underline on hover or keyboard focus."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "journal-desktop",
+        "value": "800px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Archive Entry",
+      "kind": "custom",
+      "description": "A date and wrapping post title in the chronological ledger.",
+      "html": "<div class=\"ds-archive\"><time>Jul 27</time><a href=\"#\">Life Around Me</a></div>",
+      "css": ".ds-archive { display:grid; grid-template-columns:5rem 1fr; gap:2rem; font-family:Arvo,serif; color:#303030; } .ds-archive time { color:#686868; font-size:.8125rem; font-variant-numeric:tabular-nums; } .ds-archive a { color:currentColor; text-decoration:underline; text-underline-offset:.2em; } .ds-archive a:hover { color:#686868; } .ds-archive a:focus-visible { outline:2px solid #4d4a45; outline-offset:4px; }"
+    },
+    {
+      "name": "Text Control",
+      "kind": "button",
+      "description": "The quiet theme/language control used in the masthead.",
+      "html": "<button class=\"ds-control\">Dark</button>",
+      "css": ".ds-control { min-width:2rem; min-height:2rem; border:0; background:transparent; color:#686868; font:700 .75rem Arvo,serif; text-decoration:underline; text-underline-offset:.25em; cursor:pointer; } .ds-control:hover { color:#303030; } .ds-control:focus-visible { outline:2px solid #4d4a45; outline-offset:4px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Personal Archive Ledger",
+    "overview": "The blog is a durable paper journal translated directly to the web: restrained, chronological, and led by typography.",
+    "keyCharacteristics": [
+      "One centered 38rem editorial column",
+      "Paper-and-ink neutral palette",
+      "Arvo slab-serif voice",
+      "Year-led archive rows",
+      "Square flat surfaces"
+    ],
+    "rules": [
+      {
+        "name": "Ink-Only",
+        "body": "Do not introduce a brand accent for navigation or links.",
+        "section": "colors"
+      },
+      {
+        "name": "Flat Ledger",
+        "body": "Do not add shadows, floating cards, translucent layers, or decorative depth.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do let chronology, whitespace, and typography create hierarchy.",
+      "Do wrap long Chinese and English titles at every width."
+    ],
+    "donts": [
+      "Don’t use card grids, thumbnails, summaries, or promotional heroes for the archive.",
+      "Don’t truncate post titles."
+    ]
+  }
+}

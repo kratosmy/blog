@@ -1,7 +1,6 @@
 // uno.config.ts
 import {
   defineConfig,
-  presetMini,
   presetTypography,
   presetUno,
   presetIcons,
@@ -11,7 +10,7 @@ import {
 export default defineConfig({
   injectReset: false,
   mode: 'per-module',
-  injectEntry: process.env['NODE_ENV'] === 'development',
+  injectEntry: process.env.NODE_ENV === 'development',
   transformers: [transformerDirectives()],
 
   shortcuts: {

@@ -1,11 +1,11 @@
 ---
 import criticalCss from '../styles/critical.css?raw'
 import '../styles/index.css'
-import { useLocale } from '@utils/locale'
-import { localeFromUrl } from '@utils/locale'
+import { localeFromUrl, useLocale } from '@utils/locale'
 import Header from './Header.astro'
 import Navbar from './Navbar.astro'
-import '@fontsource/ibm-plex-sans'
+import '@fontsource/arvo/400.css'
+import '@fontsource/arvo/700.css'
 import '@fontsource/google-sans-code'
 import { SEO } from 'astro-seo'
 import Footer from './Footer.astro'
@@ -28,17 +28,15 @@ const fullTitle = `${title} - ${t('layout.title')}`
 ---
 
 <!doctype html>
-<html lang={htmlLang} class="mx-4">
+<html lang={htmlLang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
-    <!-- Single critical CSS source (critical.css) -->
     <style is:inline set:html={criticalCss} />
 
-    <!-- FOUC: apply theme class before paint; ThemeSelect owns full policy -->
     <script is:inline>
       ;(function () {
         try {
@@ -68,12 +66,18 @@ const fullTitle = `${title} - ${t('layout.title')}`
       }}
     />
   </head>
-  <body class="max-width dark:bg-[#333] bg-[#FBFBFBFF]">
+  <body class="site-shell">
+    <!--
+      THESIS: John Wick is a bilingual personal archive, not a card-based content product.
+      OWN-WORLD: Paper and ink surfaces, Arvo-led type, square edges, quiet rules, and a narrow editorial column.
+      STORY: Readers meet the author, scan writing by year and date, then enter an uninterrupted reading view.
+      FIRST VIEWPORT: A compact masthead and text navigation lead directly into the newest year; the archive link rule is the signature interaction.
+      FORM: Restrained personal web journal, seventh grounded direction, seed 0f5372d0.
+      FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+    -->
     <Header />
     {navbar && <Navbar />}
-    <main>
-      <slot />
-    </main>
+    <slot />
     <Footer />
     <script defer>
       if ('serviceWorker' in navigator) {
