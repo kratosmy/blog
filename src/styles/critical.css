@@ -6,15 +6,17 @@
 }
 
 :root {
-  --paper: #fbfbfb;
-  --ink: #303030;
-  --muted-ink: #686868;
-  --quiet-ink: #85817b;
-  --rule: #c9c6c0;
-  --soft-surface: #e9e7e3;
-  --code-surface: #efede9;
-  --focus: #4d4a45;
-  --font-reading: "Arvo", "Noto Serif SC", "Songti SC", STSong, SimSun, serif;
+  --paper: #e7e8dc;
+  --ink: #344a38;
+  --muted-ink: #536858;
+  --quiet-ink: #586b5d;
+  --rule: #aeb8aa;
+  --soft-surface: #d7dbcf;
+  --code-surface: #dfe2d7;
+  --focus: #244f34;
+  --font-reading:
+    "Arvo", "Noto Serif SC", "Source Han Serif SC", "Songti SC", STSong,
+    "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", sans-serif;
   --font-code: "Google Sans Code", "Source Code Pro", Consolas, monospace;
   color-scheme: light;
   background: var(--paper);
@@ -25,14 +27,14 @@
 }
 
 :root.dark {
-  --paper: #1c1b1a;
-  --ink: #ebe8e2;
-  --muted-ink: #b8b2a8;
-  --quiet-ink: #9d978e;
-  --rule: #54504a;
-  --soft-surface: #302e2b;
-  --code-surface: #292725;
-  --focus: #f0ede7;
+  --paper: #2b2f2b;
+  --ink: #d1e3c8;
+  --muted-ink: #abbca4;
+  --quiet-ink: #899a84;
+  --rule: #657163;
+  --soft-surface: #373d37;
+  --code-surface: #252a25;
+  --focus: #b9d6ae;
   color-scheme: dark;
 }
 
@@ -122,6 +124,23 @@ button:focus-visible {
   outline-offset: 4px;
 }
 
+.skip-link {
+  position: fixed;
+  z-index: 10;
+  top: 0.5rem;
+  left: 0.5rem;
+  padding: 0.6rem 0.8rem;
+  background: var(--ink);
+  color: var(--paper);
+  transform: translateY(-160%);
+  transition: transform 160ms ease-out;
+}
+
+.skip-link:focus {
+  color: var(--paper);
+  transform: translateY(0);
+}
+
 button {
   color: inherit;
   font: inherit;
@@ -163,26 +182,25 @@ time {
 }
 
 .site-title {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
   text-decoration: none;
 }
 
-.site-title h1 {
-  margin: 0 0 0.25rem;
-  letter-spacing: -0.02em;
-}
-
-.site-description {
+.site-title__text {
   margin: 0;
-  color: var(--muted-ink);
-  font-size: 0.875rem;
+  font-size: 1.875rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
 }
 
 .site-controls {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.25rem;
   margin-left: auto;
-  padding-top: 0.4rem;
 }
 
 .site-nav {
@@ -193,6 +211,10 @@ time {
 }
 
 .site-nav__link {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  margin-block: -0.65rem;
   color: var(--muted-ink);
 }
 

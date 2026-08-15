@@ -1,39 +1,26 @@
 // @ts-check
-import { defineConfig } from 'astro/config'
-
+import { unified } from '@astrojs/markdown-remark'
+import sitemap from '@astrojs/sitemap'
 import yaml from '@rollup/plugin-yaml'
 import expressiveCode from 'astro-expressive-code'
-import UnoCSS from '@unocss/astro'
+import { defineConfig } from 'astro/config'
 
-import mdx from '@astrojs/mdx'
+/** Keep the page title as the sole h1 while preserving Markdown section order. */
+function demoteMarkdownH1() {
+  return (tree) => {
+    const nodes = [tree]
+    while (nodes.length > 0) {
+      const node = nodes.pop()
+      if (!node || typeof node !== 'object') continue
+      if (node.type === 'element' && node.tagName === 'h1') node.tagName = 'h2'
+      if (Array.isArray(node.children)) nodes.push(...node.children)
+    }
+  }
+}
 
-import sitemap from '@astrojs/sitemap'
-
-// https://astro.build/config
 export default defineConfig({
   vite: {
     plugins: [yaml()],
-    build: {
-      assetsDir: 'assets',
-      cssCodeSplit: true,
-      minify: 'terser',
-      terserOptions: {
-        compress: {
-          drop_console: true,
-          drop_debugger: true,
-        },
-      },
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            vendor: ['luxon'],
-          },
-          assetFileNames: 'assets/[name].[hash][extname]',
-          chunkFileNames: 'chunks/[name].[hash].js',
-          entryFileNames: 'entry/[name].[hash].js',
-        },
-      },
-    },
   },
   compressHTML: true,
   devToolbar: {
@@ -48,30 +35,32 @@ export default defineConfig({
     assets: '_astro',
   },
   markdown: {
-    shikiConfig: {
-      theme: 'everforest-dark',
-    },
-    syntaxHighlight: 'shiki',
-    remarkRehype: {
-      footnoteLabel: ' ',
-    },
-  },
-
-  integrations: [
-    UnoCSS({
-      injectReset: false,
-    }),
-    expressiveCode({
-      themeCssSelector: (theme) => {
-        return `.${theme.type}`
+    processor: unified({
+      rehypePlugins: [demoteMarkdownH1],
+      remarkRehype: {
+        footnoteLabel: ' ',
       },
+    }),
+  },
+  integrations: [
+    expressiveCode({
+      themes: ['catppuccin-latte', 'catppuccin-mocha'],
+      emitExternalStylesheet: true,
+      removeUnusedThemes: true,
+      shiki: {
+        bundledLangs: ['c', 'cpp'],
+      },
+      frames: false,
+      textMarkers: false,
+      themeCssSelector: (theme) => `.${theme.type}`,
+      useDarkModeMediaQuery: false,
       styleOverrides: {
-        borderRadius: '0.5rem',
+        borderRadius: '0',
+        borderWidth: '0',
         codeFontFamily:
           '"Google Sans Code", "Fira Code", "JetBrains Mono", Consolas, "Courier New", monospace',
       },
     }),
-    mdx(),
     sitemap(),
   ],
   output: 'static',

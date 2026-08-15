@@ -1,36 +1,40 @@
-/** Format a date as `D Mon, YYYY` (e.g. 4 Aug, 2026). */
-export function formatDateYMD(dateStr: string | number | Date): string {
-  const months = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ]
-  const d = new Date(dateStr)
-  const day = d.getDate()
-  const month = months[d.getMonth()]
-  const year = d.getFullYear()
-  return `${day} ${month}, ${year}`
+export function asUtcDate(dateValue: string | number | Date): Date {
+  if (dateValue instanceof Date || typeof dateValue === 'number') {
+    return new Date(dateValue)
+  }
+  const isoDay = dateValue.slice(0, 10)
+  if (/^\d{4}-\d{2}-\d{2}$/.test(isoDay)) {
+    return new Date(`${isoDay}T00:00:00Z`)
+  }
+  return new Date(dateValue)
 }
 
-/** Format an archive date without local-time drift. */
+/** Serialize a date or date-only value at a stable UTC instant. */
+export function toIsoTimestamp(dateValue: string | number | Date): string {
+  return asUtcDate(dateValue).toISOString()
+}
+
+/** Format a full date for the active locale without local-time drift. */
+export function formatDateYMD(
+  dateValue: string | number | Date,
+  locale: 'zh' | 'en' = 'en',
+): string {
+  return new Intl.DateTimeFormat(locale === 'zh' ? 'zh-CN' : 'en-US', {
+    year: 'numeric',
+    month: locale === 'zh' ? 'long' : 'short',
+    day: 'numeric',
+    timeZone: 'UTC',
+  }).format(asUtcDate(dateValue))
+}
+
+/** Format a compact archive date without local-time drift. */
 export function formatArchiveDate(
   dateStr: string,
   locale: 'zh' | 'en',
 ): string {
-  const [year, month, day] = dateStr.slice(0, 10).split('-').map(Number)
-  const date = new Date(Date.UTC(year, month - 1, day))
   return new Intl.DateTimeFormat(locale === 'zh' ? 'zh-CN' : 'en-US', {
     month: 'short',
     day: '2-digit',
     timeZone: 'UTC',
-  }).format(date)
+  }).format(asUtcDate(dateStr))
 }

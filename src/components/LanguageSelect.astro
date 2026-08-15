@@ -1,13 +1,22 @@
 ---
-import { localeFromUrl, toggleUrl } from '@utils/locale'
+import { localeFromUrl, toggleUrl, useLocale } from '@utils/locale'
 
 const currentLang = localeFromUrl(Astro.url)
+const { t } = useLocale(Astro.url)
 const toggleHref = toggleUrl(Astro.url)
-const toggleTitle = currentLang === 'zh' ? 'Switch to English' : '切换到中文'
+const toggleTitle =
+  currentLang === 'zh'
+    ? t('controls.switch_to_english')
+    : t('controls.switch_to_chinese')
 const shortLabel = currentLang === 'zh' ? 'EN' : '中'
+const accessibleLabel = `${shortLabel} — ${toggleTitle}`
 ---
 
-<a href={toggleHref} class="text-control" title={toggleTitle}>
+<a
+  href={toggleHref}
+  class="text-control"
+  title={toggleTitle}
+  aria-label={accessibleLabel}
+>
   <span aria-hidden="true">{shortLabel}</span>
-  <span class="visually-hidden">{toggleTitle}</span>
 </a>

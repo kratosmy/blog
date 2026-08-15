@@ -1,34 +1,24 @@
 ---
-import { homeUrl, localeFromUrl, navUrl, useLocale } from '@utils/locale'
+import {
+  activeSection,
+  homeUrl,
+  localeFromUrl,
+  localePath,
+  useLocale,
+} from '@utils/locale'
 
 const { url } = Astro
 const { t } = useLocale(url)
 const locale = localeFromUrl(url)
-const items = ['tags'] as const
-
-function isPostsSection() {
-  return (
-    url.pathname === '/' ||
-    url.pathname === '/zh/' ||
-    url.pathname === '/en/' ||
-    url.pathname.includes('/posts/')
-  )
-}
+const section = activeSection(url)
+const items = ['posts', 'tags'] as const
 ---
 
 <nav class="site-nav" aria-label="Primary navigation">
-  <a
-    href={homeUrl(locale)}
-    class="site-nav__link"
-    class:list={isPostsSection() ? 'active' : ''}
-    aria-current={isPostsSection() ? 'page' : undefined}
-  >
-    {t('nav.posts')}
-  </a>
   {
     items.map((item) => {
-      const itemUrl = navUrl(locale, item)
-      const isActive = url.pathname.includes(`/${item}`)
+      const itemUrl = item === 'posts' ? homeUrl(locale) : localePath(locale, item)
+      const isActive = section === item
       return (
         <a
           href={itemUrl}

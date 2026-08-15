@@ -1,11 +1,11 @@
 ---
-import { render } from 'astro:content'
 import Layout from '@layouts/Layout.astro'
-import { displayTitle, getPost } from '@utils/content'
-import { formatDateYMD } from '@utils/format'
-import { useLocale } from '@utils/locale'
+import { displayTitle, getPost, listPosts, tagSlug } from '@utils/content'
+import { formatDateYMD, toIsoTimestamp } from '@utils/format'
+import { homeUrl, localePath, useLocale } from '@utils/locale'
 import { calculateReadingStats, formatReadingTime } from '@utils/reading'
 import type { SupportedLocale } from '../types'
+import '../styles/post.css'
 
 interface Props {
   locale: SupportedLocale
@@ -15,33 +15,42 @@ const { locale } = Astro.props
 const { t } = useLocale(Astro.url)
 const slug = Astro.params.slug
 
-const post = slug ? await getPost(locale, slug) : null
-if (!post) {
-  return Astro.redirect(locale === 'en' ? '/en/' : '/zh/')
+const detail = slug ? await getPost(locale, slug) : null
+if (!detail) {
+  return Astro.redirect(homeUrl(locale))
 }
 
-const readingStats = calculateReadingStats(post.body ?? '')
-const { date, lastModified } = post.data
-const title = displayTitle({
-  title: post.data.title,
-  'title-en': post.data['title-en'],
-  locale,
-  pathSlug: slug ?? '',
-})
-const { Content } = await render(post)
-const homeHref = locale === 'en' ? '/en/' : '/zh/'
+const { post, Content } = detail
+const readingStats = calculateReadingStats(post.body)
+const { date, lastModified, tags = [] } = post
+const title = displayTitle(post)
+const homeHref = homeUrl(locale)
+const { posts } = await listPosts(locale)
+const currentIndex = posts.findIndex((candidate) => candidate.pathSlug === slug)
+const newerPost = currentIndex > 0 ? posts[currentIndex - 1] : undefined
+const olderPost = currentIndex >= 0 ? posts[currentIndex + 1] : undefined
 ---
 
-<Layout title={title} navbar={false}>
-  <main class="post-page">
+<Layout
+  title={title}
+  description={post.description || undefined}
+  navbar={false}
+  ogType="article"
+  article={{
+    publishedTime: toIsoTimestamp(date),
+    modifiedTime: lastModified ? toIsoTimestamp(lastModified) : undefined,
+    tags,
+  }}
+>
+  <main id="main-content" tabindex="-1" class="post-page">
     <a class="post-back" href={homeHref}>
-      <span aria-hidden="true">←</span> {t('post.back')}
+      <span aria-hidden="true">←</span>&nbsp;{t('post.back')}
     </a>
     <article class="post">
       <header class="post-header">
         <h1 class="post-title">{title}</h1>
         <div class="post-meta">
-          <time datetime={date}>{formatDateYMD(date)}</time>
+          <time datetime={date}>{formatDateYMD(date, locale)}</time>
           <span class="post-meta__stats">
             {formatReadingTime(readingStats.readingTime, locale)}
             <span aria-hidden="true"> · </span>
@@ -52,18 +61,66 @@ const homeHref = locale === 'en' ? '/en/' : '/zh/'
       <div class="post-body">
         <Content />
       </div>
-      <footer class="post-record">
+      <footer class="post-footer">
+        <div class="post-record">
+          {
+            lastModified ? (
+              <span>
+                {t('post.last_modified_at')}{' '}
+                {formatDateYMD(lastModified, locale)}
+              </span>
+            ) : (
+              <span>
+                {t('post.post_at')} {formatDateYMD(date, locale)}
+              </span>
+            )
+          }
+        </div>
         {
-          lastModified ? (
-            <span>
-              {t('post.last_modified_at')} {formatDateYMD(lastModified)}
-            </span>
-          ) : (
-            <span>
-              {t('post.post_at')} {formatDateYMD(date)}
-            </span>
+          tags.length > 0 && (
+            <div class="post-topics">
+              <span>{t('post.topics')}: </span>
+              <ul class="post-topics__list">
+                {tags.map((tag) => (
+                  <li>
+                    <a href={localePath(locale, `/tags/${tagSlug(tag)}`)}>
+                      {t(`tags.${tag}`)}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           )
         }
+        <nav class="post-continuation" aria-label={t('pagination.next')}>
+          {
+            newerPost && (
+              <div class="post-continuation__item">
+                <span class="post-continuation__label">
+                  {t('pagination.newer_post')}
+                </span>
+                <a class="post-continuation__link" href={newerPost.url}>
+                  {displayTitle(newerPost)}
+                </a>
+              </div>
+            )
+          }
+          {
+            olderPost && (
+              <div class="post-continuation__item post-continuation__item--older">
+                <span class="post-continuation__label">
+                  {t('pagination.older_post')}
+                </span>
+                <a class="post-continuation__link" href={olderPost.url}>
+                  {displayTitle(olderPost)}
+                </a>
+              </div>
+            )
+          }
+          <a class="post-continuation__archive" href={homeHref}>
+            {t('pagination.all_posts')}
+          </a>
+        </nav>
       </footer>
     </article>
   </main>

@@ -1,8 +1,9 @@
 ---
 import Layout from '@layouts/Layout.astro'
-import { listTags, tagSlug } from '@utils/content'
-import { useLocale } from '@utils/locale'
+import { listPosts, tagSlug } from '@utils/content'
+import { localePath, useLocale } from '@utils/locale'
 import type { SupportedLocale } from '../types'
+import '../styles/tags.css'
 
 interface Props {
   locale: SupportedLocale
@@ -10,23 +11,36 @@ interface Props {
 
 const { locale } = Astro.props
 const { t } = useLocale(Astro.url)
-const tags = await listTags(locale)
-const prefix = locale === 'en' ? '/en' : '/zh'
+const { posts } = await listPosts(locale)
+const tagCounts = posts.reduce<Map<string, number>>((counts, post) => {
+  for (const tag of post.tags ?? []) counts.set(tag, (counts.get(tag) ?? 0) + 1)
+  return counts
+}, new Map())
+const tags = Array.from(tagCounts)
+  .map(([tag, count]) => ({ tag, count, label: t(`tags.${tag}`) }))
+  .sort((a, b) =>
+    a.label.localeCompare(b.label, locale === 'zh' ? 'zh-CN' : 'en'),
+  )
 ---
 
 <Layout title={t('nav.tags')}>
-  <main class="tags-page">
+  <main id="main-content" tabindex="-1" class="tags-page">
     <h1>{t('nav.tags')}</h1>
     {
       tags.length === 0 ? (
         <p class="empty-state">{t('message.no-posts')}</p>
       ) : (
         <ul class="tag-list">
-          {tags.map((tag) => {
-            const tagUrl = `${prefix}/tags/${tagSlug(tag)}/`
+          {tags.map(({ tag, count, label }) => {
+            const tagUrl = localePath(locale, `/tags/${tagSlug(tag)}`)
+            const countLabel =
+              locale === 'zh'
+                ? `${count} 篇`
+                : `${count} ${count === 1 ? 'post' : 'posts'}`
             return (
               <li>
-                <a href={tagUrl}>{t(`tags.${tag}`)}</a>
+                <a href={tagUrl}>{label}</a>
+                <span class="tag-list__count">{countLabel}</span>
               </li>
             )
           })}

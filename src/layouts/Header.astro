@@ -1,5 +1,6 @@
 ---
 import { homeUrl, localeFromUrl, useLocale } from '@utils/locale'
+import { SITE_NAME } from '@utils/publishing'
 import ThemeSelect from '../components/ThemeSelect.astro'
 import LanguageSelect from '../components/LanguageSelect.astro'
 
@@ -11,13 +12,16 @@ const { t } = useLocale(Astro.url)
 <header class="site-header">
   <div class="site-header__row">
     <a href={home} class="site-title">
-      <span class="visually-hidden">Website home: </span>
-      <h1>John Wick</h1>
+      <span class="visually-hidden">{t('pagination.all_posts')}: </span>
+      <span class="site-title__text">{SITE_NAME}</span>
     </a>
-    <div class="site-controls" aria-label="Display preferences">
+    <div
+      class="site-controls"
+      role="group"
+      aria-label={t('controls.display_preferences')}
+    >
       <LanguageSelect />
       <ThemeSelect />
     </div>
   </div>
-  <p class="site-description">{t('layout.description')}</p>
 </header>

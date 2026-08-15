@@ -5,11 +5,13 @@ export type SupportedLocale = 'zh' | 'en'
 
 /** Published post as presented to pages (frontmatter + routing fields). */
 export type Post = PostFrontmatter & {
+  id: string
   url: string
-  slug: string
   locale: SupportedLocale
-  /** Clean slug without locale prefix */
+  /** Clean identifier without the locale prefix. */
   pathSlug: string
+  body: string
+  description: string
 }
 
 export interface PostCollection {
@@ -18,7 +20,6 @@ export interface PostCollection {
 }
 
 export interface LocaleConfig {
-  path: (path: string) => string
   t: (key: string) => string
   locale: SupportedLocale
 }

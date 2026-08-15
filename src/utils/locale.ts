@@ -1,5 +1,5 @@
 /**
- * Locale module — sole seam for language detection, path policy, and i18n.
+ * Locale module — sole seam for language detection, URL policy, and i18n.
  */
 import en from '../locales/en.yml'
 import zh from '../locales/zh.yml'
@@ -20,52 +20,45 @@ function getPath(obj: Record<string, unknown>, key: string): unknown {
 }
 
 export function localeFromUrl(url: URL): SupportedLocale {
-  const pathname = url.pathname
+  const { pathname } = url
   if (pathname === '/en' || pathname.startsWith('/en/')) return 'en'
-  if (pathname === '/zh' || pathname.startsWith('/zh/')) return 'zh'
-  // Root and unprefixed paths default to Chinese
   return 'zh'
 }
 
-/** Locale-prefixed path. Chinese uses `/zh` for non-root pages; root home is `/`. */
+/** Normalize a locale-aware path according to the public URL policy. */
 export function localePath(locale: SupportedLocale, path: string): string {
-  const normalized = path.startsWith('/') ? path : `/${path}`
-  if (locale === 'en') {
-    const base = `/en${normalized === '/' ? '/' : normalized}`
-    return base.endsWith('/') ? base : `${base}/`
-  }
-  // zh: keep root home as `/`; other paths use `/zh/...` for consistency with existing routes
-  if (normalized === '/') return '/'
-  const base = `/zh${normalized}`
-  return base.endsWith('/') ? base : `${base}/`
+  const raw = path.startsWith('/') ? path : `/${path}`
+  const normalized = raw === '/' ? '/' : `${raw.replace(/\/+$/, '')}/`
+  if (locale === 'en') return normalized === '/' ? '/en/' : `/en${normalized}`
+  return normalized === '/' ? '/' : `/zh${normalized}`
 }
 
 export function homeUrl(locale: SupportedLocale): string {
-  return locale === 'en' ? '/en/' : '/'
+  return localePath(locale, '/')
 }
 
-export function toggleUrl(url: URL): string {
-  const locale = localeFromUrl(url)
-  const { pathname } = url
-  if (locale === 'zh') {
-    if (pathname === '/' || pathname === '/zh' || pathname === '/zh/')
-      return '/en/'
-    if (pathname.startsWith('/zh/')) return pathname.replace(/^\/zh/, '/en')
-    // root-level paths like /tags/
-    return `/en${pathname.endsWith('/') ? pathname : `${pathname}/`}`
-  }
-  if (pathname.startsWith('/en/') || pathname === '/en') {
-    const rest = pathname.replace(/^\/en/, '') || '/'
-    if (rest === '/' || rest === '') return '/'
-    return `/zh${rest.endsWith('/') ? rest : `${rest}/`}`
-  }
+/** Canonicalize the two intentionally addressable Chinese aliases. */
+export function canonicalPath(pathname: string): string {
+  if (pathname === '/zh' || pathname === '/zh/') return '/'
+  if (pathname === '/tags' || pathname === '/tags/') return '/zh/tags/'
   return pathname
 }
 
-export function navUrl(locale: SupportedLocale, item: string): string {
-  if (locale === 'en') return `/en/${item}/`
-  // Chinese tags also exist at /tags/ (root); prefer /zh/ for consistency with posts
-  return `/zh/${item}/`
+export type SiteSection = 'posts' | 'tags'
+
+export function activeSection(url: URL): SiteSection {
+  return /(^|\/)tags(?:\/|$)/.test(url.pathname) ? 'tags' : 'posts'
+}
+
+/** Return the equivalent path in the other locale. */
+export function toggleUrl(url: URL): string {
+  const { pathname } = url
+  if (localeFromUrl(url) === 'en') {
+    const rest = pathname.replace(/^\/en(?=\/|$)/, '') || '/'
+    return localePath('zh', rest)
+  }
+  const rest = pathname.replace(/^\/zh(?=\/|$)/, '') || '/'
+  return localePath('en', rest)
 }
 
 export function translate(locale: SupportedLocale, key: string): string {
@@ -80,7 +73,6 @@ export const useLocale = (url: URL): LocaleConfig => {
   const locale = localeFromUrl(url)
   return {
     locale,
-    path: (p: string) => localePath(locale, p),
     t: (key: string) => translate(locale, key),
   }
 }

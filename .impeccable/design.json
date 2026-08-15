@@ -1,35 +1,35 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-12T02:48:38.798391+00:00",
+  "generatedAt": "2026-08-14T22:46:48.067097+08:00",
   "title": "Design System: John Wick",
   "extensions": {
     "colorMeta": {
       "paper": {
         "role": "neutral",
-        "displayName": "Paper",
+        "displayName": "Mist Paper",
         "tonalRamp": [
-          "#1c1b1a",
-          "#30302e",
-          "#55534f",
-          "#85817b",
-          "#b5b0a8",
-          "#d8d4cd",
-          "#efede9",
-          "#fbfbfb"
+          "#252a25",
+          "#2b2f2b",
+          "#445047",
+          "#657163",
+          "#899a84",
+          "#aeb8aa",
+          "#d7dbcf",
+          "#e7e8dc"
         ]
       },
       "ink": {
         "role": "primary",
-        "displayName": "Ink",
+        "displayName": "Bamboo Ink",
         "tonalRamp": [
-          "#181817",
-          "#303030",
-          "#555453",
-          "#777573",
-          "#a19e99",
-          "#c9c6c0",
-          "#e9e7e3",
-          "#fbfbfb"
+          "#1d3525",
+          "#244f34",
+          "#344a38",
+          "#536858",
+          "#7f937d",
+          "#abbca4",
+          "#d1e3c8",
+          "#e7e8dc"
         ]
       }
     },
@@ -45,6 +45,46 @@
       "code": {
         "displayName": "Code",
         "purpose": "Code and technical source material only."
+      },
+      "article-title": {
+        "displayName": "Article Title",
+        "purpose": "Fluid article titles."
+      },
+      "archive-year": {
+        "displayName": "Archive Year",
+        "purpose": "Chronological year anchors."
+      },
+      "prose-h2": {
+        "displayName": "Prose H2",
+        "purpose": "Primary article sections."
+      },
+      "prose-h3": {
+        "displayName": "Prose H3",
+        "purpose": "Nested article sections."
+      },
+      "prose-h4": {
+        "displayName": "Prose H4",
+        "purpose": "Minor article sections."
+      },
+      "heading-medium": {
+        "displayName": "Medium Heading",
+        "purpose": "Generic h3 and archive surfaces."
+      },
+      "heading-small": {
+        "displayName": "Small Heading",
+        "purpose": "Recovery and compact surfaces."
+      },
+      "label": {
+        "displayName": "Interface Label",
+        "purpose": "Navigation, controls, and back links."
+      },
+      "small": {
+        "displayName": "Small Metadata",
+        "purpose": "Dates, statistics, and counts."
+      },
+      "micro": {
+        "displayName": "Micro Metadata",
+        "purpose": "Continuation labels."
       }
     },
     "shadows": [],
@@ -68,30 +108,37 @@
       "kind": "custom",
       "description": "A date and wrapping post title in the chronological ledger.",
       "html": "<div class=\"ds-archive\"><time>Jul 27</time><a href=\"#\">Life Around Me</a></div>",
-      "css": ".ds-archive { display:grid; grid-template-columns:5rem 1fr; gap:2rem; font-family:Arvo,serif; color:#303030; } .ds-archive time { color:#686868; font-size:.8125rem; font-variant-numeric:tabular-nums; } .ds-archive a { color:currentColor; text-decoration:underline; text-underline-offset:.2em; } .ds-archive a:hover { color:#686868; } .ds-archive a:focus-visible { outline:2px solid #4d4a45; outline-offset:4px; }"
+      "css": ".ds-archive { display:grid; grid-template-columns:5rem 1fr; gap:2rem; font-family:Arvo,serif; color:#344a38; } .ds-archive time { color:#536858; font-size:.8125rem; font-variant-numeric:tabular-nums; } .ds-archive a { color:currentColor; text-decoration:underline; text-underline-offset:.2em; } .ds-archive a:hover { color:#536858; } .ds-archive a:focus-visible { outline:2px solid #244f34; outline-offset:4px; }"
     },
     {
       "name": "Text Control",
       "kind": "button",
-      "description": "The quiet theme/language control used in the masthead.",
+      "description": "The localized theme/language control used in the masthead, with an Auto return path.",
       "html": "<button class=\"ds-control\">Dark</button>",
-      "css": ".ds-control { min-width:2rem; min-height:2rem; border:0; background:transparent; color:#686868; font:700 .75rem Arvo,serif; text-decoration:underline; text-underline-offset:.25em; cursor:pointer; } .ds-control:hover { color:#303030; } .ds-control:focus-visible { outline:2px solid #4d4a45; outline-offset:4px; }"
+      "css": ".ds-control { min-width:2.75rem; min-height:2.75rem; border:0; background:transparent; color:#536858; font:700 .75rem Arvo,serif; text-decoration:underline; text-underline-offset:.25em; cursor:pointer; } .ds-control:hover { color:#344a38; } .ds-control:focus-visible { outline:2px solid #244f34; outline-offset:4px; }"
+    },
+    {
+      "name": "Article Continuation",
+      "kind": "nav",
+      "description": "A flat chronological next step with topics and a return to the archive.",
+      "html": "<nav class=\"ds-continuation\"><a href=\"#\">Newer post</a><a href=\"#\">Older post</a><a href=\"#\">Back to the archive</a></nav>",
+      "css": ".ds-continuation { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.5rem; padding-top:1.5rem; border-top:1px solid #aeb8aa; font-family:Arvo,serif; color:#344a38; } .ds-continuation a { color:currentColor; text-decoration:underline; text-underline-offset:.2em; } .ds-continuation a:last-child { grid-column:1/-1; color:#536858; font-size:.8rem; text-align:center; } .ds-continuation a:focus-visible { outline:2px solid #244f34; outline-offset:4px; }"
     }
   ],
   "narrative": {
     "northStar": "The Personal Archive Ledger",
-    "overview": "The blog is a durable paper journal translated directly to the web: restrained, chronological, and led by typography.",
+    "overview": "The blog is a durable bamboo-paper journal translated directly to the web: restrained, chronological, and led by typography.",
     "keyCharacteristics": [
       "One centered 38rem editorial column",
-      "Paper-and-ink neutral palette",
+      "Warm bamboo-paper palette",
       "Arvo slab-serif voice",
       "Year-led archive rows",
       "Square flat surfaces"
     ],
     "rules": [
       {
-        "name": "Ink-Only",
-        "body": "Do not introduce a brand accent for navigation or links.",
+        "name": "Bamboo-Ink",
+        "body": "Derive navigation, links, focus, selection, and browser surfaces from one restrained bamboo-green family.",
         "section": "colors"
       },
       {
@@ -102,7 +149,8 @@
     ],
     "dos": [
       "Do let chronology, whitespace, and typography create hierarchy.",
-      "Do wrap long Chinese and English titles at every width."
+      "Do wrap long Chinese and English titles at every width.",
+      "Do keep persistent controls at a 2.75rem touch target and localize their accessible names."
     ],
     "donts": [
       "Don’t use card grids, thumbnails, summaries, or promotional heroes for the archive.",

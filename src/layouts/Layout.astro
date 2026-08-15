@@ -2,12 +2,12 @@
 import criticalCss from '../styles/critical.css?raw'
 import '../styles/index.css'
 import { localeFromUrl, useLocale } from '@utils/locale'
+import { publishingMetadata, SITE_NAME, SOCIAL_IMAGE } from '@utils/publishing'
 import Header from './Header.astro'
 import Navbar from './Navbar.astro'
-import '@fontsource/arvo/400.css'
-import '@fontsource/arvo/700.css'
-import '@fontsource/google-sans-code'
-import { SEO } from 'astro-seo'
+import '../styles/fonts.css'
+import arvo400Url from '@fontsource/arvo/files/arvo-latin-400-normal.woff2?url'
+import arvo700Url from '@fontsource/arvo/files/arvo-latin-700-normal.woff2?url'
 import Footer from './Footer.astro'
 
 const { t } = useLocale(Astro.url)
@@ -16,15 +16,38 @@ const htmlLang = localeFromUrl(Astro.url)
 export const prerender = true
 
 export interface Props {
-  title: string | undefined
+  title?: string
   navbar?: boolean
+  header?: boolean
   description?: string
+  noindex?: boolean
+  ogType?: 'website' | 'article'
+  article?: {
+    publishedTime?: string
+    modifiedTime?: string
+    tags?: string[]
+  }
+  languageAlternates?: boolean
 }
 
-let { title, navbar, description } = Astro.props
-if (navbar === undefined) navbar = true
-if (!description) description = t('layout.description')
-const fullTitle = `${title} - ${t('layout.title')}`
+const {
+  title,
+  navbar = true,
+  header = true,
+  description,
+  noindex = false,
+  ogType = 'website',
+  article,
+  languageAlternates = true,
+} = Astro.props
+const metadata = publishingMetadata({
+  url: Astro.url,
+  site: Astro.site,
+  locale: htmlLang,
+  title,
+  description,
+  languageAlternates,
+})
 ---
 
 <!doctype html>
@@ -32,59 +55,126 @@ const fullTitle = `${title} - ${t('layout.title')}`
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="theme-color"
+      content="#e7e8dc"
+      data-light="#e7e8dc"
+      data-dark="#2b2f2b"
+    />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`${SITE_NAME} RSS`}
+      href="/rss.xml"
+    />
+    <link
+      rel="preload"
+      href={arvo400Url}
+      as="font"
+      type="font/woff2"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      href={arvo700Url}
+      as="font"
+      type="font/woff2"
+      crossorigin="anonymous"
+    />
 
     <style is:inline set:html={criticalCss} />
 
     <script is:inline>
       ;(function () {
+        var stored = null
         try {
-          const stored = localStorage.getItem('theme')
-          const dark =
-            stored === 'dark' ||
-            ((!stored || stored === 'auto') &&
-              window.matchMedia('(prefers-color-scheme: dark)').matches)
-          if (dark) document.documentElement.classList.add('dark')
+          stored = localStorage.getItem('theme')
         } catch (_) {}
+        var preference =
+          stored === 'dark' || stored === 'light' || stored === 'auto'
+            ? stored
+            : 'auto'
+        var prefersDark = window.matchMedia(
+          '(prefers-color-scheme: dark)',
+        ).matches
+        var resolved =
+          preference === 'auto'
+            ? prefersDark
+              ? 'dark'
+              : 'light'
+            : preference
+        var root = document.documentElement
+        root.classList.add(resolved)
+        root.dataset.theme = resolved
+        root.dataset.themePreference = preference
+        var themeColor = document.querySelector('meta[name="theme-color"]')
+        if (themeColor) {
+          themeColor.content = themeColor.dataset[resolved]
+        }
       })()
     </script>
 
-    <title>{fullTitle}</title>
-    <SEO
-      title={fullTitle}
-      description={description}
-      openGraph={{
-        basic: {
-          title: fullTitle,
-          type: 'website',
-          image: 'https://avatars.githubusercontent.com/u/63009984?v=4',
-        },
-      }}
-      twitter={{
-        creator: '@kratosmy_',
-      }}
+    <title>{metadata.title}</title>
+    <meta name="description" content={metadata.description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="canonical" href={metadata.canonicalUrl} />
+    {
+      metadata.alternates?.map((alternate) => (
+        <link
+          rel="alternate"
+          hreflang={alternate.hrefLang}
+          href={alternate.href}
+        />
+      ))
+    }
+    <meta property="og:title" content={metadata.title} />
+    <meta property="og:description" content={metadata.description} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={metadata.canonicalUrl} />
+    <meta property="og:image" content={SOCIAL_IMAGE} />
+    <meta property="og:image:alt" content={SITE_NAME} />
+    <meta property="og:locale" content={metadata.openGraphLocale} />
+    <meta
+      property="og:locale:alternate"
+      content={metadata.openGraphLocaleAlternate}
     />
+    <meta property="og:site_name" content={SITE_NAME} />
+    {
+      article?.publishedTime && (
+        <meta
+          property="article:published_time"
+          content={article.publishedTime}
+        />
+      )
+    }
+    {
+      article?.modifiedTime && (
+        <meta property="article:modified_time" content={article.modifiedTime} />
+      )
+    }
+    {
+      article?.tags?.map((tag) => (
+        <meta property="article:tag" content={tag} />
+      ))
+    }
   </head>
   <body class="site-shell">
     <!--
       THESIS: John Wick is a bilingual personal archive, not a card-based content product.
-      OWN-WORLD: Paper and ink surfaces, Arvo-led type, square edges, quiet rules, and a narrow editorial column.
+      OWN-WORLD: Mist-paper and bamboo-ink surfaces, Arvo-led type, square edges, quiet rules, and a narrow editorial column.
       STORY: Readers meet the author, scan writing by year and date, then enter an uninterrupted reading view.
       FIRST VIEWPORT: A compact masthead and text navigation lead directly into the newest year; the archive link rule is the signature interaction.
       FORM: Restrained personal web journal, seventh grounded direction, seed 0f5372d0.
       FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
     -->
-    <Header />
+    <a class="skip-link" href="#main-content">
+      {t('accessibility.skip_to_content')}
+    </a>
+    {header && <Header />}
     {navbar && <Navbar />}
     <slot />
     <Footer />
-    <script defer>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js').catch(() => {})
-        })
-      }
-    </script>
   </body>
 </html>

@@ -12,5 +12,11 @@
     "strictNullChecks": true,
     "allowJs": true
   },
-  "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.astro"]
+  "include": [
+    "src/**/*.d.ts",
+    "src/**/*.ts",
+    "src/**/*.astro",
+    "tests/**/*.ts",
+    "vitest.config.ts"
+  ]
 }

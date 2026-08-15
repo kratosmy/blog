@@ -1,4 +1,2 @@
-/* Modular CSS — critical is also inlined once via Layout */
-@import "./critical.css";
+/* Shared non-critical journal styles */
 @import "./components.css";
-@import "./prose.css";

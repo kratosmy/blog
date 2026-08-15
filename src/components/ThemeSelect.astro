@@ -1,76 +1,112 @@
-<theme-select>
-  <button type="button" class="text-control" aria-label="Toggle color theme">
-    <span class="theme-label theme-label--light" aria-hidden="true">Dark</span>
-    <span class="theme-label theme-label--dark" aria-hidden="true">Light</span>
+---
+import { useLocale } from '@utils/locale'
+
+const { t } = useLocale(Astro.url)
+---
+
+<theme-select
+  data-label-auto={t('controls.auto')}
+  data-label-dark={t('controls.dark')}
+  data-label-light={t('controls.light')}
+  data-action-auto={t('controls.switch_to_auto')}
+  data-action-dark={t('controls.switch_to_dark')}
+  data-action-light={t('controls.switch_to_light')}
+>
+  <button
+    type="button"
+    class="text-control"
+    aria-label={t('controls.switch_to_auto')}
+    title={t('controls.switch_to_auto')}
+  >
+    <span data-theme-label aria-hidden="true">{t('controls.auto')}</span>
   </button>
 </theme-select>
 
 <script>
-  type Theme = 'auto' | 'dark' | 'light'
+  import {
+    nextTheme,
+    parseTheme,
+    resolveTheme,
+    type ThemePreference,
+  } from '@utils/theme'
 
   const storageKey = 'theme'
+  const mediaQuery = matchMedia('(prefers-color-scheme: dark)')
 
-  function parseTheme(theme: unknown): Theme {
-    return theme === 'auto' || theme === 'dark' || theme === 'light'
-      ? theme
-      : 'auto'
-  }
-
-  function loadTheme(): Theme {
-    return parseTheme(
-      typeof localStorage !== 'undefined' && localStorage.getItem(storageKey),
-    )
-  }
-
-  function storeTheme(theme: Theme): void {
-    if (typeof localStorage !== 'undefined') {
-      localStorage.setItem(
-        storageKey,
-        theme === 'light' || theme === 'dark' ? theme : '',
-      )
+  function loadTheme(): ThemePreference {
+    try {
+      return parseTheme(localStorage.getItem(storageKey))
+    } catch {
+      return 'auto'
     }
   }
 
-  function getPreferredColorScheme(): 'dark' | 'light' {
-    return matchMedia('(prefers-color-scheme: light)').matches
-      ? 'light'
-      : 'dark'
+  function storeTheme(theme: ThemePreference): void {
+    try {
+      if (theme === 'auto') localStorage.removeItem(storageKey)
+      else localStorage.setItem(storageKey, theme)
+    } catch {
+      // Theme selection still applies when storage is unavailable.
+    }
   }
 
-  function resolveTheme(theme: Theme): 'dark' | 'light' {
-    return theme === 'auto' ? getPreferredColorScheme() : theme
-  }
-
-  function onThemeChange(theme: Theme): void {
-    const resolvedTheme = resolveTheme(theme)
-    document.documentElement.dataset['theme'] = resolvedTheme
-    document.documentElement.classList.toggle('dark', resolvedTheme === 'dark')
+  function applyTheme(theme: ThemePreference): void {
+    const resolved = resolveTheme(theme, mediaQuery.matches)
+    const root = document.documentElement
+    root.classList.toggle('dark', resolved === 'dark')
+    root.classList.toggle('light', resolved === 'light')
+    root.dataset['theme'] = resolved
+    root.dataset['themePreference'] = theme
+    const themeColor = document.querySelector<HTMLMetaElement>(
+      'meta[name="theme-color"]',
+    )
+    const color = themeColor?.dataset[resolved]
+    if (themeColor && color) themeColor.content = color
     storeTheme(theme)
   }
 
-  matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => {
-    if (loadTheme() === 'auto') onThemeChange('auto')
-  })
+  function capitalize(value: ThemePreference): 'Auto' | 'Dark' | 'Light' {
+    return `${value.charAt(0).toUpperCase()}${value.slice(1)}` as
+      | 'Auto'
+      | 'Dark'
+      | 'Light'
+  }
+
+  class ThemeSelect extends HTMLElement {
+    connectedCallback() {
+      if (this.dataset['ready']) return
+      this.dataset['ready'] = 'true'
+      applyTheme(loadTheme())
+      this.refresh()
+      this.querySelector('button')?.addEventListener('click', () => {
+        applyTheme(nextTheme(loadTheme(), mediaQuery.matches))
+        this.refresh()
+      })
+    }
+
+    refresh() {
+      const next = nextTheme(loadTheme(), mediaQuery.matches)
+      const label = this.dataset[`label${capitalize(next)}`]
+      const action = this.dataset[`action${capitalize(next)}`]
+      const button = this.querySelector('button')
+      const labelNode = this.querySelector('[data-theme-label]')
+      if (labelNode && label) labelNode.textContent = label
+      if (button && action) {
+        button.setAttribute('aria-label', action)
+        button.setAttribute('title', action)
+      }
+    }
+  }
 
   if (!customElements.get('theme-select')) {
-    customElements.define(
-      'theme-select',
-      class ThemeSelect extends HTMLElement {
-        constructor() {
-          super()
-          onThemeChange(loadTheme())
-          const button = this.querySelector('button')
-          button?.addEventListener('click', () => {
-            const theme = parseTheme(document.documentElement.dataset['theme'])
-            const nextTheme = theme === 'dark' ? 'light' : 'dark'
-            onThemeChange(nextTheme)
-            button.setAttribute(
-              'aria-label',
-              `Switch to ${nextTheme === 'dark' ? 'light' : 'dark'} theme`,
-            )
-          })
-        }
-      },
-    )
+    customElements.define('theme-select', ThemeSelect)
   }
+
+  mediaQuery.addEventListener('change', () => {
+    if (loadTheme() !== 'auto') return
+    applyTheme('auto')
+    document.querySelectorAll<ThemeSelect>('theme-select').forEach((select) => {
+      select.refresh()
+    })
+  })
 </script>

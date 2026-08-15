@@ -1,0 +1,97 @@
+/* Chronological archive */
+.archive-filter {
+  margin: 0 0 2.5rem;
+  font-size: 1.5rem;
+}
+
+.archive-year {
+  margin-bottom: 3.25rem;
+}
+
+.archive-year:last-child {
+  margin-bottom: 1rem;
+}
+
+.archive-year h2 {
+  margin: 0 0 0.65rem;
+  letter-spacing: -0.02em;
+}
+
+.archive-year ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.archive-entry {
+  margin-bottom: 0.8rem;
+}
+
+.archive-entry time {
+  display: block;
+  color: var(--muted-ink);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  transition: color 180ms ease-out;
+}
+
+.archive-link {
+  position: relative;
+  display: inline;
+  margin-left: 1rem;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0 1px;
+  box-decoration-break: clone;
+  text-decoration-color: currentColor;
+  transition:
+    color 180ms ease-out,
+    background-size 260ms cubic-bezier(0.16, 1, 0.3, 1),
+    text-decoration-color 120ms ease-out;
+  -webkit-box-decoration-break: clone;
+}
+
+.archive-entry:hover time,
+.archive-entry:focus-within time {
+  color: var(--ink);
+}
+
+.archive-entry:hover .archive-link,
+.archive-entry:focus-within .archive-link {
+  background-size: 100% 1px;
+  text-decoration-color: transparent;
+}
+
+.empty-state__recovery {
+  display: block;
+  margin-top: 0.75rem;
+}
+
+@media screen and (min-width: 800px) {
+  .archive-year {
+    margin-bottom: 4rem;
+  }
+
+  .archive-entry {
+    display: grid;
+    grid-template-columns: 5rem minmax(0, 1fr);
+    gap: 2rem;
+    margin-bottom: 0.45rem;
+  }
+
+  .archive-link {
+    margin-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .archive-link {
+    background-size: 100% 1px;
+  }
+
+  .archive-entry:hover .archive-link,
+  .archive-entry:focus-within .archive-link {
+    text-decoration-color: currentColor;
+  }
+}

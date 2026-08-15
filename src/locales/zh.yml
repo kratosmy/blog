@@ -1,21 +1,35 @@
-layout:
-  title: John Wick
-  description: John Wick的个人博客
 nav:
   posts: 文章
   tags: 标签
+controls:
+  display_preferences: 显示偏好
+  switch_to_english: 切换到英文
+  switch_to_chinese: 切换到中文
+  switch_to_dark: 切换到深色主题
+  switch_to_light: 切换到浅色主题
+  switch_to_auto: 跟随系统主题
+  dark: 深色
+  light: 浅色
+  auto: 自动
+accessibility:
+  skip_to_content: 跳到正文
 post:
   back: 返回
   post_at: 发布于
   last_modified_at: 最后修改于
+  topics: 主题
 message:
   404-content: 页面未找到
   loading: 加载中...
   no-posts: 暂无文章。
+  view_all_posts: 查看全部文章
   more-about: 更多关于
 pagination:
   previous: 上一页
   next: 下一页
+  newer_post: 较新一篇
+  older_post: 较早一篇
+  all_posts: 返回文章归档
 tags:
   reading: 阅读
   movie: 电影

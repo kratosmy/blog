@@ -1,0 +1,148 @@
+@import "./prose.css";
+
+@font-face {
+  font-family: "Google Sans Code";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("@fontsource/google-sans-code/files/google-sans-code-latin-400-normal.woff2")
+    format("woff2");
+}
+
+/* Article surface */
+code,
+pre,
+.code,
+.hljs,
+[class*="language-"],
+.expressive-code {
+  font-family: var(--font-code);
+  font-feature-settings:
+    "liga" 1,
+    "calt" 1;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  content-visibility: auto;
+  contain-intrinsic-size: 640px 420px;
+}
+
+.post-body .expressive-code .frame {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.post-page {
+  margin-top: 0.5rem;
+}
+
+.post-back {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  margin: -0.65rem 0 1.85rem;
+  color: var(--muted-ink);
+  font-size: 0.875rem;
+}
+
+.post-header {
+  margin-bottom: 3rem;
+}
+
+.post-title {
+  margin: 0 0 1rem;
+  font-size: clamp(1.85rem, 6vw, 2.35rem);
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
+}
+
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.25rem 1rem;
+  color: var(--muted-ink);
+  font-size: 0.75rem;
+  text-align: right;
+}
+
+.post-meta__stats {
+  white-space: nowrap;
+}
+
+.post-record {
+  margin-top: 3rem;
+  color: var(--muted-ink);
+  font-size: 0.75rem;
+  text-align: right;
+}
+
+.post-topics {
+  margin-top: 1.25rem;
+  color: var(--muted-ink);
+  font-size: 0.8rem;
+}
+
+.post-topics__list {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.post-topics__list li {
+  display: inline;
+}
+
+.post-topics__list li + li::before {
+  content: " · ";
+  color: var(--quiet-ink);
+}
+
+.post-continuation {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+  margin-top: 3.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+}
+
+.post-continuation__item {
+  min-width: 0;
+}
+
+.post-continuation__item--older {
+  text-align: right;
+}
+
+.post-continuation__label {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--muted-ink);
+  font-size: 0.7rem;
+}
+
+.post-continuation__link {
+  overflow-wrap: anywhere;
+}
+
+.post-continuation__archive {
+  grid-column: 1 / -1;
+  color: var(--muted-ink);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+@media screen and (min-width: 560px) {
+  .post-continuation {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .post-continuation__item--older {
+    grid-column: 2;
+  }
+}

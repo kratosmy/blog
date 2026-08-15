@@ -5,8 +5,9 @@
  */
 import { displayTitle, listPosts, resolveTag } from '@utils/content'
 import { formatArchiveDate } from '@utils/format'
-import { useLocale } from '@utils/locale'
+import { homeUrl, useLocale } from '@utils/locale'
 import type { SupportedLocale } from '../types'
+import '../styles/archive.css'
 import Layout from './Layout.astro'
 
 interface Props {
@@ -24,6 +25,10 @@ const resolvedTag = tagParam
 
 const { posts } = await listPosts(locale, { tag: resolvedTag })
 const filterName = resolvedTag
+const filterLabel = filterName ? t(`tags.${filterName}`) : undefined
+const pageTitle = filterLabel
+  ? `${t('nav.posts')} · ${filterLabel}`
+  : t('nav.posts')
 const archive = posts.reduce<Map<string, typeof posts>>((groups, post) => {
   const year = post.date.slice(0, 4)
   const group = groups.get(year) ?? []
@@ -33,18 +38,25 @@ const archive = posts.reduce<Map<string, typeof posts>>((groups, post) => {
 }, new Map())
 ---
 
-<Layout title={t('nav.posts')}>
-  <main class="archive-page">
+<Layout title={pageTitle}>
+  <main id="main-content" tabindex="-1" class="archive-page">
     {
-      filterName && (
-        <h1 class="archive-filter">“{t(`tags.${filterName}`)}”</h1>
+      filterLabel ? (
+        <h1 class="archive-filter">“{filterLabel}”</h1>
+      ) : (
+        <h1 class="visually-hidden">{t('nav.posts')}</h1>
       )
     }
     {
       posts.length === 0 ? (
-        <p class="empty-state">{t('message.no-posts')}</p>
+        <p class="empty-state">
+          {t('message.no-posts')}
+          <a class="empty-state__recovery" href={homeUrl(locale)}>
+            {t('message.view_all_posts')}
+          </a>
+        </p>
       ) : (
-        <article class="archive" aria-label={t('nav.posts')}>
+        <article class="archive" aria-label={pageTitle}>
           {Array.from(archive).map(([year, yearPosts]) => (
             <section class="archive-year" aria-labelledby={`year-${year}`}>
               <h2 id={`year-${year}`}>{year}</h2>
@@ -56,11 +68,7 @@ const archive = posts.reduce<Map<string, typeof posts>>((groups, post) => {
                       <time datetime={post.date}>
                         {formatArchiveDate(post.date, locale)}
                       </time>
-                      <a
-                        rel="prefetch-intent"
-                        href={post.url}
-                        class="archive-link"
-                      >
+                      <a href={post.url} class="archive-link">
                         {title}
                       </a>
                     </li>
