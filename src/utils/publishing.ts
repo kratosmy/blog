@@ -3,8 +3,7 @@ import { canonicalPath, toggleUrl } from './locale'
 
 export const SITE_NAME = 'John Wick'
 export const SITE_URL = 'https://blog.changshaking.xyz'
-export const SOCIAL_IMAGE =
-  'https://avatars.githubusercontent.com/u/63009984?v=4'
+export const SOCIAL_IMAGE_PATH = '/og.jpg'
 
 const descriptions: Record<SupportedLocale, string> = {
   zh: 'John Wick 的双语个人文章归档，记录技术、阅读、电影与生活。',
@@ -20,6 +19,7 @@ export interface PublishingMetadata {
   title: string
   description: string
   canonicalUrl: URL
+  socialImage: URL
   alternates?: LanguageAlternate[]
   openGraphLocale: 'zh_CN' | 'en_US'
   openGraphLocaleAlternate: 'en_US' | 'zh_CN'
@@ -46,6 +46,7 @@ export function publishingMetadata(input: {
     title: title ? `${title} - ${SITE_NAME}` : SITE_NAME,
     description,
     canonicalUrl,
+    socialImage: new URL(SOCIAL_IMAGE_PATH, base),
     alternates: languageAlternates
       ? [
           { href: zhUrl, hrefLang: 'zh-CN' },

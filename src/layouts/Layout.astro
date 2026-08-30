@@ -1,11 +1,11 @@
 ---
 import criticalCss from '../styles/critical.css?raw'
-import '../styles/index.css'
+import '../styles/components.css'
+import '../styles/fonts.css'
 import { localeFromUrl, useLocale } from '@utils/locale'
-import { publishingMetadata, SITE_NAME, SOCIAL_IMAGE } from '@utils/publishing'
+import { publishingMetadata, SITE_NAME } from '@utils/publishing'
 import Header from './Header.astro'
 import Navbar from './Navbar.astro'
-import '../styles/fonts.css'
 import arvo400Url from '@fontsource/arvo/files/arvo-latin-400-normal.woff2?url'
 import arvo700Url from '@fontsource/arvo/files/arvo-latin-700-normal.woff2?url'
 import Footer from './Footer.astro'
@@ -133,7 +133,7 @@ const metadata = publishingMetadata({
     <meta property="og:description" content={metadata.description} />
     <meta property="og:type" content={ogType} />
     <meta property="og:url" content={metadata.canonicalUrl} />
-    <meta property="og:image" content={SOCIAL_IMAGE} />
+    <meta property="og:image" content={metadata.socialImage} />
     <meta property="og:image:alt" content={SITE_NAME} />
     <meta property="og:locale" content={metadata.openGraphLocale} />
     <meta
@@ -161,14 +161,6 @@ const metadata = publishingMetadata({
     }
   </head>
   <body class="site-shell">
-    <!--
-      THESIS: John Wick is a bilingual personal archive, not a card-based content product.
-      OWN-WORLD: Mist-paper and bamboo-ink surfaces, Arvo-led type, square edges, quiet rules, and a narrow editorial column.
-      STORY: Readers meet the author, scan writing by year and date, then enter an uninterrupted reading view.
-      FIRST VIEWPORT: A compact masthead and text navigation lead directly into the newest year; the archive link rule is the signature interaction.
-      FORM: Restrained personal web journal, seventh grounded direction, seed 0f5372d0.
-      FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
-    -->
     <a class="skip-link" href="#main-content">
       {t('accessibility.skip_to_content')}
     </a>

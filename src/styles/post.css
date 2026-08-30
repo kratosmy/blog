@@ -12,9 +12,6 @@
 /* Article surface */
 code,
 pre,
-.code,
-.hljs,
-[class*="language-"],
 .expressive-code {
   font-family: var(--font-code);
   font-feature-settings:
@@ -28,11 +25,6 @@ img {
   height: auto;
   content-visibility: auto;
   contain-intrinsic-size: 640px 420px;
-}
-
-.post-body .expressive-code .frame {
-  border-radius: 0;
-  box-shadow: none;
 }
 
 .post-page {

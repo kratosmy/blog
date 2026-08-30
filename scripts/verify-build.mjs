@@ -53,6 +53,7 @@ for (const required of [
   'rss.xml',
   'sitemap-index.xml',
   'favicon.svg',
+  'og.jpg',
   'CNAME',
 ]) {
   expect(
@@ -100,6 +101,14 @@ for (const file of files.filter((file) =>
 for (const file of htmlFiles) {
   const rel = relative(rootPath, file)
   const html = readFileSync(file, 'utf8')
+  expect(
+    !html.includes('avatars.githubusercontent.com'),
+    `${rel}: social image leaked to GitHub`,
+  )
+  expect(
+    count(html, /<link\b[^>]*\brel=["']stylesheet["']/g) === 0,
+    `${rel}: render-blocking stylesheet`,
+  )
   expect(count(html, /<title(?:\s|>)/g) === 1, `${rel}: expected one title`)
   expect(
     count(html, /<link\s+rel="canonical"/g) === 1,
@@ -130,9 +139,13 @@ for (const file of htmlFiles) {
     ...html.matchAll(/<a\b[^>]*\bhref="([^"]+)"/g),
     ...html.matchAll(/<(?:script|img)\b[^>]*\bsrc="([^"]+)"/g),
     ...html.matchAll(
-      /<link\b[^>]*\brel="(?:stylesheet|icon)"[^>]*\bhref="([^"]+)"/g,
+      /<link\b[^>]*\brel="(?:stylesheet|icon|preload)"[^>]*\bhref="([^"]+)"/g,
     ),
   ].map((match) => match[1])
+
+  for (const match of html.matchAll(/url\((?:"|')?([^"')]+)(?:"|')?\)/g)) {
+    navigable.push(match[1])
+  }
 
   for (const target of navigable) {
     if (!target.startsWith('/') || target.startsWith('//')) continue
@@ -163,6 +176,12 @@ for (const jsFile of jsFiles) {
     `${relative(rootPath, jsFile)}: unreferenced JavaScript`,
   )
 }
+expect(
+  cssFiles.length === 0,
+  `external CSS must not be emitted: ${cssFiles
+    .map((file) => relative(rootPath, file))
+    .join(', ')}`,
+)
 const cssBytes = cssFiles.reduce(
   (total, file) => total + statSync(file).size,
   0,

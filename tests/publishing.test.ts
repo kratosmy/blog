@@ -13,6 +13,7 @@ describe('publishing metadata', () => {
     })
     expect(metadata.title).toBe('Archive - John Wick')
     expect(metadata.canonicalUrl.href).toBe('https://blog.example/')
+    expect(metadata.socialImage.href).toBe('https://blog.example/og.jpg')
     expect(
       metadata.alternates?.map(({ href, hrefLang }) => [
         hrefLang,

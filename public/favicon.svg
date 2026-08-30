@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <title>John Wick</title>
-  <rect width="64" height="64" rx="12" fill="#2b2f2b" />
+  <rect width="64" height="64" fill="#2b2f2b" />
   <text
     x="32"
     y="39"
     text-anchor="middle"
-    font-family="IBM Plex Sans, Arial, sans-serif"
+    font-family="Arvo, Arial, sans-serif"
     font-size="24"
     font-weight="700"
     fill="#d1e3c8"

@@ -19,13 +19,9 @@ post:
   last_modified_at: Last modified at
   topics: Topics
 message:
-  404-content: Page not found
-  loading: Loading...
   no-posts: No posts found.
   view_all_posts: View all posts
-  more-about: More about
 pagination:
-  previous: Previous
   next: Next
   newer_post: Newer post
   older_post: Older post

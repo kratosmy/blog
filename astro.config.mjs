@@ -31,7 +31,7 @@ export default defineConfig({
   scopedStyleStrategy: 'class',
   build: {
     format: 'directory',
-    inlineStylesheets: 'auto',
+    inlineStylesheets: 'always',
     assets: '_astro',
   },
   markdown: {
@@ -45,7 +45,7 @@ export default defineConfig({
   integrations: [
     expressiveCode({
       themes: ['catppuccin-latte', 'catppuccin-mocha'],
-      emitExternalStylesheet: true,
+      emitExternalStylesheet: false,
       removeUnusedThemes: true,
       shiki: {
         bundledLangs: ['c', 'cpp'],

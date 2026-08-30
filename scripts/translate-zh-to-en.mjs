@@ -74,7 +74,7 @@ async function listMarkdownFiles(directory) {
     const entryPath = path.join(directory, entry.name)
     if (entry.isDirectory()) {
       files.push(...(await listMarkdownFiles(entryPath)))
-    } else if (/\.(md|mdx)$/i.test(entry.name)) {
+    } else if (/\.md$/i.test(entry.name)) {
       files.push(entryPath)
     }
   }

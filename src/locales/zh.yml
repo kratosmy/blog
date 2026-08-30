@@ -19,13 +19,9 @@ post:
   last_modified_at: 最后修改于
   topics: 主题
 message:
-  404-content: 页面未找到
-  loading: 加载中...
   no-posts: 暂无文章。
   view_all_posts: 查看全部文章
-  more-about: 更多关于
 pagination:
-  previous: 上一页
   next: 下一页
   newer_post: 较新一篇
   older_post: 较早一篇

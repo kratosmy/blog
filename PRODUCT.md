@@ -42,7 +42,6 @@ Readers typically arrive at the chronological post index, follow a post or tag, 
 - Real bilingual posts live in `src/content/posts/zh/` and `src/content/posts/en/`.
 - Locale copy lives in `src/locales/`.
 - Current routing and content behavior are implemented under `src/pages/`, `src/layouts/`, `src/components/`, and `src/utils/`.
-- The reference-site capture and extracted CSS are stored under `.firecrawl/`.
 - No testimonials, audience metrics, commercial claims, or custom photography are available; future work must not invent them.
 
 ## Product Principles
